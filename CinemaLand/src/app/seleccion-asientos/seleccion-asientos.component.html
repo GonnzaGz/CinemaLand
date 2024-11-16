@@ -1,0 +1,20 @@
+<div *ngIf="movieDetails">
+    <h2>{{ movieDetails.title }}</h2>
+    <p>{{ movieDetails.description }}</p>
+    <img *ngIf="movieDetails?.poster_path" [src]="'https://image.tmdb.org/t/p/w500' + movieDetails?.poster_path" alt="Poster de la película">
+    <!-- Aquí puedes agregar la lógica para elegir los asientos -->
+  </div>
+  
+  <div *ngIf="!movieDetails">
+    <p>Cargando detalles de la película...</p>
+  </div>
+  
+  <!-- seleccion-asientos.component.html -->
+<div>
+    <h3>Selecciona tus asientos</h3>
+    <div *ngFor="let asiento of asientosDisponibles">
+      <input type="checkbox" [value]="asiento" /> Asiento {{ asiento }}
+    </div>
+    <button (click)="confirmarCompra()">Confirmar Compra</button>
+  </div>
+  
