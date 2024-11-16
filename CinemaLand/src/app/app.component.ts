@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { CompraEntradasComponent } from './compra-entradas/compra-entradas.component';
 
 @Component({
   selector: 'app-root',
-  standalone: true,
-  imports: [RouterOutlet],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  styleUrls: ['./app.component.css'],
+  standalone: true, // Hacemos este componente standalone
+  imports: [CompraEntradasComponent], // Importamos el componente CompraEntradas
 })
 export class AppComponent {
   title = 'CinemaLand';

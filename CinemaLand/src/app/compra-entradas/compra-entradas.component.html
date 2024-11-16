@@ -1,0 +1,23 @@
+<div class="compra-container">
+    <h2>Compra de Entradas</h2>
+  
+    <!-- Lista de películas populares -->
+    <div class="peliculas-populares">
+      <h3>Películas Populares</h3>
+      <div *ngFor="let pelicula of peliculas" class="pelicula-card">
+        <img [src]="'https://image.tmdb.org/t/p/w200/' + pelicula.poster_path" alt="Poster" />
+        <h4>{{ pelicula.title }}</h4>
+        <button (click)="verDetalles(pelicula.id)">Ver Detalles</button>
+      </div>
+    </div>
+  
+    <!-- Detalles de la película seleccionada -->
+    <div *ngIf="detallesPelicula" class="detalles-pelicula">
+      <h3>Detalles de la Película</h3>
+      <h4>{{ detallesPelicula.title }}</h4>
+      <p>{{ detallesPelicula.overview }}</p>
+      <p>Fecha de estreno: {{ detallesPelicula.release_date }}</p>
+      <button (click)="comprarEntradas()">Comprar Entradas</button>
+    </div>
+  </div>
+  

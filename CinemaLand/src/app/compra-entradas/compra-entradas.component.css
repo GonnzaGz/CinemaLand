@@ -1,0 +1,41 @@
+.compra-container {
+    padding: 20px;
+  }
+  
+  .peliculas-populares {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .pelicula-card {
+    width: 150px;
+    margin: 10px;
+    text-align: center;
+  }
+  
+  .pelicula-card img {
+    width: 100%;
+    border-radius: 8px;
+  }
+  
+  .detalles-pelicula {
+    margin-top: 20px;
+  }
+  
+  .detalles-pelicula h3 {
+    font-size: 24px;
+  }
+  
+  button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #0056b3;
+  }
+  
