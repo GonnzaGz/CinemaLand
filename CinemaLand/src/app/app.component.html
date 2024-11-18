@@ -1,9 +1,7 @@
 <!-- app.component.html -->
-<div>
-  <h1>Bienvenido a CinemaLand</h1>
-  <!-- Aquí agregamos el componente Compra Entradas -->
-  <app-compra-entradas></app-compra-entradas>
-
+<div>    
   <!-- Aquí se cargarán los componentes según las rutas -->
-  <router-outlet></router-outlet>
+  <router-outlet>
+    <app-navbar></app-navbar>
+  </router-outlet>
 </div>
