@@ -29,4 +29,10 @@ export class ApipeliculasService {
   getbusquedamultiple(query: string): Observable<any> {
     return this.http.get(`${this.apiUrl}/search/multi?query=${query}&language=es-ar&api_key=${this.apiKey}`);
   }
+
+  getcategorias(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/genre/movie/list?language=es-ar&api_key=${this.apiKey}`);
+  }
+
 }
+

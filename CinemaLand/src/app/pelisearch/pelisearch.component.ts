@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ApipeliculasService } from '../service/apipeliculas.service';
-import { Pelicula } from './pelicula interface';
+import { Pelicula } from './pelicula.interface';
 
 @Component({
   selector: 'app-pelisearch',
