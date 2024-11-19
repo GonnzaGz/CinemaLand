@@ -25,4 +25,8 @@ export class ApipeliculasService {
     return this.http.get(`${this.apiUrl}/movie/${id}?language=es-ar&api_key=${this.apiKey}`);
   }
   //#endregion
+
+  getbusquedamultiple(query: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/search/multi?query=${query}&language=es-ar&api_key=${this.apiKey}`);
+  }
 }

@@ -15,9 +15,10 @@
           <!-- Aquí puedes agregar más enlaces de navegación -->
         </ul>
         <form class="d-flex" role="search">
-          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-          <button class="btn btn-outline-success" type="submit">Search</button>
+          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" [(ngModel)]="searchTerm" name="searchTerm">
+          <button class="btn btn-outline-success" type="button" (click)="onSearch()">Search</button>
         </form>
       </div>
     </div>
   </nav>
+ 
