@@ -34,5 +34,8 @@ export class ApipeliculasService {
     return this.http.get(`${this.apiUrl}/genre/movie/list?language=es-ar&api_key=${this.apiKey}`);
   }
 
+  getbusquedaporcategoria(id: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/discover/movie?with_genres=${id}&language=es-ar&api_key=${this.apiKey}`);
+  }
 }
 
