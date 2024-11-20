@@ -21,11 +21,13 @@ export class PelisearchComponent implements OnInit{
   ngOnInit(): void {
       this._route.params.subscribe(params => {
         
-        this.apiMovieService.getbusquedamultiple(params['id']).subscribe(data => {
-          
-          console.log(data);
-          this.peliculas = data.results;
-          
+        this.apiMovieService.getbusquedamultiple(params['id']).subscribe({
+          next:(data: any) => {
+            console.log(data);
+            this.peliculas = data.results;
+          },error: (error) => {
+            console.log(error);
+          }
         })
       })
   }
