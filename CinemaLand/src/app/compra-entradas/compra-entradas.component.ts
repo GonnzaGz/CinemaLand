@@ -77,13 +77,25 @@ export class CompraEntradasComponent implements OnInit {
   }
 
   // Función para ver los detalles de la película seleccionada
-  verDetalles(id: number) {
-    this.apiMovieService.getDetalleMovie(id.toString()).subscribe((data: any) => {
-      this.detallesPelicula = data;  // Guardamos los detalles de la película
-      this.peliculaSeleccionada = id;  // Guardamos el ID de la película seleccionada
-      this.selectedMovieId = id;  // Aseguramos que selectedMovieId tenga el id correcto
-    });
-  }
+verDetalles(id: number) {
+  this.apiMovieService.getDetalleMovie(id.toString()).subscribe((data: any) => {
+    this.detallesPelicula = data;  // Guardamos los detalles de la película
+    this.peliculaSeleccionada = id;  // Guardamos el ID de la película seleccionada
+    this.selectedMovieId = id;  // Aseguramos que selectedMovieId tenga el id correcto
+    
+    // Espera a que el DOM se actualice antes de hacer el desplazamiento
+    setTimeout(() => {
+      const detallesDiv = document.getElementById('detalles-pelicula');
+      console.log('Detalles div:', detallesDiv);
+      if (detallesDiv) {
+        detallesDiv.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 500);  // Ajusta el tiempo si es necesario
+  });
+}
+
+  
+  
 
   // Función para simular la compra de entradas
   comprarEntradas() {
@@ -99,12 +111,5 @@ export class CompraEntradasComponent implements OnInit {
       console.error('No se ha seleccionado ninguna película');
     }
   }
-
-
-
-
-
-
-
 
 }

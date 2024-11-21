@@ -1,1 +1,426 @@
-/* You can add global styles to this file, and also import other style files */
+/* Estilos generales para la página */
+
+html, body {
+    scroll-behavior: smooth; /* Habilita desplazamiento suave en toda la página */
+  }
+  
+  .compra-container {
+    height: 100vh; /* Asegúrate de que el contenedor principal tenga suficiente altura */
+  }
+  
+body {
+    background-color: #1d1d1d; /* Fondo negro */
+    font-family: 'Poppins', sans-serif;
+    color: #f1f1f1; /* Texto en blanco */
+    margin: 0;
+    padding: 0;
+}
+
+/* Estilos para los contenedores */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+h1, h2, h3 {
+    font-family: 'Montserrat', sans-serif;
+    color: #e50914; /* Rojo Hoyts */
+}
+
+h1 {
+    font-size: 3rem;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+h2, h3 {
+    font-size: 2rem;
+    margin-bottom: 15px;
+}
+
+/* Navbar */
+.navbar {
+    background-color: #000000; /* Negro */
+    padding: 10px 0;
+}
+
+.navbar-brand {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #e50914; /* Rojo Hoyts */
+}
+
+.navbar-nav .nav-link {
+    color: #fff !important;
+    font-size: 1.1rem;
+}
+
+.navbar-nav .nav-link:hover {
+    color: #e50914 !important; /* Rojo Hoyts */
+}
+
+/* Estilos para el botón de búsqueda */
+.form-control {
+    border-radius: 25px;
+    padding: 8px;
+}
+
+.btn-outline-success {
+    background-color: #e50914; /* Rojo Hoyts */
+    border-radius: 25px;
+    color: white;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.btn-outline-success:hover {
+    background-color: #b50710; /* Rojo más oscuro */
+    transform: scale(1.05);
+}
+
+/* Estilos para las películas populares */
+.peliculas-populares {
+    text-align: center; /* Centrar el título y el contenido */
+    margin-top: 20px;
+}
+
+.peliculas-populares h2 {
+    font-size: 2.5rem;
+    color: #e50914; /* Rojo Hoyts */
+    margin-bottom: 20px;
+}
+
+/* Contenedor de las tarjetas de película */
+.peliculas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Grid responsivo */
+    gap: 20px; /* Espaciado entre las tarjetas */
+    justify-items: center; /* Centrar las tarjetas dentro del grid */
+    padding: 0 20px; /* Padding horizontal para que no toque los bordes */
+}
+
+/* Estilos para cada tarjeta de película */
+.pelicula-card {
+    background-color: #222222; /* Fondo oscuro */
+    color: #f1f1f1; /* Texto blanco */
+    border-radius: 15px;
+    padding: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    transition: transform 0.3s ease;
+    display: flex;
+    flex-direction: column; /* Asegura que los elementos estén alineados verticalmente */
+    justify-content: space-between; /* Distribuye el espacio entre los elementos */
+    width: 100%;
+    max-width: 220px; /* Limita el tamaño máximo de la tarjeta */
+}
+
+.pelicula-card:hover {
+    transform: scale(1.05);
+}
+
+.pelicula-card img {
+    max-width: 100%;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    margin-bottom: 10px;
+}
+
+.pelicula-card h4 {
+    font-size: 1.3rem;
+    margin-top: 10px;
+    color: #e50914; /* Rojo Hoyts */
+}
+
+.pelicula-card button {
+    background-color: #e50914; /* Rojo Hoyts */
+    border: none;
+    padding: 10px 20px;
+    border-radius: 25px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    margin-top: 10px;
+}
+
+.pelicula-card button:hover {
+    background-color: #b50710; /* Rojo más oscuro */
+    transform: scale(1.05);
+}
+
+/* Detalles de la película */
+.detalles-pelicula {
+    background-color: #222222; /* Fondo oscuro */
+    color: white;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    margin-top: 20px;
+    text-align: center; /* Centrar el texto */
+}
+
+.detalles-pelicula img {
+    max-width: 100%; /* Asegura que la imagen no se salga del contenedor */
+  height: auto; /* Mantiene la proporción de la imagen */
+  margin: 20px auto; /* Agrega espacio alrededor de la imagen y la centra */
+  display: block; /* Hace que la imagen se comporte como un bloque y se pueda centrar */
+  border-radius: 10px; /* Opcional, si deseas bordes redondeados */
+}
+
+.detalles-pelicula img:hover {
+    transform: scale(1.05);
+}
+
+.detalles-pelicula h3 {
+    font-size: 2rem;
+    color: #e50914; /* Rojo Hoyts */
+}
+
+.detalles-pelicula p {
+    font-size: 1.1rem;
+    margin-top: 10px;
+}
+
+/* Estilos para las filas de asientos */
+.fila {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+
+.fila span {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    margin: 5px;
+    text-align: center;
+    line-height: 40px;
+    background-color: #e50914;
+    color: white;
+    font-weight: bold;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.fila span.selected {
+    background-color: #87c739; /* Verde cuando se selecciona */
+    color: white;
+}
+
+.fila span:hover {
+    background-color: #87c739; /* Fucsia al pasar el ratón */
+    transform: scale(1.1);
+}
+
+/* Estilos para el resumen de compra */
+.resumen-compra {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.resumen-compra p {
+    font-size: 1.2rem;
+    margin: 10px 0;
+}
+
+.resumen-compra h3 {
+    font-size: 1.5rem;
+    color: #004d40;
+}
+
+/* Animaciones de entrada */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.8s ease-out;
+}
+/* Estilo para el botón de comprar entradas */
+.comprar-entradas {
+    background-color: #e50914; /* Rojo Hoyts */
+    border: none;
+    padding: 10px 20px;
+    border-radius: 25px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    margin-top: 10px;
+    width: auto; /* Ajusta el ancho al contenido */
+    display: inline-block; /* Mantiene el tamaño ajustado al texto */
+}
+
+.comprar-entradas:hover {
+    background-color: #b50710; /* Rojo más oscuro al pasar el ratón */
+    transform: scale(1.05);
+}
+
+/* Efecto de enfoque (focus) */
+.comprar-entradas:focus {
+    outline: none;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.8); /* Brillo blanco al hacer foco */
+}
+
+.asientosTitulo {
+    text-align: center; /* Centra el texto */
+    margin-top: 20px; /* Espacio arriba */
+    margin-bottom: 20px; /* Espacio abajo */
+    font-size: 24px; /* Tamaño de fuente (puedes ajustarlo según tu preferencia) */
+    font-weight: bold; /* Opcional, para hacerlo más destacado */
+  }
+
+
+  /* Estilos generales para los dropdowns */
+
+ .seleccion-asientos{
+    text-align: center;
+  }
+.seleccion-asientos select {
+    background-color: #333; /* Fondo oscuro */
+    color: white; /* Texto blanco */
+    border: 1px solid #ff5733; /* Borde rojo */
+    padding: 12px 18px; /* Espaciado ajustado para el contenido */
+    width: 80%; /* Ancho ajustado */
+    max-width: 400px; /* Máximo ancho para los select */
+    margin: 20px auto; /* Centrado y separación de los elementos */
+    border-radius: 8px; /* Bordes redondeados */
+    font-size: 16px; /* Tamaño de fuente ajustado */
+    font-family: 'Arial', sans-serif; /* Fuente legible */
+    box-sizing: border-box; /* Asegura que el padding no rompa el layout */
+    transition: all 0.3s ease; /* Transición suave para los cambios */
+    cursor: pointer; /* Cursor de puntero */
+    outline: none; /* Eliminar contorno por defecto */
+  }
+  
+  
+  /* Opciones del dropdown */
+  .seleccion-asientos select option {
+    background-color: #333; /* Fondo oscuro para las opciones */
+    color: white; /* Texto blanco */
+    padding: 12px 18px; /* Espaciado cómodo en las opciones */
+    font-size: 16px; /* Ajuste de tamaño de fuente */
+    font-family: 'Arial', sans-serif; /* Fuente uniforme */
+  }
+  
+  /* Estado deshabilitado del dropdown */
+  .seleccion-asientos select[disabled] {
+    background-color: #555; /* Fondo gris cuando está deshabilitado */
+    cursor: not-allowed; /* Cursor no permitido */
+    opacity: 0.7; /* Reducir opacidad para denotar deshabilitado */
+  }
+  
+  /* Estilo para el modal */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7); /* Fondo oscuro */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    width: 80%;
+    max-width: 500px;
+  }
+  
+  button {
+    padding: 10px 20px;
+    background-color: #ff4d4d; /* Rojo */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #e43f3f;
+  }
+  
+  .qr-container {
+    width: 100px; /* Ajusta el tamaño según necesites */
+    height: 100px;
+    margin: 20px auto;
+}
+.mensaje-agradecimiento {
+    position: fixed; /* Para que quede fijo en la pantalla */
+    top: 50%; /* Centrado verticalmente */
+    left: 50%; /* Centrado horizontalmente */
+    transform: translate(-50%, -50%); /* Ajusta el desplazamiento para centrar */
+    background-color: #222; /* Fondo oscuro */
+    color: white; /* Texto blanco */
+    padding: 20px; /* Espaciado interno */
+    border-radius: 10px; /* Bordes redondeados */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Sombra */
+    text-align: center; /* Centrar texto */
+    z-index: 1000; /* Asegura que esté encima de otros elementos */
+    animation: fadeIn 0.8s ease-out; /* Animación de entrada */
+    max-width: 90%; /* Asegura que no se desborde en pantallas pequeñas */
+    box-sizing: border-box; /* Considera el padding dentro del ancho total */
+}
+
+  
+  .mensaje-agradecimiento h2 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+  }
+  
+  .mensaje-agradecimiento p {
+    font-size: 1rem;
+    line-height: 1.5;
+    margin-bottom: 15px;
+  }
+  
+  .btn-confirmacion {
+    background-color: #fff;
+    color: #e43f3f;
+    border: 2px solid #e43f3f;
+    border-radius: 30px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .btn-confirmacion:hover {
+    background-color: #e43f3f;
+    color: #fff;
+    transform: scale(1.05);
+  }
+  
+  .fade-in {
+    opacity: 0;
+    animation: fadeIn 1s forwards;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
