@@ -13,7 +13,7 @@ import { FormsModule } from '@angular/forms';
 export class NavbarComponent {
   searchTerm = '';
 
-  constructor(private apiMovieService: ApipeliculasService,private router: Router) {}  
+  constructor(private apiMovieService: ApipeliculasService,private router: Router) {}
 
   onSearch() {
     this.apiMovieService.getbusquedamultiple(this.searchTerm).subscribe({
@@ -31,6 +31,7 @@ export class NavbarComponent {
         console.error(error);
       }
     });
-  
+
+    
   }
 }
