@@ -40,8 +40,9 @@ body {
 
 .titulofav {
   text-align: center;
-  color: #000000;
-  margin-top: 22px;
+  color: color wheatn;
+  margin-bottom: 32px; /*Separa las cards del titulo*/
+  margin-top: 24px; /*Separa el titulo Peliculas populares de arriba de la pagina*/
 }
 
 .favorito-container {
