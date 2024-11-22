@@ -43,7 +43,7 @@ export class ApipeliculasService {
     return this.http.get(`${this.apiUrl}/authentication/token/new?api_key=${this.apiKey}`);
   }
 
-  
+
   postvalidate(token : string): Observable<any> {
 
     return this.http.post(`${this.apiUrl}/authentication/token/validate_with_login?api_key=${this.apiKey}`,
@@ -51,7 +51,7 @@ export class ApipeliculasService {
   }
 
   postconvetir(token : string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/authentication/session/new?api_key=${this.apiKey}`,{request_token: token}); 
+    return this.http.post(`${this.apiUrl}/authentication/session/new?api_key=${this.apiKey}`,{request_token: token});/* Genera sesion nueva de usuario*/
   }
 
   postcrearlista(token : string): Observable<any> {
@@ -59,14 +59,14 @@ export class ApipeliculasService {
   }
 
   postagregarpeliculalista( idlista : string,idsession : string,idpelicula : string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/list/${idlista}/add_item?api_key=${this.apiKey}&session_id=${idsession}`,{media_id: idpelicula});
+    return this.http.post(`${this.apiUrl}/list/${idlista}/add_item?api_key=${this.apiKey}&session_id=${idsession}`,{media_id: Number(idpelicula)});
   }
 
   getpeliculaslista(idlista : string): Observable<any> {
     return this.http.get(`${this.apiUrl}/list/${idlista}?api_key=${this.apiKey}`);
   }
 
-  deletelistalla(idlista : string,idsession : string,idpelicula : string): Observable<any> {
+  deletelistacompleta(idlista : string,idsession : string): Observable<any> {
     return this.http.delete(`${this.apiUrl}/list/${idlista}?api_key=${this.apiKey}&session_id=${idsession}`);
   }
 
@@ -74,5 +74,4 @@ export class ApipeliculasService {
     return this.http.post(`${this.apiUrl}/list/${idlista}/remove_item?api_key=${this.apiKey}&session_id=${idsession}`,{media_id: idpelicula});
   }
 
-} 
-
+}

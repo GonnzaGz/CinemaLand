@@ -491,3 +491,24 @@ h2, h3 {
       transform: translateY(0);
     }
   }
+
+  .container-search{
+    margin-top: 20px;
+    background-color:   #030918  ; /* Fondo oscuro */
+    color: #f1f1f1; /* Texto en blanco */
+  }
+
+  .pelicula-cardsearch{
+    background-color: #222222; /* Fondo oscuro */
+    color: #f1f1f1; /* Texto blanco */
+    border-radius: 15px;
+    padding: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    transition: transform 0.3s ease;
+    display: flex;
+    flex-direction: column; /* Asegura que los elementos estén alineados verticalmente */
+    justify-content: space-between; /* Distribuye el espacio entre los elementos */
+    width: 100%;
+    max-width: 220px; /* Limita el tamaño máximo de la tarjeta */
+  }

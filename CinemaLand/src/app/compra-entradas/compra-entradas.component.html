@@ -1,63 +1,39 @@
 <div class="compra-container">
-  <!-- Título principal de la página -->
   <h1>¡Bienvenido a Cinemaland!</h1>
-
   <div class="row">
-    <!-- Sección de Películas Populares -->
     <div class="col-9 peliculas-populares">
-      <!-- Subtítulo de la sección -->
       <h2>Películas Populares</h2>
       <div class="peliculas-grid">
-        <!-- Recorre la lista de películas populares y genera una tarjeta para cada película -->
         <div *ngFor="let pelicula of peliculas" class="pelicula-card">
-          <!-- Imagen del poster de la película -->
           <img [src]="'https://image.tmdb.org/t/p/w200/' + pelicula.poster_path" alt="Poster" />
-          <!-- Título de la película -->
           <h4>{{ pelicula.title }}</h4>
-          <!-- Botón para ver detalles de la película seleccionada -->
           <button (click)="verDetalles(pelicula.id)">Ver Detalles</button>
-          <!-- Botón para añadir la película a la lista de favoritos -->
           <button (click)="agregarAFavoritos(pelicula)">Añadir a Favoritos</button>
         </div>
       </div>
     </div>
 
-    <!-- Sección de Favoritos -->
     <div class="col-3 favoritos">
-      <!-- Subtítulo de la sección -->
       <h2 class="titulofav">Favoritos Seleccionados</h2>
-      <!-- Lista de películas favoritas -->
       <ul>
-        <!-- Recorre la lista de favoritos y genera una tarjeta para cada película -->
-        <li *ngFor="let pelicula of favoritos" class="pelicula-card">
+        <li *ngFor="let pelicula of peliculasfavoritas" class="pelicula-card">
           <div class="favorito-container">
-            <!-- Imagen del poster de la película favorita -->
             <img [src]="'https://image.tmdb.org/t/p/w200/' + pelicula.poster_path" alt="Poster" class="favorito-poster" />
-            <!-- Título de la película favorita -->
             <h4 class="favorito-titulo">{{ pelicula.title }}</h4>
           </div>
-          <!-- Botón para eliminar la película de la lista de favoritos -->
           <button (click)="eliminarDeFavoritos(pelicula.id)">Eliminar</button>
         </li>
       </ul>
-      <!-- Botón para eliminar todas las películas de la lista de favoritos -->
-      <button (click)="limpiarFavoritos()" class="boton-limpiar">Limpiar Todos los Favoritos</button>
+      <button (click)="Borrarlistacompleta()" class="boton-limpiar">Limpiar Todos los Favoritos</button>
     </div>
   </div>
 
-  <!-- Sección de Detalles de la Película Seleccionada -->
   <div *ngIf="detallesPelicula" class="detalles-pelicula" id="detalles-pelicula">
-    <!-- Encabezado para los detalles de la película -->
     <h3>Detalles de la Película</h3>
-    <!-- Título de la película -->
     <h4>{{ detallesPelicula.title }}</h4>
-    <!-- Imagen del poster de la película en mayor resolución -->
     <img [src]="'https://image.tmdb.org/t/p/w500/' + detallesPelicula.poster_path" alt="Foto de la película" />
-    <!-- Descripción o sinopsis de la película -->
     <p>{{ detallesPelicula.overview }}</p>
-    <!-- Fecha de estreno de la película -->
     <p>Fecha de estreno: {{ detallesPelicula.release_date }}</p>
-    <!-- Botón para iniciar el proceso de compra de entradas para la película -->
     <button (click)="comprarEntradas()" class="comprar-entradas">Comprar Entradas</button>
   </div>
 </div>

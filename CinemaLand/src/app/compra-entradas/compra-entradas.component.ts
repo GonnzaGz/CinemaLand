@@ -1,122 +1,163 @@
-import { Component, inject, OnInit } from '@angular/core'; // Importa las herramientas necesarias para crear el componente, inyectar dependencias y manejar el ciclo de vida de Angular.
-import { ApipeliculasService } from '../service/apipeliculas.service'; // Importa el servicio que se conecta a la API de películas.
-import { CommonModule } from '@angular/common'; // Importa el módulo común de Angular, que incluye directivas básicas como *ngFor y *ngIf.
-import { Router } from '@angular/router'; // Importa el servicio de enrutamiento para navegar entre páginas.
+import { Component, inject, OnInit } from '@angular/core';
+import { ApipeliculasService } from '../service/apipeliculas.service';  // Ajusta la ruta según sea necesario
+import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
-// Decorador para configurar el componente
 @Component({
-  selector: 'app-compra-entradas', // Define el selector HTML que representa este componente.
-  standalone: true, // Indica que este componente puede funcionar por sí solo.
-  imports: [CommonModule], // Especifica los módulos que este componente necesita para funcionar.
-  templateUrl: './compra-entradas.component.html', // Enlaza el archivo HTML que define la vista del componente.
-  styleUrls: ['./compra-entradas.component.css'] // Enlaza el archivo CSS que define los estilos del componente.
+  selector: 'app-compra-entradas',
+  standalone: true,
+  imports: [CommonModule],
+  templateUrl: './compra-entradas.component.html',
+  styleUrls: ['./compra-entradas.component.css']
 })
-export class CompraEntradasComponent implements OnInit { // Define la clase del componente y su implementación de la interfaz `OnInit`.
+export class CompraEntradasComponent implements OnInit {
+  peliculas: any[] = [];
+  detallesPelicula: any = null;
+  peliculaSeleccionada: number | null = null;
+  selectedMovieId: number | null = null;
+  tokenrequest: string = '';
+  peliculasfavoritas: any[] = [];
 
-  peliculas: any[] = []; // Almacena la lista de películas populares obtenidas de la API.
-  detallesPelicula: any = null; // Almacena los detalles de la película seleccionada.
-  peliculaSeleccionada: number | null = null; // Guarda el ID de la película actualmente seleccionada.
-  selectedMovieId: number | null = null; // Alternativa para guardar el ID de la película seleccionada.
-  favoritos: any[] = []; // Almacena la lista de películas marcadas como favoritas por el usuario.
-
-  tokenrequest: string = ""; // Almacena un token temporal usado en las peticiones a la API.
-
-  private apiMovieService = inject(ApipeliculasService); // Inyecta el servicio de películas para usar sus métodos.
-  private router = inject(Router); // Inyecta el servicio de enrutamiento para navegar entre páginas.
+  private apiMovieService = inject(ApipeliculasService);
+  private router = inject(Router);
 
   constructor() {
-    this.obtenerPeliculasPopulares(); // Llama al método para obtener las películas populares al construir el componente.
+    this.obtenerPeliculasPopulares();
   }
 
-  ngOnInit(): void { // Hook que se ejecuta cuando el componente está inicializado.
-    let id = localStorage.getItem("id"); // Recupera el ID de sesión almacenado en localStorage.
-
-    if (id) {
-      console.log("ID almacenado:", id); // Si existe un ID, lo muestra en la consola.
+  ngOnInit(): void {
+    let idsession = localStorage.getItem('idsession');
+    let idlist =localStorage.getItem('idlist')
+    if (idsession && idlist) {
+      this.listadefavoritos();
     } else {
-      this.apiMovieService.gettoken().subscribe({ // Si no existe un ID, obtiene un token de la API.
-        next: (data: any) => {
-          this.tokenrequest = data.request_token; // Almacena el token temporal recibido de la API.
-          this.apiMovieService.postvalidate(this.tokenrequest).subscribe({ // Valida el token con otra llamada a la API.
-            next: (data: any) => {
-              this.apiMovieService.postconvetir(this.tokenrequest).subscribe({ // Convierte el token en una sesión.
-                next: (data: any) => {
-                  localStorage.setItem("id", data.session_id); // Almacena el ID de la sesión en localStorage.
-                  this.apiMovieService.postcrearlista(data.session_id).subscribe({ // Crea una lista asociada a la sesión.
-                    next: (data: any) => {
-                      localStorage.setItem("idlist", data.id); // Almacena el ID de la lista en localStorage.
-                    },
-                    error: (error) => {
-                      console.log(error); // Maneja errores durante la creación de la lista.
-                    }
-                  });
-                },
-                error: (error) => {
-                  console.log(error); // Maneja errores durante la conversión del token.
-                }
-              });
-            },
-            error: (error) => {
-              console.log(error); // Maneja errores durante la validación del token.
-            }
-          });
-        },
-        error: (error) => {
-          console.log(error); // Maneja errores durante la obtención del token.
+        localStorage.clear();
+        this.Crearlista()
+
+    }
+  }
+
+  obtenerPeliculasPopulares() {
+    this.apiMovieService.getPopularMovies().subscribe((data: any) => {
+      this.peliculas = data.results;
+    });
+  }
+
+  verDetalles(id: number) {
+    this.apiMovieService.getDetalleMovie(id.toString()).subscribe((data: any) => {
+      this.detallesPelicula = data;
+      this.peliculaSeleccionada = id;
+      this.selectedMovieId = id;
+
+      setTimeout(() => {
+        const detallesDiv = document.getElementById('detalles-pelicula');
+        if (detallesDiv) {
+          detallesDiv.scrollIntoView({ behavior: 'smooth' });
         }
+      }, 500);
+    });
+  }
+
+  comprarEntradas() {
+    if (this.selectedMovieId) {
+      this.router.navigate(['/seleccion-asientos', this.selectedMovieId]);
+    } else {
+      console.error('No se ha seleccionado ninguna película');
+    }
+  }
+
+  agregarAFavoritos(pelicula: any) {
+    const idlista = localStorage.getItem('idlist');
+    const idsession = localStorage.getItem('idsession');
+
+    if(idlista && idsession){
+
+      this.apiMovieService.postagregarpeliculalista(idlista, idsession, pelicula.id).subscribe({
+        next: (data: any) =>{
+          this.listadefavoritos();
+          console.log('Película agregada a favoritos:', data)
+        },
+        error: (error) => console.error('Error al agregar a favoritos:', error)
+      });
+
+
+    }
+  }
+
+
+
+
+  eliminarDeFavoritos(idpelicula: string) {
+    const idlista = localStorage.getItem('idlist');
+    const idsession = localStorage.getItem('idsession');
+
+    if (idlista && idsession) {
+      this.apiMovieService.posteliminarpeliculalista(idlista, idsession, idpelicula).subscribe({
+        next: (data: any) => {
+          console.log('Película eliminada de favoritos:', data);
+          this.listadefavoritos(); // Refresca la lista de favoritos
+        },
+        error: (error) => console.error('Error al eliminar de favoritos:', error)
       });
     }
   }
 
-  obtenerPeliculasPopulares() { // Método para obtener las películas populares desde la API.
-    this.apiMovieService.getPopularMovies().subscribe((data: any) => {
-      this.peliculas = data.results; // Almacena los resultados obtenidos en la lista `peliculas`.
-    });
-  }
+  Borrarlistacompleta() {
+    const idlista = localStorage.getItem('idlist');
+    const idsession = localStorage.getItem('idsession');
 
-  verDetalles(id: number) { // Método para obtener y mostrar los detalles de una película específica.
-    this.apiMovieService.getDetalleMovie(id.toString()).subscribe((data: any) => {
-      this.detallesPelicula = data; // Almacena los detalles de la película seleccionada.
-      this.peliculaSeleccionada = id; // Actualiza el ID de la película seleccionada.
-      this.selectedMovieId = id; // También lo almacena en la variable `selectedMovieId`.
-
-      setTimeout(() => { // Retraso para realizar un desplazamiento suave hacia la sección de detalles.
-        const detallesDiv = document.getElementById('detalles-pelicula'); // Obtiene la referencia al contenedor de detalles.
-        if (detallesDiv) {
-          detallesDiv.scrollIntoView({ behavior: 'smooth' }); // Desplaza suavemente hacia el contenedor.
-        }
-      }, 500); // Retraso de 500 ms para asegurar que el contenedor esté listo.
-    });
-  }
-
-  agregarAFavoritos(pelicula: any) { // Método para añadir una película a la lista de favoritos.
-    const yaEstaEnFavoritos = this.favoritos.some(fav => fav.id === pelicula.id); // Verifica si la película ya está en favoritos.
-    if (!yaEstaEnFavoritos) {
-      this.favoritos.push(pelicula); // Si no está, la añade a la lista.
-      console.log(`Película agregada a favoritos: ${pelicula.title}`); // Muestra un mensaje en la consola.
+    if (idlista && idsession) {
+      this.apiMovieService.deletelistacompleta(idlista, idsession).subscribe({
+        next: (data: any) => {
+          console.log('Lista completa eliminada:', data);
+          localStorage.removeItem('idlist'); // Opcional, si decides reiniciar los datos
+          this.peliculasfavoritas = [];// Limpia la lista de favoritos en la UI
+          this.Crearlista()
+        },
+        error: (error) => console.error('Error al eliminar la lista completa:', error)
+      });
     } else {
-      console.log(`La película ya está en favoritos: ${pelicula.title}`); // Informa si ya estaba en favoritos.
+      console.error('Falta el id de la lista o sesión en el almacenamiento local.');
     }
   }
 
-  eliminarDeFavoritos(id: number) { // Método para eliminar una película de la lista de favoritos.
-    const pelicula = this.favoritos.find(pelicula => pelicula.id === id); // Busca la película en la lista por su ID.
-    if (pelicula) {
-      this.favoritos = this.favoritos.filter(pelicula => pelicula.id !== id); // Filtra la lista para eliminarla.
-      console.log(`Película eliminada de favoritos: ${pelicula.title}`); // Muestra un mensaje en la consola.
+
+  listadefavoritos() {
+    const idlista = localStorage.getItem('idlist');
+    if (idlista) {
+      this.apiMovieService.getpeliculaslista(idlista).subscribe({
+        next: (data: any) => {
+          this.peliculasfavoritas = data.items;
+        },
+        error: (error) => console.log(error)
+      });
     }
   }
 
-  limpiarFavoritos() { // Método para vaciar completamente la lista de favoritos.
-    this.favoritos = []; // Resetea la lista de favoritos.
-    console.log('Todos los favoritos han sido eliminados'); // Muestra un mensaje en la consola.
-  }
 
-  comprarEntradas() { // Método para navegar a la página de selección de asientos.
-    if (this.selectedMovieId) {
-      this.router.navigate(['/seleccion-asientos', this.selectedMovieId]); // Navega pasando el ID de la película seleccionada.
-    } else {
-      console.error('No se ha seleccionado ninguna película'); // Muestra un error si no hay película seleccionada.
-    }
+  Crearlista(){
+    this.apiMovieService.gettoken().subscribe({
+      next: (data: any) => {
+        this.tokenrequest = data.request_token;
+        this.apiMovieService.postvalidate(this.tokenrequest).subscribe({
+          next: (data: any) => {
+            this.apiMovieService.postconvetir(this.tokenrequest).subscribe({
+              next: (data: any) => {
+                localStorage.setItem('idsession', data.session_id);
+                this.apiMovieService.postcrearlista(data.session_id).subscribe({
+                  next: (data: any) => {
+                    localStorage.setItem('idlist', data.list_id);
+                  },
+                  error: (error) => console.log(error)
+                });
+              },
+              error: (error) => console.log(error)
+            });
+          },
+          error: (error) => console.log(error)
+        });
+      },
+      error: (error) => console.log(error)
+    });
   }
 }
