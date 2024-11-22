@@ -1,4 +1,4 @@
-<div class="container text-center">
+<div class="container-random text-center">
     <h1>Tu Pelicula Random</h1>
     <div class="row">
         <div class="col">
@@ -6,19 +6,19 @@
                 <p>Selecciona tus categorias</p>
             </div>
             <div class="row row-cols-lg-auto g-1 aling-items-center  ">
-                   
+
                 <div class="row justify-content-center">
-                        
-                    @for(item of categorias; track $index){   
+
+                    @for(item of categorias; track $index){
                         @if($index >= (categorias.length/2)){
                             <div class="col-6">
                                 <div class="form-check form-switch ">
                                     <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked{{item.id}}" (change)="onCheckboxChange($event, item)" >
                                     <label class="form-check-label" for="flexSwitchCheckChecked{{item.id}}">{{item.name}}</label>
                                 </div>
-                            </div> 
-                        }@else{  
-                            <div class="col-6">        
+                            </div>
+                        }@else{
+                            <div class="col-6">
                                 <div class="form-check form-switch ">
                                     <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked{{item.id}}"  (change)="onCheckboxChange($event, item)">
                                     <label class="form-check-label" for="flexSwitchCheckChecked{{item.id}}">{{item.name}}</label>
@@ -26,14 +26,14 @@
                             </div>
                         }
                     }
-                        
-                </div>              
-                
+
+                </div>
+
             </div>
             <div class="row justify-content-center">
                 <button class="btn btn-primary" (click)="Randompeli()">Random</button>
             </div>
-            
+
         </div>
         <div class="col-8" >
             <div id="carouselExample" class="carousel slide w-50">
@@ -41,16 +41,15 @@
                     @for(item of peliculas; track $index){
                         <div class="carousel-item" [class.active]="$index === activeIndex">
                             <a [routerLink]="['/peliculadetalle', item.id]"><img  [src]="'https://image.tmdb.org/t/p/w200/' + item.poster_path" class="d-block w-100" alt="..."></a>
-                            
+
                           </div>
                     }
                 </div>
-               
+
             </div>
-        </div>        
+        </div>
     </div>
-    
-    
+
 </div>
 
 

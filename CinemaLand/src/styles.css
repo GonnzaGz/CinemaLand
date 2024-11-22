@@ -2,19 +2,85 @@
 
 html, body {
     scroll-behavior: smooth; /* Habilita desplazamiento suave en toda la página */
+    height: 100%;
+    background-color: #1d1d1d; /* Fondo oscuro */
+    color: #f1f1f1; /* Color de texto blanco */
   }
-  
+
   .compra-container {
-    height: 100vh; /* Asegúrate de que el contenedor principal tenga suficiente altura */
-  }
-  
-body {
-    background-color: #1d1d1d; /* Fondo negro */
-    font-family: 'Poppins', sans-serif;
+    min-height: 100vh; /* Esto asegura que el contenedor ocupe toda la altura de la ventana */
+    background-color:   #030918  ; /* Fondo oscuro */
     color: #f1f1f1; /* Texto en blanco */
-    margin: 0;
-    padding: 0;
+    display: flex; /* Usar flexbox para el contenido */
+    flex-direction: column; /* Colocar los elementos en columna */
 }
+
+.boton-limpiar {
+  position: fixed;
+  bottom: 20px; /* Distancia desde el borde inferior */
+  right: 20px; /* Distancia desde el borde derecho */
+  padding: 10px 20px;
+  background-color: #ffcc00;
+  color: white;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  z-index: 10; /* Asegura que esté encima de otros elementos */
+}
+
+
+
+body {
+  height: 100vh; /* Asegura que el body ocupe toda la pantalla */
+  background-color: #1d1d1d; /* Fondo oscuro */
+  color: #f1f1f1; /* Texto en blanco */
+  margin: 0;
+  padding: 0;
+}
+
+.titulofav {
+  text-align: center;
+  color: #000000;
+  margin-top: 22px;
+}
+
+.favorito-container {
+  text-align: center; /* Titulo de la pelicula en el apartado favorito */
+  display: flex;
+  flex-wrap: wrap;  /* Permite que las tarjetas se acomoden en filas si es necesario */
+  justify-content: center; /* Centra las tarjetas */
+  gap: 20px;  /* Agrega espacio entre las tarjetas */
+}
+
+.favorito-card {
+  display: block;
+  text-align: center;
+  width: 150px; /* Ajusta el tamaño de las tarjetas */
+  margin-bottom: 20px; /* Agrega espacio entre las tarjetas verticalmente */
+}
+
+.favorito-poster {
+  display: block;
+  max-width: 100%; /* Mantén el tamaño natural de la imagen */
+}
+
+.favorito-titulo {
+  margin-top: 8px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+}
+
+.container-random {
+  max-width: 1200px; /* Define un ancho máximo */
+
+}
+
+.carousel-inner img {
+  max-height: 300px; /* Ajusta la altura de las imágenes */
+  object-fit: contain; /* Evita distorsión de las imágenes */
+}
+
 
 /* Estilos para los contenedores */
 .container {
@@ -88,7 +154,8 @@ h2, h3 {
 .peliculas-populares h2 {
     font-size: 2.5rem;
     color: #e50914; /* Rojo Hoyts */
-    margin-bottom: 20px;
+    margin-bottom: 30px; /*Separa las cards del titulo*/
+    margin-top: 20px; /*Separa el titulo Peliculas populares de arriba de la pagina*/
 }
 
 /* Contenedor de las tarjetas de película */
@@ -303,8 +370,8 @@ h2, h3 {
     cursor: pointer; /* Cursor de puntero */
     outline: none; /* Eliminar contorno por defecto */
   }
-  
-  
+
+
   /* Opciones del dropdown */
   .seleccion-asientos select option {
     background-color: #333; /* Fondo oscuro para las opciones */
@@ -313,14 +380,14 @@ h2, h3 {
     font-size: 16px; /* Ajuste de tamaño de fuente */
     font-family: 'Arial', sans-serif; /* Fuente uniforme */
   }
-  
+
   /* Estado deshabilitado del dropdown */
   .seleccion-asientos select[disabled] {
     background-color: #555; /* Fondo gris cuando está deshabilitado */
     cursor: not-allowed; /* Cursor no permitido */
     opacity: 0.7; /* Reducir opacidad para denotar deshabilitado */
   }
-  
+
   /* Estilo para el modal */
 .modal {
     position: fixed;
@@ -334,7 +401,7 @@ h2, h3 {
     align-items: center;
     z-index: 1000;
   }
-  
+
   .modal-content {
     background-color: white;
     padding: 20px;
@@ -343,7 +410,7 @@ h2, h3 {
     width: 80%;
     max-width: 500px;
   }
-  
+
   button {
     padding: 10px 20px;
     background-color: #ff4d4d; /* Rojo */
@@ -352,11 +419,11 @@ h2, h3 {
     border-radius: 5px;
     cursor: pointer;
   }
-  
+
   button:hover {
     background-color: #e43f3f;
   }
-  
+
   .qr-container {
     width: 100px; /* Ajusta el tamaño según necesites */
     height: 100px;
@@ -379,18 +446,18 @@ h2, h3 {
     box-sizing: border-box; /* Considera el padding dentro del ancho total */
 }
 
-  
+
   .mensaje-agradecimiento h2 {
     font-size: 2rem;
     margin-bottom: 10px;
   }
-  
+
   .mensaje-agradecimiento p {
     font-size: 1rem;
     line-height: 1.5;
     margin-bottom: 15px;
   }
-  
+
   .btn-confirmacion {
     background-color: #fff;
     color: #e43f3f;
@@ -401,18 +468,18 @@ h2, h3 {
     cursor: pointer;
     transition: all 0.3s ease-in-out;
   }
-  
+
   .btn-confirmacion:hover {
     background-color: #e43f3f;
     color: #fff;
     transform: scale(1.05);
   }
-  
+
   .fade-in {
     opacity: 0;
     animation: fadeIn 1s forwards;
   }
-  
+
   @keyframes fadeIn {
     from {
       opacity: 0;
@@ -423,4 +490,3 @@ h2, h3 {
       transform: translateY(0);
     }
   }
-  

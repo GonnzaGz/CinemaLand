@@ -1,18 +1,38 @@
 <div class="compra-container">
   <h1>¡Bienvenido a Cinemaland!</h1>
-  <!-- Lista de películas populares -->
-  <div class="peliculas-populares">
-    <h2>Películas Populares</h2>
-    <div class="peliculas-grid">
-      <div *ngFor="let pelicula of peliculas" class="pelicula-card">
-        <img [src]="'https://image.tmdb.org/t/p/w200/' + pelicula.poster_path" alt="Poster" />
-        <h4>{{ pelicula.title }}</h4>
-        <button (click)="verDetalles(pelicula.id)">Ver Detalles</button>
+
+  <div class="row">
+    <!-- Sección de Películas Populares -->
+    <div class="col-9 peliculas-populares">
+      <h2>Películas Populares</h2>
+      <div class="peliculas-grid">
+        <div *ngFor="let pelicula of peliculas" class="pelicula-card">
+          <img [src]="'https://image.tmdb.org/t/p/w200/' + pelicula.poster_path" alt="Poster" />
+          <h4>{{ pelicula.title }}</h4>
+          <button (click)="verDetalles(pelicula.id)">Ver Detalles</button>
+          <button (click)="agregarAFavoritos(pelicula)">Añadir a Favoritos</button>
+        </div>
       </div>
+    </div>
+
+    <!-- Sección de Favoritos -->
+    <div class="col-3 favoritos" >
+      <h2 class="titulofav">Favoritos</h2>
+      <ul>
+        <li *ngFor="let pelicula of favoritos"  class="pelicula-card">
+          <div class="favorito-container">
+            <img [src]="'https://image.tmdb.org/t/p/w200/' + pelicula.poster_path" alt="Poster" class="favorito-poster" />
+            <h4 class="favorito-titulo">{{ pelicula.title }}</h4>
+          </div>
+          <button (click)="eliminarDeFavoritos(pelicula.id)">Eliminar</button>
+        </li>
+      </ul>
+      <!-- Botón para Limpiar Favoritos -->
+<button (click)="limpiarFavoritos()" class="boton-limpiar">Limpiar Todos los Favoritos</button>
     </div>
   </div>
 
-  <!-- Detalles de la película seleccionada -->
+  <!-- Detalles de la Película Seleccionada -->
   <div *ngIf="detallesPelicula" class="detalles-pelicula" id="detalles-pelicula">
     <h3>Detalles de la Película</h3>
     <h4>{{ detallesPelicula.title }}</h4>
