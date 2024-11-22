@@ -6,7 +6,7 @@
 
 <div class="seleccion-asientos">
   <div class="dropdown">
-    <label for="sucursal">Selecciona una sucursal:</label>
+    <label for="sucursal">Selecciona una sucursal</label>
     <select id="sucursal" [(ngModel)]="sucursalSeleccionada" (change)="onSucursalChange()">
       <option *ngFor="let sucursal of sucursales" [value]="sucursal">{{ sucursal }}</option>
     </select>
@@ -32,19 +32,19 @@
   <div *ngIf="sucursalSeleccionada && horarioSeleccionado && modoPago">
     <h3 class="asientosTitulo">Selecciona tus asientos</h3>
     <div class="fila">
-      <span *ngFor="let asiento of fila1" (click)="seleccionarAsiento(asiento)" 
+      <span *ngFor="let asiento of fila1" (click)="seleccionarAsiento(asiento)"
             [class.selected]="asientosSeleccionados.includes(asiento)">
         {{ asiento.nombre }}
       </span>
     </div>
     <div class="fila">
-      <span *ngFor="let asiento of fila2" (click)="seleccionarAsiento(asiento)" 
+      <span *ngFor="let asiento of fila2" (click)="seleccionarAsiento(asiento)"
             [class.selected]="asientosSeleccionados.includes(asiento)">
         {{ asiento.nombre }}
       </span>
     </div>
     <div class="fila">
-      <span *ngFor="let asiento of fila3" (click)="seleccionarAsiento(asiento)" 
+      <span *ngFor="let asiento of fila3" (click)="seleccionarAsiento(asiento)"
             [class.selected]="asientosSeleccionados.includes(asiento)">
         {{ asiento.nombre }}
       </span>

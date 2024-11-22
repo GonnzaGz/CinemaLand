@@ -353,7 +353,9 @@ h2, h3 {
   /* Estilos generales para los dropdowns */
 
  .seleccion-asientos{
+  color: white;
     text-align: center;
+    margin-bottom: 10px;
   }
 .seleccion-asientos select {
     background-color: #333; /* Fondo oscuro */
@@ -512,3 +514,5 @@ h2, h3 {
     width: 100%;
     max-width: 220px; /* Limita el tamaño máximo de la tarjeta */
   }
+
+    
