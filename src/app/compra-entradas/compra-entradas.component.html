@@ -5,35 +5,55 @@
       <h2>Películas Populares</h2>
       <div class="peliculas-grid">
         <div *ngFor="let pelicula of peliculas" class="pelicula-card">
-          <img [src]="'https://image.tmdb.org/t/p/w200/' + pelicula.poster_path" alt="Poster" />
+          <img
+            [src]="'https://image.tmdb.org/t/p/w200/' + pelicula.poster_path"
+            alt="Poster"
+          />
           <h4>{{ pelicula.title }}</h4>
           <button (click)="verDetalles(pelicula.id)">Ver Detalles</button>
-          <button (click)="agregarAFavoritos(pelicula)">Añadir a Favoritos</button>
+          <button (click)="agregarAFavoritos(pelicula)">
+            Añadir a Favoritos
+          </button>
         </div>
       </div>
     </div>
 
     <div class="col-3 favoritos">
-      <h2 class="titulofav">Favoritos Seleccionados</h2>
+      <h2 class="titulofav">Tus Favoritas</h2>
       <ul>
         <li *ngFor="let pelicula of peliculasfavoritas" class="pelicula-card">
           <div class="favorito-container">
-            <img [src]="'https://image.tmdb.org/t/p/w200/' + pelicula.poster_path" alt="Poster" class="favorito-poster" />
+            <img
+              [src]="'https://image.tmdb.org/t/p/w200/' + pelicula.poster_path"
+              alt="Poster"
+              class="favorito-poster"
+            />
             <h4 class="favorito-titulo">{{ pelicula.title }}</h4>
           </div>
           <button (click)="eliminarDeFavoritos(pelicula.id)">Eliminar</button>
         </li>
       </ul>
-      <button (click)="Borrarlistacompleta()" class="boton-limpiar">Limpiar Todos los Favoritos</button>
+      <button (click)="Borrarlistacompleta()" class="boton-limpiar">
+        Limpiar Todos los Favoritos
+      </button>
     </div>
   </div>
 
-  <div *ngIf="detallesPelicula" class="detalles-pelicula" id="detalles-pelicula">
+  <div
+    *ngIf="detallesPelicula"
+    class="detalles-pelicula"
+    id="detalles-pelicula"
+  >
     <h3>Detalles de la Película</h3>
     <h4>{{ detallesPelicula.title }}</h4>
-    <img [src]="'https://image.tmdb.org/t/p/w500/' + detallesPelicula.poster_path" alt="Foto de la película" />
+    <img
+      [src]="'https://image.tmdb.org/t/p/w500/' + detallesPelicula.poster_path"
+      alt="Foto de la película"
+    />
     <p>{{ detallesPelicula.overview }}</p>
     <p>Fecha de estreno: {{ detallesPelicula.release_date }}</p>
-    <button (click)="comprarEntradas()" class="comprar-entradas">Comprar Entradas</button>
+    <button (click)="comprarEntradas()" class="comprar-entradas">
+      Comprar Entradas
+    </button>
   </div>
 </div>
