@@ -9,7 +9,7 @@
 
 .banner {
   background-image: url("../../assets/images/cinemalandBanner.jpg");
-  width: 1264px;
+  width: auto;
   height: 300px;
   background-size: cover;
   background-position: center;
