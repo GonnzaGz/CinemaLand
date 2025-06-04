@@ -1,9 +1,9 @@
 <div class="banner"></div>
 <div class="compra-container">
   <div class="row">
-    <h1>¡Bienvenido!</h1>
+    <h1 class="h1">¡Bienvenido!</h1>
     <div class="col-9 peliculas-populares">
-      <h2>Películas Populares</h2>
+      <h2>🎬 Películas Populares 🎬</h2>
       <div class="peliculas-grid">
         <div *ngFor="let pelicula of peliculas" class="pelicula-card">
           <img
@@ -13,14 +13,14 @@
           <h4>{{ pelicula.title }}</h4>
           <button (click)="verDetalles(pelicula.id)">Ver Detalles</button>
           <button (click)="agregarAFavoritos(pelicula)">
-            Añadir a Favoritos
+            Añadir a Favoritos ⭐
           </button>
         </div>
       </div>
     </div>
 
     <div class="col-3 favoritos">
-      <h2 class="titulofav">Tus Favoritas</h2>
+      <h2 class="titulofav">Tus Favoritas ⭐</h2>
       <ul>
         <li *ngFor="let pelicula of peliculasfavoritas" class="pelicula-card">
           <div class="favorito-container">

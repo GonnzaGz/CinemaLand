@@ -1,7 +1,10 @@
-h1,
-h2 {
+.h1 {
+  text-align: center;
+  font-size: 3rem;
+  color: #fff;
+  margin-top: 20px;
   color: white;
-  margin-top: 50px;
+  -webkit-text-stroke: 1px white; /* contorno rojo */
 }
 
 .banner {
@@ -11,7 +14,8 @@ h2 {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  border: 1px solid rgba(0, 0, 0, 0.767);
+  border: 5px solid rgba(0, 0, 0, 0.53);
+  border-bottom: 10px solid rgba(0, 0, 0, 0.774);
 }
 
 .compra-container {

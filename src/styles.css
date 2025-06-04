@@ -7,10 +7,9 @@ body {
   overflow-y: scroll;
   overflow-x: hidden;
   color: #f1f1f1;
-  background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)),
+  background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)),
     url(./assets/images/pngtree-popcorn-spilling-onto-a-vibrant-red-backdrop-from-a-paper-bowl-picture-image_5805600.jpg);
   background-size: cover;
-  background-position: center;
   background-repeat: no-repeat;
 }
 
@@ -43,9 +42,11 @@ body {
 
 .titulofav {
   text-align: center;
-  color: color wheatn;
+  color: white;
+  -webkit-text-stroke: 1px white; /* contorno rojo */
   margin-bottom: 32px; /*Separa las cards del titulo*/
   margin-top: 24px; /*Separa el titulo Peliculas populares de arriba de la pagina*/
+  font-size: 2rem; /* Tamaño del título */
 }
 
 .favorito-container {
@@ -158,8 +159,9 @@ h3 {
 }
 
 .peliculas-populares h2 {
-  font-size: 2.5rem;
-  color: #e50914; /* Rojo Hoyts */
+  font-size: 2rem;
+  color: white;
+  -webkit-text-stroke: 1px white; /* contorno rojo */
   margin-bottom: 30px; /*Separa las cards del titulo*/
   margin-top: 20px; /*Separa el titulo Peliculas populares de arriba de la pagina*/
 }
@@ -178,7 +180,7 @@ h3 {
 
 /* Estilos para cada tarjeta de película */
 .pelicula-card {
-  background-color: #222222; /* Fondo oscuro */
+  background-color: #222222e3; /* Fondo oscuro */
   color: #f1f1f1; /* Texto blanco */
   border-radius: 15px;
   padding: 15px;
