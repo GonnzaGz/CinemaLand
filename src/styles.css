@@ -2,11 +2,16 @@
 
 html,
 body {
-  scroll-behavior: smooth; /* Habilita desplazamiento suave en toda la página */
+  scroll-behavior: smooth;
   height: 100%;
-  background-color: #1d1d1d; /* Fondo oscuro */
-  color: #f1f1f1; /* Color de texto blanco */
-  background-image: url(./assets/images/cinemaland.jpg);
+  overflow-y: scroll;
+  overflow-x: hidden;
+  color: #f1f1f1;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)),
+    url(./assets/images/pngtree-popcorn-spilling-onto-a-vibrant-red-backdrop-from-a-paper-bowl-picture-image_5805600.jpg);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .compra-container {
@@ -34,8 +39,6 @@ body {
   height: 100vh; /* Asegura que el body ocupe toda la pantalla */
   background-color: #1d1d1d; /* Fondo oscuro */
   color: #f1f1f1; /* Texto en blanco */
-  margin: 0;
-  padding: 0;
 }
 
 .titulofav {
@@ -51,6 +54,7 @@ body {
   flex-wrap: wrap; /* Permite que las tarjetas se acomoden en filas si es necesario */
   justify-content: center; /* Centra las tarjetas */
   gap: 20px; /* Agrega espacio entre las tarjetas */
+  margin-top: 0px;
 }
 
 .favorito-card {

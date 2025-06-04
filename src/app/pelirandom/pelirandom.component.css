@@ -1,4 +1,56 @@
 p {
-    font-weight: bold;
-    font-size: large;
-  }
+  font-weight: bold;
+  font-size: large;
+}
+
+.container-random {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  background-color: #282c3490;
+  margin: auto;
+  margin-top: 100px;
+  margin-bottom: 100px;
+  padding: 50px;
+}
+
+button {
+  background-color: white;
+  color: red;
+  border: 2px solid #454545;
+  padding: 10px 20px;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-top: 20px;
+}
+
+/* Fondo blanco cuando está desactivado */
+.form-check-input {
+  background-color: white;
+  border-color: red;
+}
+
+/* Bolita (thumb) roja cuando está desactivado */
+.form-check-input::before {
+  background-color: red;
+}
+
+/* Fondo rojo cuando está activado */
+.form-check-input:checked {
+  background-color: red;
+  border-color: red;
+}
+
+/* Bolita sigue siendo roja cuando está activado */
+.form-check-input:checked::before {
+  background-color: white; /* opcional: blanco sobre fondo rojo */
+}
+
+/* Sombra de enfoque en rojo suave */
+.form-check-input:focus {
+  box-shadow: 0 0 0 0.25rem rgba(255, 0, 0, 0.3);
+}

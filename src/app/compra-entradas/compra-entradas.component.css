@@ -1,4 +1,19 @@
 h1,
 h2 {
   color: white;
+  margin-top: 50px;
+}
+
+.banner {
+  background-image: url("../../assets/images/cinemalandBanner.jpg");
+  width: 1264px;
+  height: 300px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border: 1px solid rgba(0, 0, 0, 0.767);
+}
+
+.compra-container {
+  margin-bottom: 50px;
 }
