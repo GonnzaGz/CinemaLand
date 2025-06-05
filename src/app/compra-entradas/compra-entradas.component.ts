@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { ApipeliculasService } from '../service/apipeliculas.service';  // Ajusta la ruta según sea necesario
+import { ApipeliculasService } from '../service/apipeliculas.service';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 
@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './compra-entradas.component.html',
-  styleUrls: ['./compra-entradas.component.css']
+  styleUrls: ['./compra-entradas.component.css'],
 })
 export class CompraEntradasComponent implements OnInit {
   peliculas: any[] = [];
@@ -26,15 +26,23 @@ export class CompraEntradasComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    let idsession = localStorage.getItem('idsession');
-    let idlist =localStorage.getItem('idlist')
+    const idsession = localStorage.getItem('idsession');
+    const idlist = localStorage.getItem('idlist');
+    /*const lastSelectedMovieId = localStorage.getItem('selectedMovieId');*/
+
     if (idsession && idlist) {
       this.listadefavoritos();
     } else {
-        localStorage.clear();
-        this.Crearlista()
-
+      localStorage.clear();
+      this.Crearlista();
     }
+
+    /*if (lastSelectedMovieId) {
+      const id = parseInt(lastSelectedMovieId, 10);
+      if (!isNaN(id)) {
+        this.verDetalles(id);
+      }
+    }*/
   }
 
   obtenerPeliculasPopulares() {
@@ -44,18 +52,22 @@ export class CompraEntradasComponent implements OnInit {
   }
 
   verDetalles(id: number) {
-    this.apiMovieService.getDetalleMovie(id.toString()).subscribe((data: any) => {
-      this.detallesPelicula = data;
-      this.peliculaSeleccionada = id;
-      this.selectedMovieId = id;
+    this.apiMovieService
+      .getDetalleMovie(id.toString())
+      .subscribe((data: any) => {
+        this.detallesPelicula = data;
+        this.peliculaSeleccionada = id;
+        this.selectedMovieId = id;
 
-      setTimeout(() => {
-        const detallesDiv = document.getElementById('detalles-pelicula');
-        if (detallesDiv) {
-          detallesDiv.scrollIntoView({ behavior: 'smooth' });
-        }
-      }, 500);
-    });
+        localStorage.setItem('selectedMovieId', id.toString());
+
+        setTimeout(() => {
+          const detallesDiv = document.getElementById('detalles-pelicula');
+          if (detallesDiv) {
+            detallesDiv.scrollIntoView({ behavior: 'smooth' });
+          }
+        }, 500);
+      });
   }
 
   comprarEntradas() {
@@ -70,35 +82,35 @@ export class CompraEntradasComponent implements OnInit {
     const idlista = localStorage.getItem('idlist');
     const idsession = localStorage.getItem('idsession');
 
-    if(idlista && idsession){
-
-      this.apiMovieService.postagregarpeliculalista(idlista, idsession, pelicula.id).subscribe({
-        next: (data: any) =>{
-          this.listadefavoritos();
-          console.log('Película agregada a favoritos:', data)
-        },
-        error: (error) => console.error('Error al agregar a favoritos:', error)
-      });
-
-
+    if (idlista && idsession) {
+      this.apiMovieService
+        .postagregarpeliculalista(idlista, idsession, pelicula.id)
+        .subscribe({
+          next: (data: any) => {
+            this.listadefavoritos();
+            console.log('Película agregada a favoritos:', data);
+          },
+          error: (error) =>
+            console.error('Error al agregar a favoritos:', error),
+        });
     }
   }
-
-
-
 
   eliminarDeFavoritos(idpelicula: string) {
     const idlista = localStorage.getItem('idlist');
     const idsession = localStorage.getItem('idsession');
 
     if (idlista && idsession) {
-      this.apiMovieService.posteliminarpeliculalista(idlista, idsession, idpelicula).subscribe({
-        next: (data: any) => {
-          console.log('Película eliminada de favoritos:', data);
-          this.listadefavoritos(); // Refresca la lista de favoritos
-        },
-        error: (error) => console.error('Error al eliminar de favoritos:', error)
-      });
+      this.apiMovieService
+        .posteliminarpeliculalista(idlista, idsession, idpelicula)
+        .subscribe({
+          next: (data: any) => {
+            console.log('Película eliminada de favoritos:', data);
+            this.listadefavoritos();
+          },
+          error: (error) =>
+            console.error('Error al eliminar de favoritos:', error),
+        });
     }
   }
 
@@ -110,17 +122,19 @@ export class CompraEntradasComponent implements OnInit {
       this.apiMovieService.deletelistacompleta(idlista, idsession).subscribe({
         next: (data: any) => {
           console.log('Lista completa eliminada:', data);
-          localStorage.removeItem('idlist'); // Opcional, si decides reiniciar los datos
-          this.peliculasfavoritas = [];// Limpia la lista de favoritos en la UI
-          this.Crearlista()
+          localStorage.removeItem('idlist');
+          this.peliculasfavoritas = [];
+          this.Crearlista();
         },
-        error: (error) => console.error('Error al eliminar la lista completa:', error)
+        error: (error) =>
+          console.error('Error al eliminar la lista completa:', error),
       });
     } else {
-      console.error('Falta el id de la lista o sesión en el almacenamiento local.');
+      console.error(
+        'Falta el id de la lista o sesión en el almacenamiento local.'
+      );
     }
   }
-
 
   listadefavoritos() {
     const idlista = localStorage.getItem('idlist');
@@ -129,18 +143,17 @@ export class CompraEntradasComponent implements OnInit {
         next: (data: any) => {
           this.peliculasfavoritas = data.items;
         },
-        error: (error) => console.log(error)
+        error: (error) => console.log(error),
       });
     }
   }
 
-
-  Crearlista(){
+  Crearlista() {
     this.apiMovieService.gettoken().subscribe({
       next: (data: any) => {
         this.tokenrequest = data.request_token;
         this.apiMovieService.postvalidate(this.tokenrequest).subscribe({
-          next: (data: any) => {
+          next: () => {
             this.apiMovieService.postconvetir(this.tokenrequest).subscribe({
               next: (data: any) => {
                 localStorage.setItem('idsession', data.session_id);
@@ -148,16 +161,31 @@ export class CompraEntradasComponent implements OnInit {
                   next: (data: any) => {
                     localStorage.setItem('idlist', data.list_id);
                   },
-                  error: (error) => console.log(error)
+                  error: (error) => console.log(error),
                 });
               },
-              error: (error) => console.log(error)
+              error: (error) => console.log(error),
             });
           },
-          error: (error) => console.log(error)
+          error: (error) => console.log(error),
         });
       },
-      error: (error) => console.log(error)
+      error: (error) => console.log(error),
     });
+  }
+
+  // 🔁 NUEVAS FUNCIONES AGREGADAS ABAJO
+
+  toggleFavorito(pelicula: any) {
+    const yaEsFavorita = this.esFavorito(pelicula.id);
+    if (yaEsFavorita) {
+      this.eliminarDeFavoritos(pelicula.id);
+    } else {
+      this.agregarAFavoritos(pelicula);
+    }
+  }
+
+  esFavorito(peliculaId: number): boolean {
+    return this.peliculasfavoritas.some((p) => p.id === peliculaId);
   }
 }

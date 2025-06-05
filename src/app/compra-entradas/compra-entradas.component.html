@@ -12,8 +12,8 @@
           />
           <h4>{{ pelicula.title }}</h4>
           <button (click)="verDetalles(pelicula.id)">Ver Detalles</button>
-          <button (click)="agregarAFavoritos(pelicula)">
-            Añadir a Favoritos ⭐
+          <button (click)="toggleFavorito(pelicula)">
+            {{ esFavorito(pelicula.id) ? "⭐" : "☆" }}
           </button>
         </div>
       </div>
@@ -31,7 +31,9 @@
             />
             <h4 class="favorito-titulo">{{ pelicula.title }}</h4>
           </div>
-          <button (click)="eliminarDeFavoritos(pelicula.id)">Eliminar</button>
+          <button (click)="eliminarDeFavoritos(pelicula.id)">
+            Eliminar ⭐
+          </button>
         </li>
       </ul>
       <button (click)="Borrarlistacompleta()" class="boton-limpiar">
