@@ -7,7 +7,7 @@ body {
   overflow-y: scroll;
   overflow-x: hidden;
   color: #f1f1f1;
-  background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)),
+  background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
     url(./assets/images/pngtree-popcorn-spilling-onto-a-vibrant-red-backdrop-from-a-paper-bowl-picture-image_5805600.jpg);
   background-size: cover;
   background-repeat: no-repeat;

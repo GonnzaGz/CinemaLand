@@ -22,6 +22,55 @@
   margin-bottom: 50px;
 }
 
-.pelicula-card {
+/* Estilos para cada tarjeta de película */
+.pelicula-card-fav {
+  background-color: rgba(218, 165, 32, 0.783); /* Fondo oscuro */
+  color: goldenrod; /* Texto blanco */
+  border-radius: 15px;
+  padding: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  transition: transform 0.3s ease;
+  display: flex;
+  flex-direction: column; /* Asegura que los elementos estén alineados verticalmente */
+  justify-content: space-between; /* Distribuye el espacio entre los elementos */
+  width: 100%;
+  max-width: 220px; /* Limita el tamaño máximo de la tarjeta */
   margin-bottom: 20px;
+}
+
+.pelicula-card-fav:hover {
+  transform: scale(1.05);
+}
+
+.pelicula-card-fav img {
+  max-width: 100%;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  margin-bottom: 10px;
+}
+
+.pelicula-card-fav h4 {
+  font-size: 1.3rem;
+  margin-top: 10px;
+  color: black; /* Rojo Hoyts */
+}
+
+.pelicula-card-fav button {
+  background-color: white; /* Rojo Hoyts */
+  border: none;
+  padding: 10px 20px;
+  border-radius: 25px;
+  color: black;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  margin-top: 10px;
+}
+
+.pelicula-card-fav button:hover {
+  background-color: #b50710; /* Rojo más oscuro */
+  transform: scale(1.05);
+  color: goldenrod;
+  -webkit-text-stroke: 1px black; /* contorno rojo */
 }

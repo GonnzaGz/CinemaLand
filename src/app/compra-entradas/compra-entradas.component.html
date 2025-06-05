@@ -22,7 +22,10 @@
     <div class="col-3 favoritos">
       <h2 class="titulofav">Tus Favoritas ⭐</h2>
       <ul>
-        <li *ngFor="let pelicula of peliculasfavoritas" class="pelicula-card">
+        <li
+          *ngFor="let pelicula of peliculasfavoritas"
+          class="pelicula-card-fav"
+        >
           <div class="favorito-container">
             <img
               [src]="'https://image.tmdb.org/t/p/w200/' + pelicula.poster_path"
@@ -31,6 +34,7 @@
             />
             <h4 class="favorito-titulo">{{ pelicula.title }}</h4>
           </div>
+          <button (click)="verDetalles(pelicula.id)">Ver Detalles</button>
           <button (click)="eliminarDeFavoritos(pelicula.id)">
             Eliminar ⭐
           </button>
