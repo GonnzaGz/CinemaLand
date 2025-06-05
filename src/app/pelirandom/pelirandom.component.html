@@ -1,5 +1,7 @@
 <div class="container-random text-center">
   <h1>Experiencia Random!</h1>
+  <h2 class="text-white bg-danger">15% de Descuento</h2>
+  <h2>Disfruta de la Nueva Experiencia de Ir al Cine!</h2>
   <div class="row">
     <div class="col">
       <div>
@@ -38,8 +40,8 @@
               <label
                 class="form-check-label"
                 for="flexSwitchCheckChecked{{ item.id }}"
-                >{{ item.name }}</label
-              >
+                >{{ item.name }}
+              </label>
             </div>
           </div>
           } }
@@ -60,8 +62,17 @@
               ><img
                 [src]="'https://image.tmdb.org/t/p/w200/' + item.poster_path"
                 class="d-block w-100"
-                alt="..." /></a
-            >{{ item.title }}
+                alt="..."
+            /></a>
+            <p>{{ item.title }}</p>
+            <p>{{ item.overview }}</p>
+            <p>{{ item.release_date }}</p>
+            <button
+              class="btn btn-primary mt-2"
+              (click)="irAComprarEntradas(item.id)"
+            >
+              🎟️ Comprar Entradas 🎟️
+            </button>
           </div>
           }
         </div>

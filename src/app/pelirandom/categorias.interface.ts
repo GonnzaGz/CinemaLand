@@ -1,7 +1,7 @@
-export interface Pelicula {
+export interface Categoria {
   id: number;
-  title: string;
   name: string;
+  title: string;
   overview: string;
   release_date: string;
   poster_path: string;

@@ -17,6 +17,8 @@ export class CompraEntradasComponent implements OnInit {
   selectedMovieId: number | null = null;
   tokenrequest: string = '';
   peliculasfavoritas: any[] = [];
+  estrenos: any[] = [];
+  peliculasViejas: any[] = [];
 
   private apiMovieService = inject(ApipeliculasService);
   private router = inject(Router);
@@ -47,7 +49,14 @@ export class CompraEntradasComponent implements OnInit {
 
   obtenerPeliculasPopulares() {
     this.apiMovieService.getPopularMovies().subscribe((data: any) => {
-      this.peliculas = data.results;
+      this.estrenos = data.results.filter((pelicula: any) =>
+        this.apiMovieService.esEstreno(pelicula.release_date)
+      );
+
+      this.peliculasViejas = data.results.filter(
+        (pelicula: any) =>
+          !this.apiMovieService.esEstreno(pelicula.release_date)
+      );
     });
   }
 
@@ -174,8 +183,6 @@ export class CompraEntradasComponent implements OnInit {
     });
   }
 
-  // 🔁 NUEVAS FUNCIONES AGREGADAS ABAJO
-
   toggleFavorito(pelicula: any) {
     const yaEsFavorita = this.esFavorito(pelicula.id);
     if (yaEsFavorita) {
@@ -187,5 +194,16 @@ export class CompraEntradasComponent implements OnInit {
 
   esFavorito(peliculaId: number): boolean {
     return this.peliculasfavoritas.some((p) => p.id === peliculaId);
+  }
+
+  get esEstreno(): boolean {
+    return this.apiMovieService.esEstreno(this.detallesPelicula?.release_date);
+  }
+
+  cerrarDetalles() {
+    this.detallesPelicula = null;
+    this.peliculaSeleccionada = null;
+    this.selectedMovieId = null;
+    localStorage.removeItem('selectedMovieId');
   }
 }

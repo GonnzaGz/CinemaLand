@@ -8,9 +8,8 @@ describe('PelirandomComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [PelirandomComponent]
-    })
-    .compileComponents();
+      imports: [PelirandomComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(PelirandomComponent);
     component = fixture.componentInstance;

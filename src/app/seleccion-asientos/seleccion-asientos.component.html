@@ -1,67 +1,111 @@
 <div class="detalles-pelicula fade-in">
   <h1>{{ movieDetails?.title }}</h1>
-  <img *ngIf="movieDetails?.imageUrl" [src]="movieDetails.imageUrl" alt="{{ movieDetails?.title }}" />
-  <p>{{ movieDetails?.overview }}</p>
+  <img
+    *ngIf="movieDetails?.imageUrl"
+    [src]="movieDetails.imageUrl"
+    alt="{{ movieDetails?.title }}"
+  />
+  <h3>{{ movieDetails?.overview }}</h3>
+  <h3>{{ movieDetails?.release_date }}</h3>
 </div>
 
-<div class="seleccion-asientos">
-  <div class="dropdown">
-    <label for="sucursal">Selecciona una sucursal</label>
-    <select id="sucursal" [(ngModel)]="sucursalSeleccionada" (change)="onSucursalChange()">
-      <option *ngFor="let sucursal of sucursales" [value]="sucursal">{{ sucursal }}</option>
-    </select>
-  </div>
+<div *ngIf="esEstreno">
+  <div class="seleccion-asientos">
+    <div class="seleccion-asientos">
+      <div class="dropdown">
+        <label for="sucursal">Selecciona una sucursal</label>
+        <select
+          id="sucursal"
+          [(ngModel)]="sucursalSeleccionada"
+          (change)="onSucursalChange()"
+        >
+          <option *ngFor="let sucursal of sucursales" [value]="sucursal">
+            {{ sucursal }}
+          </option>
+        </select>
+      </div>
 
-  <div class="dropdown" *ngIf="sucursalSeleccionada">
-    <label for="horario">Selecciona el horario:</label>
-    <select id="horario" [(ngModel)]="horarioSeleccionado">
-      <option *ngFor="let hora of [12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22]" [value]="hora">
-        {{ hora }}:00
-      </option>
-    </select>
-  </div>
-  
+      <div class="dropdown" *ngIf="sucursalSeleccionada">
+        <label for="horario">Selecciona el horario:</label>
+        <select id="horario" [(ngModel)]="horarioSeleccionado">
+          <option
+            *ngFor="let hora of [12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22]"
+            [value]="hora"
+          >
+            {{ hora }}:00
+          </option>
+        </select>
+      </div>
 
-  <div class="dropdown" *ngIf="horarioSeleccionado">
-    <label for="pago">Selecciona el modo de pago:</label>
-    <select id="pago" [(ngModel)]="modoPago" (change)="onPagoChange()" [disabled]="!horarioSeleccionado">
-      <option value="pago_mostrador">Pago en mostrador</option>
-      <option value="pago_online" [disabled]="true">Pago online (no disponible)</option>
-    </select>
-  </div>
+      <div class="dropdown" *ngIf="horarioSeleccionado">
+        <label for="pago">Selecciona el modo de pago:</label>
+        <select
+          id="pago"
+          [(ngModel)]="modoPago"
+          (change)="onPagoChange()"
+          [disabled]="!horarioSeleccionado"
+        >
+          <option value="pago_mostrador">Pago en mostrador</option>
+          <option value="pago_online" [disabled]="true">
+            Pago online (no disponible)
+          </option>
+        </select>
+      </div>
 
-  <div *ngIf="sucursalSeleccionada && horarioSeleccionado && modoPago">
-    <h3 class="asientosTitulo">Selecciona tus asientos</h3>
-    <div class="fila">
-      <span *ngFor="let asiento of fila1" (click)="seleccionarAsiento(asiento)"
-            [class.selected]="asientosSeleccionados.includes(asiento)">
-        {{ asiento.nombre }}
-      </span>
+      <div *ngIf="sucursalSeleccionada && horarioSeleccionado && modoPago">
+        <h3 class="asientosTitulo">Selecciona tus asientos</h3>
+        <div class="fila">
+          <span
+            *ngFor="let asiento of fila1"
+            (click)="seleccionarAsiento(asiento)"
+            [class.selected]="asientosSeleccionados.includes(asiento)"
+          >
+            {{ asiento.nombre }}
+          </span>
+        </div>
+        <div class="fila">
+          <span
+            *ngFor="let asiento of fila2"
+            (click)="seleccionarAsiento(asiento)"
+            [class.selected]="asientosSeleccionados.includes(asiento)"
+          >
+            {{ asiento.nombre }}
+          </span>
+        </div>
+        <div class="fila">
+          <span
+            *ngFor="let asiento of fila3"
+            (click)="seleccionarAsiento(asiento)"
+            [class.selected]="asientosSeleccionados.includes(asiento)"
+          >
+            {{ asiento.nombre }}
+          </span>
+        </div>
+      </div>
     </div>
-    <div class="fila">
-      <span *ngFor="let asiento of fila2" (click)="seleccionarAsiento(asiento)"
-            [class.selected]="asientosSeleccionados.includes(asiento)">
-        {{ asiento.nombre }}
-      </span>
+
+    <div class="resumen-compra">
+      <h3 class="text-dark">Resumen</h3>
+      <p class="text-dark">
+        Asientos seleccionados: {{ asientosSeleccionados.length }}
+      </p>
+      <p class="text-dark">
+        Total a pagar: {{ precioTotal | currency : "ARS $" }}
+      </p>
+      <button class="comprar-entradas" (click)="confirmarCompra()">
+        Confirmar compra
+      </button>
     </div>
-    <div class="fila">
-      <span *ngFor="let asiento of fila3" (click)="seleccionarAsiento(asiento)"
-            [class.selected]="asientosSeleccionados.includes(asiento)">
-        {{ asiento.nombre }}
-      </span>
+
+    <div *ngIf="compraConfirmada" class="mensaje-agradecimiento fade-in">
+      <h2>✨ ¡Gracias por tu compra! ✨</h2>
+      <p>
+        Tu compra ha sido confirmada con éxito. Hemos generado un PDF con los
+        detalles de tu compra y el código QR. ¡Disfruta de tu película! 🎬
+      </p>
+      <button class="btn-confirmacion" (click)="redirigirAPaginaPrincipal()">
+        Volver al inicio
+      </button>
     </div>
   </div>
-</div>
-
-<div class="resumen-compra">
-  <h3>Resumen</h3>
-  <p>Asientos seleccionados: {{ asientosSeleccionados.length }}</p>
-  <p>Total a pagar: {{ precioTotal | currency:'ARS $' }}</p>
-  <button class="comprar-entradas" (click)="confirmarCompra()">Confirmar compra</button>
-</div>
-
-<div *ngIf="compraConfirmada" class="mensaje-agradecimiento fade-in">
-  <h2>✨ ¡Gracias por tu compra! ✨</h2>
-  <p>Tu compra ha sido confirmada con éxito. Hemos generado un PDF con los detalles de tu compra y el código QR. ¡Disfruta de tu película! 🎬</p>
-  <button class="btn-confirmacion" (click)="redirigirAPaginaPrincipal()">Volver al inicio</button>
 </div>

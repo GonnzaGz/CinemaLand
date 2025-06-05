@@ -3,9 +3,24 @@
   <div class="row">
     <h1 class="h1">¡Bienvenido!</h1>
     <div class="col-9 peliculas-populares">
-      <h2>🎬 Películas Populares 🎬</h2>
+      <h2>🎬 Estrenos, solo en cines! 🎟️</h2>
       <div class="peliculas-grid">
-        <div *ngFor="let pelicula of peliculas" class="pelicula-card">
+        <div *ngFor="let pelicula of estrenos" class="pelicula-card">
+          <img
+            [src]="'https://image.tmdb.org/t/p/w200/' + pelicula.poster_path"
+            alt="Poster"
+          />
+          <h4>{{ pelicula.title }}</h4>
+          <button (click)="verDetalles(pelicula.id)">Ver Detalles</button>
+          <button (click)="toggleFavorito(pelicula)">
+            {{ esFavorito(pelicula.id) ? "⭐" : "☆" }}
+          </button>
+        </div>
+      </div>
+
+      <h2>🎬 Películas Fuera de Taquilla! 🎬</h2>
+      <div class="peliculas-grid">
+        <div *ngFor="let pelicula of peliculasViejas" class="pelicula-card">
           <img
             [src]="'https://image.tmdb.org/t/p/w200/' + pelicula.poster_path"
             alt="Poster"
@@ -41,16 +56,19 @@
         </li>
       </ul>
       <button (click)="Borrarlistacompleta()" class="boton-limpiar">
-        Limpiar Todos los Favoritos
+        Borrar Todos los Favoritos
       </button>
     </div>
   </div>
 
   <div
     *ngIf="detallesPelicula"
-    class="detalles-pelicula"
     id="detalles-pelicula"
+    class="detalles-pelicula"
   >
+    <button class="bg-transparent text-danger" (click)="cerrarDetalles()">
+      Cerrar ❌
+    </button>
     <h3>Detalles de la Película</h3>
     <h4>{{ detallesPelicula.title }}</h4>
     <img
@@ -59,8 +77,18 @@
     />
     <p>{{ detallesPelicula.overview }}</p>
     <p>Fecha de estreno: {{ detallesPelicula.release_date }}</p>
-    <button (click)="comprarEntradas()" class="comprar-entradas">
-      Comprar Entradas
+
+    <!-- Este es el botón que muestra si es favorita o no -->
+    <button class="bg-transparent" (click)="toggleFavorito(detallesPelicula)">
+      {{ esFavorito(detallesPelicula.id) ? "⭐" : "☆" }}
+    </button>
+
+    <button
+      *ngIf="esEstreno"
+      (click)="comprarEntradas()"
+      class="comprar-entradas"
+    >
+      🎟️ Comprar Entradas 🎟️
     </button>
   </div>
 </div>

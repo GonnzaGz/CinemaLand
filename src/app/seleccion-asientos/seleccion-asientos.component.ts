@@ -11,13 +11,14 @@ import QRCode from 'qrcode'; // Importar QRCode
   standalone: true,
   imports: [CommonModule, FormsModule], // Add FormsModule here
   templateUrl: './seleccion-asientos.component.html',
-  styleUrls: ['./seleccion-asientos.component.css']
+  styleUrls: ['./seleccion-asientos.component.css'],
 })
 export class SeleccionAsientosComponent implements OnInit {
   movieId: string | undefined;
   movieDetails: any;
   precioTotal: number = 0;
-  compraConfirmada: boolean = false;  // Cambiar a verdadero una vez que la compra esté confirmada
+  compraConfirmada: boolean = false; // Cambiar a verdadero una vez que la compra esté confirmada
+  esEstreno: boolean = false;
 
   // Filas de asientos
   fila1 = this.generarAsientos('A', 5, 5000);
@@ -28,10 +29,14 @@ export class SeleccionAsientosComponent implements OnInit {
   asientosSeleccionados: any[] = [];
 
   // Sucursales y opciones de pago
-  sucursales: string[] = ['Cinemark Buenos Aires', 'Hoyts Abasto', 'Hoyts Unicenter'];
+  sucursales: string[] = [
+    'Cinemark Buenos Aires',
+    'Hoyts Abasto',
+    'Hoyts Unicenter',
+  ];
   sucursalSeleccionada: string | null = null;
   modoPago: string | null = null;
-  horarioSeleccionado: string | null = null;  // Nuevo campo para horario
+  horarioSeleccionado: string | null = null; // Nuevo campo para horario
   diaCompra: string = new Date().toLocaleDateString(); // Fecha actual de la compra
   horaCompra: string = new Date().toLocaleTimeString(); // Hora de la compra
 
@@ -39,12 +44,12 @@ export class SeleccionAsientosComponent implements OnInit {
   qrCodeDataUrl: string = ''; // URL del código QR
 
   private apiMovieService = inject(ApipeliculasService);
-  private router = inject(Router);  // Inyectamos Router para la redirección
+  private router = inject(Router); // Inyectamos Router para la redirección
 
   constructor(private route: ActivatedRoute) {}
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe(params => {
+    this.route.paramMap.subscribe((params) => {
       this.movieId = params.get('id') as string;
       if (this.movieId) {
         this.obtenerDetallesDePelicula(this.movieId);
@@ -57,10 +62,14 @@ export class SeleccionAsientosComponent implements OnInit {
       (data: any) => {
         this.movieDetails = {
           ...data,
-          imageUrl: `https://image.tmdb.org/t/p/w500${data.poster_path}` // Construye la URL de la imagen
+          imageUrl: `https://image.tmdb.org/t/p/w500${data.poster_path}`, // Construye la URL de la imagen
         };
+        this.esEstreno = this.apiMovieService.esEstreno(
+          this.movieDetails.release_date
+        );
       },
-      error => console.error('Error al obtener detalles de la película:', error)
+      (error) =>
+        console.error('Error al obtener detalles de la película:', error)
     );
   }
 
@@ -68,14 +77,16 @@ export class SeleccionAsientosComponent implements OnInit {
     return Array.from({ length: cantidad }, (_, index) => ({
       id: `${fila}${index + 1}`,
       nombre: `${fila}${index + 1}`,
-      precio: precio
+      precio: precio,
     }));
   }
 
   seleccionarAsiento(asiento: any): void {
     if (this.asientosSeleccionados.includes(asiento)) {
       // Si ya está seleccionado, lo quitamos
-      this.asientosSeleccionados = this.asientosSeleccionados.filter(a => a.id !== asiento.id);
+      this.asientosSeleccionados = this.asientosSeleccionados.filter(
+        (a) => a.id !== asiento.id
+      );
     } else {
       // Si no está seleccionado, lo agregamos
       this.asientosSeleccionados.push(asiento);
@@ -84,7 +95,10 @@ export class SeleccionAsientosComponent implements OnInit {
   }
 
   actualizarPrecios(): void {
-    this.precioTotal = this.asientosSeleccionados.reduce((total, asiento) => total + asiento.precio, 0);
+    this.precioTotal = this.asientosSeleccionados.reduce(
+      (total, asiento) => total + asiento.precio,
+      0
+    );
   }
 
   onPagoChange(): void {
@@ -105,27 +119,33 @@ export class SeleccionAsientosComponent implements OnInit {
     try {
       // Generar el QR y esperar a que termine
       await this.generarQR();
-      console.log("QR generado con éxito");
+      console.log('QR generado con éxito');
 
       // Crear el PDF
       this.generarPDF();
-      
+
       // Mostrar el mensaje de agradecimiento
       this.compraConfirmada = true;
     } catch (error) {
-      console.error("Error al generar el QR:", error);
+      console.error('Error al generar el QR:', error);
     }
   }
 
   async generarQR(): Promise<void> {
-    const qrData = `Película: ${this.movieDetails?.title}\nSucursal: ${this.sucursalSeleccionada}\nHorario: ${this.horarioSeleccionado}\nAsientos: ${this.asientosSeleccionados.map(a => a.nombre).join(', ')}\nTotal: ${this.precioTotal} ARS`;
+    const qrData = `Película: ${this.movieDetails?.title}\nSucursal: ${
+      this.sucursalSeleccionada
+    }\nHorario: ${
+      this.horarioSeleccionado
+    }\nAsientos: ${this.asientosSeleccionados
+      .map((a) => a.nombre)
+      .join(', ')}\nTotal: ${this.precioTotal} ARS`;
 
     try {
       this.qrCodeDataUrl = await QRCode.toDataURL(qrData);
       console.log('QR generado con éxito:', this.qrCodeDataUrl);
     } catch (err) {
       console.error('Error generando el QR:', err);
-      throw new Error("Error generando el QR");
+      throw new Error('Error generando el QR');
     }
   }
 
@@ -139,7 +159,13 @@ export class SeleccionAsientosComponent implements OnInit {
     doc.text(`Película: ${this.movieDetails?.title}`, 20, 40);
     doc.text(`Sucursal: ${this.sucursalSeleccionada}`, 20, 50);
     doc.text(`Horario: ${this.horarioSeleccionado}`, 20, 60);
-    doc.text(`Asientos seleccionados: ${this.asientosSeleccionados.map(a => a.nombre).join(', ')}`, 20, 70);
+    doc.text(
+      `Asientos seleccionados: ${this.asientosSeleccionados
+        .map((a) => a.nombre)
+        .join(', ')}`,
+      20,
+      70
+    );
     doc.text(`Total a pagar: ${this.precioTotal} ARS`, 20, 80);
 
     // Insertar el código QR

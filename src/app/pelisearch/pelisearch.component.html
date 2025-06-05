@@ -1,19 +1,22 @@
 <div class="container-search">
   <h1>Resultado de Busqueda</h1>
-    <div  class="row row-cols-2 row-cols-sm-3 row-cols-md-5">
-        @for(item of peliculas; track $index) {
-            <div class="col">
-                <div class="pelicula-cardsearch">
-                    <img [src]="'https://image.tmdb.org/t/p/w200/' + item.poster_path" class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <h5 class="card-title">{{item.title ? item.title : item.name }} </h5>
-
-                        <a href="#" class="btn btn-primary">Detalle</a>
-                    </div>
-                </div>
-            </div>
-        }
+  <div class="row row-cols-2 row-cols-sm-3 row-cols-md-5">
+    @for(item of peliculas; track $index) {
+    <div class="col">
+      <div class="pelicula-cardsearch">
+        <img
+          [src]="'https://image.tmdb.org/t/p/w200/' + item.poster_path"
+          class="card-img-top"
+          alt="..."
+        />
+        <div class="card-body">
+          <h5 class="card-title">{{ item.title ? item.title : item.name }}</h5>
+          <button class="btn btn-danger" (click)="irAComprarEntradas(item.id)">
+            Detalles
+          </button>
+        </div>
+      </div>
     </div>
+    }
   </div>
-
-
+</div>
