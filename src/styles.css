@@ -1,10 +1,14 @@
 /* Estilos generales para la página */
 
+html {
+  scrollbar-color: red #1e1e1e; /* thumb y track */
+  scrollbar-width: thin;
+}
+
 html,
 body {
   scroll-behavior: smooth;
   height: 100%;
-  overflow-y: scroll;
   overflow-x: hidden;
   color: #f1f1f1;
   background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
@@ -35,12 +39,6 @@ body {
   font-weight: bold;
   cursor: pointer;
   z-index: 10; /* Asegura que esté encima de otros elementos */
-}
-
-body {
-  height: 100vh; /* Asegura que el body ocupe toda la pantalla */
-  background-color: #1d1d1d; /* Fondo oscuro */
-  color: #f1f1f1; /* Texto en blanco */
 }
 
 .titulofav {
@@ -119,6 +117,7 @@ h3 {
 .navbar {
   background-color: #000000; /* Negro */
   padding: 10px 0;
+  flex-wrap: wrap;
 }
 
 .navbar-brand {
@@ -133,7 +132,7 @@ h3 {
 }
 
 .navbar-nav .nav-link:hover {
-  color: #e50914 !important; /* Rojo Hoyts */
+  color: #8f080f !important; /* Rojo Hoyts */
 }
 
 /* Estilos para el botón de búsqueda */
@@ -502,9 +501,10 @@ button:hover {
 }
 
 .container-search {
-  margin-top: 100px;
+  padding-top: 10rem;
   /*background-color: #030918d2; /* Fondo oscuro */
   color: #f1f1f1; /* Texto en blanco */
+  margin-left: 1rem;
 }
 
 .pelicula-cardsearch {

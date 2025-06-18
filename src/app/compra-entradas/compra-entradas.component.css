@@ -1,7 +1,6 @@
 .h1 {
   text-align: center;
   font-size: 3rem;
-  color: #fff;
   margin-top: 20px;
   color: white;
   -webkit-text-stroke: 1px white; /* contorno rojo */
@@ -10,11 +9,10 @@
 .banner {
   background-image: url("../../assets/images/cinemalandBanner.jpg");
   width: auto;
-  height: 300px;
+  height: 250px;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  border: 5px solid rgba(0, 0, 0, 0.53);
   border-bottom: 10px solid rgba(0, 0, 0, 0.774);
 }
 
@@ -73,4 +71,9 @@
   transform: scale(1.05);
   color: goldenrod;
   -webkit-text-stroke: 1px black; /* contorno rojo */
+}
+
+.row {
+  margin-right: 0 !important;
+  margin-left: 0 !important;
 }

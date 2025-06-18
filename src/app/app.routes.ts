@@ -3,6 +3,9 @@ import { SeleccionAsientosComponent } from './seleccion-asientos/seleccion-asien
 import { PelirandomComponent } from './pelirandom/pelirandom.component';
 import { CompraEntradasComponent } from './compra-entradas/compra-entradas.component';
 import { PelisearchComponent } from './pelisearch/pelisearch.component';
+import { Error404Component } from './error404/error404.component';
+import { NosotrosComponent } from './nosotros/nosotros.component';
+import { LoginComponent } from './login/login.component';
 
 export const routes: Routes = [
   { path: '', component: CompraEntradasComponent },
@@ -13,5 +16,11 @@ export const routes: Routes = [
 
   { path: 'pelissearch/:id', component: PelisearchComponent },
 
-  { path: '**', redirectTo: '', pathMatch: 'full' },
+  { path: 'error404', component: Error404Component },
+
+  { path: 'nosotros', component: NosotrosComponent },
+
+  { path: 'login', component: LoginComponent },
+
+  { path: '**', redirectTo: 'error404', pathMatch: 'full' },
 ];

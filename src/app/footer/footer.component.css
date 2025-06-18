@@ -1,0 +1,11 @@
+.container {
+  position: sticky;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.1);
+  margin: auto;
+}
+
+.redes {
+  width: 20px;
+  height: 20px;
+}
