@@ -66,7 +66,6 @@ export class LoginComponent implements OnInit {
       return;
     }
 
-    // Aquí iría tu lógica real para redirigir o mostrar la compra
     alert('Redirigiendo a la compra de entradas...');
   }
 }
