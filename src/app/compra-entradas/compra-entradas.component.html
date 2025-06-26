@@ -90,5 +90,12 @@
     >
       🎟️ Comprar Entradas 🎟️
     </button>
+    <div
+      *ngIf="mensaje"
+      class="alert alert-danger mt-2"
+      style="font-size: 1rem"
+    >
+      {{ mensaje }}
+    </div>
   </div>
 </div>

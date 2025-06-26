@@ -2,6 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { ApipeliculasService } from '../service/apipeliculas.service';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { AuthService } from '../service/auth.service';
 
 @Component({
   selector: 'app-compra-entradas',
@@ -19,12 +20,20 @@ export class CompraEntradasComponent implements OnInit {
   peliculasfavoritas: any[] = [];
   estrenos: any[] = [];
   peliculasViejas: any[] = [];
-
+  isAuthenticated$!: any;
+  isAuthenticated: boolean = true;
+  mensaje: string = '';
   private apiMovieService = inject(ApipeliculasService);
   private router = inject(Router);
 
-  constructor() {
+  constructor(private authService: AuthService) {
     this.obtenerPeliculasPopulares();
+
+    this.isAuthenticated$ = this.authService.isAuthenticated$;
+
+    this.authService.isAuthenticated$.subscribe((data) => {
+      this.isAuthenticated = data.isAuthenticated;
+    });
   }
 
   ngOnInit(): void {
@@ -80,10 +89,15 @@ export class CompraEntradasComponent implements OnInit {
   }
 
   comprarEntradas() {
-    if (this.selectedMovieId) {
-      this.router.navigate(['/seleccion-asientos', this.selectedMovieId]);
+    console.log(this.isAuthenticated);
+    if (this.isAuthenticated) {
+      if (this.selectedMovieId) {
+        this.router.navigate(['/seleccion-asientos', this.selectedMovieId]);
+      } else {
+        console.error('No se ha seleccionado ninguna película');
+      }
     } else {
-      console.error('No se ha seleccionado ninguna película');
+      this.mensaje = 'Debes iniciar sesión para comprar entradas.';
     }
   }
 
