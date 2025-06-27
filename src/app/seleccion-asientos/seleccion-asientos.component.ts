@@ -2,9 +2,10 @@ import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ApipeliculasService } from '../service/apipeliculas.service';
-import { FormsModule } from '@angular/forms'; // Import FormsModule
-import { jsPDF } from 'jspdf'; // Importar jsPDF
-import QRCode from 'qrcode'; // Importar QRCode
+import { FormsModule } from '@angular/forms';
+import { jsPDF } from 'jspdf';
+import QRCode from 'qrcode';
+import { BackendService } from '../service/backend.service';
 
 @Component({
   selector: 'app-seleccion-asientos',
@@ -26,19 +27,19 @@ export class SeleccionAsientosComponent implements OnInit {
   fila3 = this.generarAsientos('C', 5, 5000);
 
   // Almacena asientos seleccionados
-  asientosSeleccionados: any[] = [];
+  asientosSeleccionados: any = [];
 
   // Sucursales y opciones de pago
-  sucursales: string[] = [
-    'Cinemark Buenos Aires',
-    'Hoyts Abasto',
-    'Hoyts Unicenter',
-  ];
+  sucursales: any = [];
   sucursalSeleccionada: string | null = null;
   modoPago: string | null = null;
-  horarioSeleccionado: string | null = null; // Nuevo campo para horario
+  horarioSeleccionado: any = []; // Nuevo campo para horario
   diaCompra: string = new Date().toLocaleDateString(); // Fecha actual de la compra
   horaCompra: string = new Date().toLocaleTimeString(); // Hora de la compra
+  sucursalCompletaHorarios: any = [];
+  horariosPorSucursal: any = [];
+  asientosFiltrados: any = [];
+  filasAsientos: any[][] = [];
 
   // QR code
   qrCodeDataUrl: string = ''; // URL del código QR
@@ -46,7 +47,10 @@ export class SeleccionAsientosComponent implements OnInit {
   private apiMovieService = inject(ApipeliculasService);
   private router = inject(Router); // Inyectamos Router para la redirección
 
-  constructor(private route: ActivatedRoute) {}
+  constructor(
+    private route: ActivatedRoute,
+    private backendService: BackendService
+  ) {}
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((params) => {
@@ -55,6 +59,7 @@ export class SeleccionAsientosComponent implements OnInit {
         this.obtenerDetallesDePelicula(this.movieId);
       }
     });
+    this.generaSucursal();
   }
 
   obtenerDetallesDePelicula(id: string): void {
@@ -73,6 +78,18 @@ export class SeleccionAsientosComponent implements OnInit {
     );
   }
 
+  generaSucursal(): void {
+    this.backendService.getSucursal().subscribe(
+      (datos: any) => {
+        console.log('Sucursales obtenidos del backend:', datos);
+        this.sucursales = datos;
+      },
+      (error) => {
+        console.error('Error al obtener sucursales del backend:', error);
+      }
+    );
+  }
+
   generarAsientos(fila: string, cantidad: number, precio: number): any[] {
     return Array.from({ length: cantidad }, (_, index) => ({
       id: `${fila}${index + 1}`,
@@ -85,7 +102,7 @@ export class SeleccionAsientosComponent implements OnInit {
     if (this.asientosSeleccionados.includes(asiento)) {
       // Si ya está seleccionado, lo quitamos
       this.asientosSeleccionados = this.asientosSeleccionados.filter(
-        (a) => a.id !== asiento.id
+        (a: any) => a.id !== asiento.id
       );
     } else {
       // Si no está seleccionado, lo agregamos
@@ -96,7 +113,7 @@ export class SeleccionAsientosComponent implements OnInit {
 
   actualizarPrecios(): void {
     this.precioTotal = this.asientosSeleccionados.reduce(
-      (total, asiento) => total + asiento.precio,
+      (total: any, asiento: any) => total + 10000,
       0
     );
   }
@@ -106,9 +123,29 @@ export class SeleccionAsientosComponent implements OnInit {
     console.log('Modo de pago seleccionado:', this.modoPago);
   }
 
-  onSucursalChange(): void {
-    // Aquí puedes implementar cualquier lógica adicional cuando se cambie la sucursal seleccionada
-    console.log('Sucursal seleccionada:', this.sucursalSeleccionada);
+  async onSucursalChange(e: any): Promise<void> {
+    console.log(e);
+    this.backendService.getSucursalCompleta(e).subscribe((response: any) => {
+      this.sucursalCompletaHorarios = response;
+
+      this.horariosPorSucursal = Array.from(
+        new Set(this.sucursalCompletaHorarios.map((item: any) => item.HORARIO))
+      );
+    });
+  }
+
+  generarFilas() {
+    const chunkSize = 15;
+    this.filasAsientos = [];
+    for (let i = 0; i < this.asientosFiltrados.length; i += chunkSize) {
+      this.filasAsientos.push(this.asientosFiltrados.slice(i, i + chunkSize));
+    }
+  }
+  onHorarioChange(e: any) {
+    this.asientosFiltrados = this.sucursalCompletaHorarios.filter(
+      (item: any) => item.HORARIO === e
+    );
+    this.generarFilas();
   }
 
   async confirmarCompra(): Promise<void> {
@@ -132,13 +169,11 @@ export class SeleccionAsientosComponent implements OnInit {
   }
 
   async generarQR(): Promise<void> {
-    const qrData = `Película: ${this.movieDetails?.title}\nSucursal: ${
-      this.sucursalSeleccionada
-    }\nHorario: ${
-      this.horarioSeleccionado
-    }\nAsientos: ${this.asientosSeleccionados
-      .map((a) => a.nombre)
-      .join(', ')}\nTotal: ${this.precioTotal} ARS`;
+    const asientos = this.asientosSeleccionados
+      .map((a: any) => a.ASIENTO)
+      .join(', ');
+    console.log(asientos);
+    const qrData = `Película: ${this.movieDetails?.title}\nSucursal: ${this.sucursalSeleccionada}\nHorario: ${this.horarioSeleccionado}\nAsientos: ${asientos}\nTotal: ${this.precioTotal} ARS`;
 
     try {
       this.qrCodeDataUrl = await QRCode.toDataURL(qrData);
@@ -151,6 +186,9 @@ export class SeleccionAsientosComponent implements OnInit {
 
   generarPDF(): void {
     const doc = new jsPDF();
+    const asientos = this.asientosSeleccionados
+      .map((a: any) => a.ASIENTO)
+      .join(', ');
 
     doc.setFontSize(20);
     doc.text('Compra Confirmada', 20, 20);
@@ -159,13 +197,7 @@ export class SeleccionAsientosComponent implements OnInit {
     doc.text(`Película: ${this.movieDetails?.title}`, 20, 40);
     doc.text(`Sucursal: ${this.sucursalSeleccionada}`, 20, 50);
     doc.text(`Horario: ${this.horarioSeleccionado}`, 20, 60);
-    doc.text(
-      `Asientos seleccionados: ${this.asientosSeleccionados
-        .map((a) => a.nombre)
-        .join(', ')}`,
-      20,
-      70
-    );
+    doc.text(`Asientos seleccionados: ${asientos}`, 20, 70);
     doc.text(`Total a pagar: ${this.precioTotal} ARS`, 20, 80);
 
     // Insertar el código QR

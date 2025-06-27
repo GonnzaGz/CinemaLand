@@ -274,17 +274,18 @@ h3 {
   margin: 5px;
   text-align: center;
   line-height: 40px;
-  background-color: #e50914;
-  color: white;
+  background-color: white;
+  color: red;
   font-weight: bold;
   border-radius: 50%;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.3s ease;
+  border: 1px solid black; /* Borde rojo */
 }
 
 .fila span.selected {
   background-color: #87c739; /* Verde cuando se selecciona */
-  color: white;
+  color: black;
 }
 
 .fila span:hover {
