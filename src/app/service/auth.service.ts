@@ -19,7 +19,7 @@ export class AuthService {
   }
 
   logout() {
-    window.location.href = 'http://localhost:4200';
+    window.location.href = 'https://main.d1dbozfv7qh8jl.amplifyapp.com/';
     localStorage.clear();
     sessionStorage.clear();
   }
