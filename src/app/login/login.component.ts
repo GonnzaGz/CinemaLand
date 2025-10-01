@@ -52,8 +52,8 @@ export class LoginComponent implements OnInit {
     }
 
     const logoutUrl =
-      'https://us-east-1_dtizp7Sp2.auth.us-east-1.amazoncognito.com/logout' +
-      '?client_id=4j9pa1oamff1bd4hk3181rq4vp' +
+      'https://us-east-1_3HspZNy7e.auth.us-east-1.amazoncognito.com/logout' +
+      '?client_id=1v91jckl7411lmtn3r1k0m664p' +
       '&logout_uri=' +
       encodeURIComponent(window.location.origin);
 
