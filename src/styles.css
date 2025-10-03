@@ -11,15 +11,34 @@ body {
   height: 100%;
   overflow-x: hidden;
   color: #f1f1f1;
-  background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
-    url(./assets/images/fondo.jpg);
-  background-size: cover;
-  background-repeat: no-repeat;
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%);
+}
+
+/* Compensar el navbar sticky */
+body {
+  padding-top: 0; /* El navbar sticky no necesita padding extra */
+}
+
+/* Eliminar cualquier espacio entre navbar y contenido */
+app-navbar + * {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+/* Eliminar espacios en el banner */
+.banner {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
 }
 
 .compra-container {
   min-height: 100vh; /* Esto asegura que el contenedor ocupe toda la altura de la ventana */
-  background-image: #030918; /* Fondo oscuro */
+  background: linear-gradient(
+    135deg,
+    #1a1a1a 0%,
+    #2d2d2d 50%,
+    #1a1a1a 100%
+  ); /* Mismo fondo que navbar y footer */
   color: #f1f1f1; /* Texto en blanco */
   display: flex; /* Usar flexbox para el contenido */
   flex-direction: column; /* Colocar los elementos en columna */

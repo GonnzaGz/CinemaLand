@@ -1,70 +1,100 @@
-<div class="container">
-  <footer class="py-5">
-    <div class="row">
-      <div class="col-6 col-md-2 mb-3">
-        <h5>Secciones</h5>
-        <ul class="nav flex-column">
-          <li class="nav-item mb-2">
-            <a href="#" class="nav-link p-0 text-white" routerLink="">Home</a>
-          </li>
-          <li class="nav-item mb-2">
-            <a href="#" class="nav-link p-0 text-white" routerLink="pelirandom"
-              >Tu Peli Random</a
-            >
-          </li>
-          <li class="nav-item mb-2">
-            <a href="#" class="nav-link p-0 text-white" routerLink="pelissearch"
-              >Buscador</a
-            >
-          </li>
-          <li class="nav-item mb-2">
-            <a href="#" class="nav-link p-0 text-white" routerLink="nosotros"
-              >Nosotros</a
-            >
-          </li>
-        </ul>
-      </div>
-      <div class="col-md-5 offset-md-1 mb-3">
-        <form>
-          <h5>Suscríbete a nuestro boletín</h5>
-          <p>Resumen mensual de nuestras novedades y novedades..</p>
-          <div class="d-flex flex-column flex-sm-row w-100 gap-2">
-            <label for="newsletter1" class="visually-hidden">Mail</label>
-            <input
-              id="newsletter1"
-              type="email"
-              class="form-control"
-              placeholder="Ingrese su mail..."
-            />
-            <button class="btn btn-danger" type="button">Subscribite</button>
-          </div>
-        </form>
-      </div>
-    </div>
-    <div
-      class="d-flex flex-column flex-sm-row justify-content-between py-4 my-1 border-top"
-    >
-      <p>© 2025 Company, Inc. Todos los derechos reservados.</p>
-      <ul class="list-unstyled d-flex">
-        <li class="ms-3">
-          <a href="#" aria-label="Instagram"
-            ><img
-              class="redes"
-              src="assets/images/toppng.com-subscribe-to-our-mailing-list-icono-de-instagram-en-blanco-1708x1709.png"
-              alt="Instagram Logo"
-            />
-          </a>
-        </li>
-        <li class="ms-3">
-          <a href="#" aria-label="Facebook">
+<footer class="footer-modern">
+  <div class="footer-container">
+    <!-- Sección principal del footer -->
+    <div class="footer-main">
+      <div class="footer-grid">
+        <!-- Logo y descripción -->
+        <div class="footer-brand">
+          <div class="brand-logo">
             <img
-              class="redes"
-              src="assets/images/toppng.com-white-facebook-icon-png-facebook-logo-facebook-facebook-fortnite-logo-transparent-white-176x367.png"
-              alt="Facebook Logo"
+              src="assets/images/cinemaland-Logo.png"
+              alt="CinemaLand Logo"
+              class="footer-logo"
             />
-          </a>
-        </li>
-      </ul>
+            <h3 class="brand-name">CinemaLand</h3>
+          </div>
+          <p class="brand-description">
+            Tu experiencia de cine, pero mejor. Descubre las mejores películas,
+            gestiona tus favoritas y disfruta del séptimo arte.
+          </p>
+          <!-- Redes sociales -->
+          <div class="social-links">
+            <a href="#" class="social-link" aria-label="Instagram">
+              <i class="fab fa-instagram"></i>
+            </a>
+            <a href="#" class="social-link" aria-label="Facebook">
+              <i class="fab fa-facebook-f"></i>
+            </a>
+            <a href="#" class="social-link" aria-label="Twitter">
+              <i class="fab fa-twitter"></i>
+            </a>
+            <a href="#" class="social-link" aria-label="YouTube">
+              <i class="fab fa-youtube"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- Navegación rápida -->
+        <div class="footer-section">
+          <h4 class="footer-title">Navegación</h4>
+          <ul class="footer-links">
+            <li><a routerLink="" class="footer-link">Home</a></li>
+            <li>
+              <a routerLink="pelirandom" class="footer-link">Tu Peli Random</a>
+            </li>
+            <li>
+              <a routerLink="pelissearch" class="footer-link">Buscador</a>
+            </li>
+            <li><a routerLink="nosotros" class="footer-link">Nosotros</a></li>
+          </ul>
+        </div>
+
+        <!-- Información -->
+        <div class="footer-section">
+          <h4 class="footer-title">Información</h4>
+          <ul class="footer-links">
+            <li><a href="#" class="footer-link">Política de Privacidad</a></li>
+            <li><a href="#" class="footer-link">Términos de Servicio</a></li>
+            <li><a href="#" class="footer-link">Contacto</a></li>
+            <li><a href="#" class="footer-link">Ayuda</a></li>
+          </ul>
+        </div>
+
+        <!-- Newsletter -->
+        <div class="footer-section newsletter-section">
+          <h4 class="footer-title">Mantente al día</h4>
+          <p class="newsletter-description">
+            Suscríbete para recibir las últimas novedades sobre estrenos y
+            eventos especiales.
+          </p>
+          <form class="newsletter-form">
+            <div class="input-group">
+              <input
+                type="email"
+                class="newsletter-input"
+                placeholder="Tu email..."
+                required
+              />
+              <button type="submit" class="newsletter-btn">
+                <i class="fas fa-paper-plane"></i>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
-  </footer>
-</div>
+
+    <!-- Línea divisoria -->
+    <div class="footer-divider"></div>
+
+    <!-- Sección inferior -->
+    <div class="footer-bottom">
+      <div class="footer-bottom-content">
+        <p class="copyright">
+          © 2025 CinemaLand. Todos los derechos reservados.
+        </p>
+        <p class="credits">Hecho con ❤️ para los amantes del cine</p>
+      </div>
+    </div>
+  </div>
+</footer>

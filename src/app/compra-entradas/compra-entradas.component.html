@@ -1,65 +1,299 @@
-<div class="banner"></div>
-<div class="compra-container">
-  <div class="row">
-    <h1 class="h1">¡Bienvenido!</h1>
-    <div class="col-9 peliculas-populares">
-      <h2>🎬 Estrenos, solo en cines! 🎟️</h2>
-      <div class="peliculas-grid">
-        <div *ngFor="let pelicula of estrenos" class="pelicula-card">
-          <img
-            [src]="'https://image.tmdb.org/t/p/w200/' + pelicula.poster_path"
-            alt="Poster"
-          />
-          <h4>{{ pelicula.title }}</h4>
-          <button (click)="verDetalles(pelicula.id)">Ver Detalles</button>
-          <button (click)="toggleFavorito(pelicula)">
-            {{ esFavorito(pelicula.id) ? "⭐" : "☆" }}
-          </button>
-        </div>
+<!-- Hero Section Moderno -->
+<section class="hero-section" *ngIf="featuredMovies.length > 0 && currentMovie">
+  <div class="hero-slider">
+    <!-- Slide único con contenido dinámico -->
+    <div class="hero-slide active">
+      <div class="hero-background">
+        <img
+          [src]="
+            'https://image.tmdb.org/t/p/original/' + currentMovie.backdrop_path
+          "
+          [alt]="currentMovie.title"
+          class="hero-bg-image"
+          *ngIf="currentMovie.backdrop_path"
+          (load)="onImageLoad()"
+          (error)="onImageError()"
+          #heroImage
+        />
+        <!-- Imagen de fallback si no hay backdrop -->
+        <div class="hero-fallback-bg" *ngIf="!currentMovie.backdrop_path"></div>
+        <div class="hero-overlay"></div>
       </div>
 
-      <h2>🎬 Películas Fuera de Taquilla! 🎬</h2>
-      <div class="peliculas-grid">
-        <div *ngFor="let pelicula of peliculasViejas" class="pelicula-card">
-          <img
-            [src]="'https://image.tmdb.org/t/p/w200/' + pelicula.poster_path"
-            alt="Poster"
-          />
-          <h4>{{ pelicula.title }}</h4>
-          <button (click)="verDetalles(pelicula.id)">Ver Detalles</button>
-          <button (click)="toggleFavorito(pelicula)">
-            {{ esFavorito(pelicula.id) ? "⭐" : "☆" }}
-          </button>
+      <div class="hero-content">
+        <div class="hero-container">
+          <div class="hero-info">
+            <div class="movie-badges">
+              <span class="badge badge-new">ESTRENO</span>
+              <span class="badge badge-rating">{{
+                currentMovie.vote_average | number : "1.1"
+              }}</span>
+            </div>
+
+            <h1 class="hero-title">{{ currentMovie.title }}</h1>
+
+            <p class="hero-description">
+              {{
+                currentMovie.overview ||
+                  "Descubre las mejores películas en CinemaLand"
+              }}
+            </p>
+
+            <div class="movie-details">
+              <span class="detail-item">
+                <i class="fas fa-clock"></i>
+                150 min
+              </span>
+              <span class="detail-item">
+                <i class="fas fa-calendar"></i>
+                {{ currentMovie.release_date | date : "yyyy" }}
+              </span>
+              <span class="detail-item">
+                <i class="fas fa-star"></i>
+                Acción, Drama
+              </span>
+            </div>
+
+            <div class="hero-actions">
+              <button
+                class="btn-primary-hero"
+                (click)="verDetalles(currentMovie.id)"
+              >
+                <i class="fas fa-ticket-alt"></i>
+                Comprar Entradas
+              </button>
+
+              <button class="btn-secondary-hero" (click)="watchTrailer()">
+                <i class="fas fa-play"></i>
+                Ver Trailer
+              </button>
+
+              <button
+                class="btn-favorite-hero"
+                (click)="toggleFavorito(currentMovie)"
+                [class.active]="esFavorito(currentMovie.id)"
+              >
+                <i class="fas fa-heart"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="hero-poster">
+            <img
+              [src]="
+                'https://image.tmdb.org/t/p/w500/' + currentMovie.poster_path
+              "
+              [alt]="currentMovie.title"
+              class="featured-poster"
+              *ngIf="currentMovie.poster_path"
+            />
+            <div class="poster-glow"></div>
+          </div>
         </div>
       </div>
     </div>
 
-    <div class="col-3 favoritos">
-      <h2 class="titulofav">Tus Favoritas ⭐</h2>
-      <ul>
-        <li
-          *ngFor="let pelicula of peliculasfavoritas"
-          class="pelicula-card-fav"
-        >
-          <div class="favorito-container">
-            <img
-              [src]="'https://image.tmdb.org/t/p/w200/' + pelicula.poster_path"
-              alt="Poster"
-              class="favorito-poster"
-            />
-            <h4 class="favorito-titulo">{{ pelicula.title }}</h4>
-          </div>
-          <button (click)="verDetalles(pelicula.id)">Ver Detalles</button>
-          <button (click)="eliminarDeFavoritos(pelicula.id)">
-            Eliminar ⭐
-          </button>
-        </li>
-      </ul>
-      <button (click)="Borrarlistacompleta()" class="boton-limpiar">
-        Borrar Favoritos
-      </button>
+    <!-- Indicadores de slides -->
+    <div class="hero-indicators" *ngIf="featuredMovies.length > 1">
+      <button
+        *ngFor="let movie of featuredMovies; let i = index"
+        class="indicator"
+        [class.active]="currentSlide === i"
+        (click)="goToSlide(i)"
+      ></button>
     </div>
   </div>
+
+  <!-- Navegación del slider -->
+  <button
+    class="hero-nav prev"
+    (click)="previousSlide()"
+    *ngIf="featuredMovies.length > 1"
+  >
+    <i class="fas fa-chevron-left"></i>
+  </button>
+  <button
+    class="hero-nav next"
+    (click)="nextSlide()"
+    *ngIf="featuredMovies.length > 1"
+  >
+    <i class="fas fa-chevron-right"></i>
+  </button>
+</section>
+
+<!-- Fallback loading hero -->
+<section class="hero-section hero-loading" *ngIf="featuredMovies.length === 0">
+  <div class="hero-content">
+    <div class="hero-container">
+      <div class="hero-info">
+        <div class="loading-content">
+          <h1 class="hero-title">¡Bienvenido a CinemaLand!</h1>
+          <p class="hero-description">
+            Cargando las mejores películas para ti...
+          </p>
+          <div class="loading-spinner">
+            <i class="fas fa-film fa-spin"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Panel lateral de favoritos -->
+<div class="panel-favoritos" [class.abierto]="favoritosAbierto">
+  <div class="favoritos-header">
+    <h2 class="titulofav">Tus Favoritas ⭐</h2>
+  </div>
+  <div class="favoritos-content">
+    <ul class="favoritos-lista">
+      <li *ngFor="let pelicula of peliculasfavoritas" class="pelicula-card-fav">
+        <div class="favorito-container">
+          <img
+            [src]="'https://image.tmdb.org/t/p/w200/' + pelicula.poster_path"
+            alt="Poster"
+            class="favorito-poster"
+          />
+          <h4 class="favorito-titulo">{{ pelicula.title }}</h4>
+        </div>
+        <div class="favorito-actions">
+          <button (click)="verDetalles(pelicula.id)" class="btn-ver-detalles">
+            Ver
+          </button>
+          <button
+            (click)="eliminarDeFavoritos(pelicula.id)"
+            class="btn-eliminar"
+          >
+            ❌
+          </button>
+        </div>
+      </li>
+    </ul>
+    <button (click)="Borrarlistacompleta()" class="boton-limpiar">
+      Borrar Favoritos
+    </button>
+  </div>
+</div>
+
+<div class="compra-container" [class.con-panel-abierto]="favoritosAbierto">
+  <!-- Sección de películas en cartelera -->
+  <section class="cartelera-section">
+    <div class="section-header">
+      <h2 class="section-title">🎬 En Cartelera</h2>
+      <p class="section-subtitle">Los mejores estrenos disponibles ahora</p>
+    </div>
+
+    <div class="peliculas-grid">
+      <div *ngFor="let pelicula of estrenos" class="pelicula-card-modern">
+        <div class="card-image-container">
+          <img
+            [src]="'https://image.tmdb.org/t/p/w400/' + pelicula.poster_path"
+            alt="{{ pelicula.title }}"
+            class="card-poster"
+          />
+          <div class="card-overlay">
+            <div class="card-rating">
+              <i class="fas fa-star"></i>
+              {{ pelicula.vote_average | number : "1.1" }}
+            </div>
+            <button
+              class="btn-favorite-card"
+              (click)="toggleFavorito(pelicula)"
+              [class.active]="esFavorito(pelicula.id)"
+            >
+              <i class="fas fa-heart"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="card-content">
+          <div class="card-info">
+            <h4 class="card-title">{{ pelicula.title }}</h4>
+            <div class="card-meta">
+              <span class="card-year">{{
+                pelicula.release_date | date : "yyyy"
+              }}</span>
+              <span class="card-badge">ESTRENO</span>
+            </div>
+          </div>
+          <div class="card-actions">
+            <button
+              class="btn-icon-card"
+              (click)="verDetalles(pelicula.id)"
+              title="Ver detalles completos"
+            >
+              <i class="fas fa-info-circle"></i>
+            </button>
+            <button
+              class="btn-primary-card"
+              (click)="comprarEntradasPelicula(pelicula.id)"
+              title="Comprar entradas"
+            >
+              <i class="fas fa-ticket-alt"></i>
+              Comprar Entradas
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sección de películas fuera de cartelera -->
+  <section class="cartelera-section">
+    <div class="section-header">
+      <h2 class="section-title">� Películas Populares</h2>
+      <p class="section-subtitle">Las favoritas del público</p>
+    </div>
+
+    <div class="peliculas-grid">
+      <div
+        *ngFor="let pelicula of peliculasViejas"
+        class="pelicula-card-modern"
+      >
+        <div class="card-image-container">
+          <img
+            [src]="'https://image.tmdb.org/t/p/w400/' + pelicula.poster_path"
+            alt="{{ pelicula.title }}"
+            class="card-poster"
+          />
+          <div class="card-overlay">
+            <div class="card-rating">
+              <i class="fas fa-star"></i>
+              {{ pelicula.vote_average | number : "1.1" }}
+            </div>
+            <button
+              class="btn-favorite-card"
+              (click)="toggleFavorito(pelicula)"
+              [class.active]="esFavorito(pelicula.id)"
+            >
+              <i class="fas fa-heart"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="card-content">
+          <div class="card-info">
+            <h4 class="card-title">{{ pelicula.title }}</h4>
+            <div class="card-meta">
+              <span class="card-year">{{
+                pelicula.release_date | date : "yyyy"
+              }}</span>
+              <span class="card-badge popular">POPULAR</span>
+            </div>
+          </div>
+          <div class="card-actions">
+            <button
+              class="btn-icon-card"
+              (click)="verDetalles(pelicula.id)"
+              title="Ver detalles completos"
+            >
+              <i class="fas fa-info-circle"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <div
     *ngIf="detallesPelicula"

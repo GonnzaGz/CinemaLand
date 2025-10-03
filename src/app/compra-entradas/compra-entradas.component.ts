@@ -1,8 +1,9 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy } from '@angular/core';
 import { ApipeliculasService } from '../service/apipeliculas.service';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { AuthService } from '../service/auth.service';
+import { FavoritosService } from '../service/favoritos.service';
 
 @Component({
   selector: 'app-compra-entradas',
@@ -11,7 +12,7 @@ import { AuthService } from '../service/auth.service';
   templateUrl: './compra-entradas.component.html',
   styleUrls: ['./compra-entradas.component.css'],
 })
-export class CompraEntradasComponent implements OnInit {
+export class CompraEntradasComponent implements OnInit, OnDestroy {
   peliculas: any[] = [];
   detallesPelicula: any = null;
   peliculaSeleccionada: number | null = null;
@@ -23,8 +24,22 @@ export class CompraEntradasComponent implements OnInit {
   isAuthenticated$!: any;
   isAuthenticated: boolean = true;
   mensaje: string = '';
+  favoritosAbierto: boolean = false; // Estado para controlar el panel de favoritos
+
+  // Nuevas propiedades para el Hero Section
+  featuredMovies: any[] = [];
+  currentSlide: number = 0;
+  slideInterval: any;
+  isTransitioning: boolean = false;
+
+  // Getter para la película actual
+  get currentMovie() {
+    return this.featuredMovies[this.currentSlide] || null;
+  }
+
   private apiMovieService = inject(ApipeliculasService);
   private router = inject(Router);
+  private favoritosService = inject(FavoritosService);
 
   constructor(private authService: AuthService) {
     this.obtenerPeliculasPopulares();
@@ -40,6 +55,11 @@ export class CompraEntradasComponent implements OnInit {
     const idsession = localStorage.getItem('idsession');
     const idlist = localStorage.getItem('idlist');
     /*const lastSelectedMovieId = localStorage.getItem('selectedMovieId');*/
+
+    // Suscribirse al estado del panel de favoritos
+    this.favoritosService.favoritosAbierto$.subscribe(
+      (estado) => (this.favoritosAbierto = estado)
+    );
 
     if (idsession && idlist) {
       this.listadefavoritos();
@@ -57,16 +77,136 @@ export class CompraEntradasComponent implements OnInit {
   }
 
   obtenerPeliculasPopulares() {
-    this.apiMovieService.getPopularMovies().subscribe((data: any) => {
-      this.estrenos = data.results.filter((pelicula: any) =>
-        this.apiMovieService.esEstreno(pelicula.release_date)
-      );
+    console.log('Iniciando carga de películas...');
+    this.apiMovieService.getPopularMovies().subscribe({
+      next: (data: any) => {
+        console.log('Películas recibidas:', data);
+        if (data && data.results) {
+          // Asegurar que tenemos al menos 20 películas para dividir
+          const todasLasPeliculas = data.results.slice(0, 20);
 
-      this.peliculasViejas = data.results.filter(
-        (pelicula: any) =>
-          !this.apiMovieService.esEstreno(pelicula.release_date)
-      );
+          // Tomar las primeras 10 para "En Cartelera"
+          this.estrenos = todasLasPeliculas.slice(0, 10);
+
+          // Tomar las siguientes 10 para "Películas Populares"
+          this.peliculasViejas = todasLasPeliculas.slice(10, 20);
+
+          // Configurar películas destacadas para el hero
+          this.setupFeaturedMovies(data.results);
+          console.log(
+            'Estrenos:',
+            this.estrenos.length,
+            'Películas populares:',
+            this.peliculasViejas.length
+          );
+        }
+      },
+      error: (error) => {
+        console.error('Error al cargar películas:', error);
+      },
     });
+  }
+
+  // Nuevos métodos para el Hero Section
+  setupFeaturedMovies(movies: any[]) {
+    if (movies && movies.length > 0) {
+      this.featuredMovies = movies.slice(0, 5); // Top 5 películas para el slider
+      this.currentSlide = 0; // Inicializar en el primer slide
+      console.log('Featured movies set:', this.featuredMovies.length);
+
+      // Precargar todas las imágenes
+      this.preloadImages();
+      this.startSlideshow();
+    }
+  }
+
+  preloadImages() {
+    this.featuredMovies.forEach((movie) => {
+      if (movie.backdrop_path) {
+        const img = new Image();
+        img.src = `https://image.tmdb.org/t/p/original/${movie.backdrop_path}`;
+      }
+      if (movie.poster_path) {
+        const img = new Image();
+        img.src = `https://image.tmdb.org/t/p/w500/${movie.poster_path}`;
+      }
+    });
+  }
+
+  startSlideshow() {
+    if (this.slideInterval) {
+      clearInterval(this.slideInterval);
+    }
+
+    if (this.featuredMovies.length > 1) {
+      this.slideInterval = setInterval(() => {
+        if (!this.isTransitioning) {
+          this.nextSlide();
+        }
+      }, 6000); // Cambiar slide cada 6 segundos
+    }
+  }
+
+  stopSlideshow() {
+    if (this.slideInterval) {
+      clearInterval(this.slideInterval);
+    }
+  }
+
+  goToSlide(index: number) {
+    if (this.featuredMovies.length > index && !this.isTransitioning) {
+      this.isTransitioning = true;
+      this.currentSlide = index;
+
+      // Pequeño delay para permitir que el DOM se actualice
+      setTimeout(() => {
+        this.isTransitioning = false;
+      }, 100);
+
+      this.stopSlideshow();
+      this.startSlideshow();
+    }
+  }
+
+  nextSlide() {
+    if (this.featuredMovies.length > 0 && !this.isTransitioning) {
+      this.isTransitioning = true;
+      this.currentSlide = (this.currentSlide + 1) % this.featuredMovies.length;
+
+      setTimeout(() => {
+        this.isTransitioning = false;
+      }, 100);
+    }
+  }
+
+  previousSlide() {
+    if (this.featuredMovies.length > 0 && !this.isTransitioning) {
+      this.isTransitioning = true;
+      this.currentSlide =
+        this.currentSlide === 0
+          ? this.featuredMovies.length - 1
+          : this.currentSlide - 1;
+
+      setTimeout(() => {
+        this.isTransitioning = false;
+      }, 100);
+
+      this.stopSlideshow();
+      this.startSlideshow();
+    }
+  }
+
+  watchTrailer() {
+    // Por ahora mostrar alert, después se puede integrar con YouTube API
+    alert('Función de trailer disponible próximamente');
+  }
+
+  onImageLoad() {
+    console.log('Imagen cargada correctamente');
+  }
+
+  onImageError() {
+    console.error('Error al cargar imagen del hero');
   }
 
   verDetalles(id: number) {
@@ -98,6 +238,19 @@ export class CompraEntradasComponent implements OnInit {
       }
     } else {
       this.mensaje = 'Debes iniciar sesión para comprar entradas.';
+    }
+  }
+
+  // Método específico para comprar entradas desde las tarjetas
+  comprarEntradasPelicula(movieId: number) {
+    console.log(this.isAuthenticated);
+    if (this.isAuthenticated) {
+      this.router.navigate(['/seleccion-asientos', movieId]);
+    } else {
+      this.mensaje = 'Debes iniciar sesión para comprar entradas.';
+      setTimeout(() => {
+        this.mensaje = '';
+      }, 5000);
     }
   }
 
@@ -198,6 +351,11 @@ export class CompraEntradasComponent implements OnInit {
   }
 
   toggleFavorito(pelicula: any) {
+    if (!pelicula || !pelicula.id) {
+      console.error('Película inválida para toggle favorito');
+      return;
+    }
+
     const yaEsFavorita = this.esFavorito(pelicula.id);
     if (yaEsFavorita) {
       this.eliminarDeFavoritos(pelicula.id);
@@ -207,6 +365,9 @@ export class CompraEntradasComponent implements OnInit {
   }
 
   esFavorito(peliculaId: number): boolean {
+    if (!peliculaId || !this.peliculasfavoritas) {
+      return false;
+    }
     return this.peliculasfavoritas.some((p) => p.id === peliculaId);
   }
 
@@ -219,5 +380,13 @@ export class CompraEntradasComponent implements OnInit {
     this.peliculaSeleccionada = null;
     this.selectedMovieId = null;
     localStorage.removeItem('selectedMovieId');
+  }
+
+  toggleFavoritos() {
+    this.favoritosService.toggleFavoritos();
+  }
+
+  ngOnDestroy() {
+    this.stopSlideshow();
   }
 }

@@ -1,83 +1,122 @@
-<nav class="navbar navbar-expand-lg bg-danger border-bottom">
-  <div class="container-fluid">
-    <a class="logo2 navbar-brand text-white">
-      <img class="logo" src="assets/images/cinemaland-Logo.png" alt="logo" />
-      CinemaLand
+<nav class="navbar-modern">
+  <div class="navbar-container">
+    <!-- Logo y marca -->
+    <a routerLink="" class="navbar-brand">
+      <img
+        class="brand-logo"
+        src="assets/images/cinemaland-Logo.png"
+        alt="CinemaLand Logo"
+      />
+      <span class="brand-text">CinemaLand</span>
     </a>
 
+    <!-- Botón mobile toggle -->
     <button
-      class="navbar-toggler"
-      type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#navbarSupportedContent"
-      aria-controls="navbarSupportedContent"
-      aria-expanded="false"
+      class="mobile-toggle"
+      [class.active]="mobileMenuOpen"
+      (click)="toggleMobileMenu()"
       aria-label="Toggle navigation"
     >
-      <span class="navbar-toggler-icon"></span>
+      <span class="hamburger-line"></span>
+      <span class="hamburger-line"></span>
+      <span class="hamburger-line"></span>
     </button>
 
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link" aria-current="page" routerLink="">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="pelirandom">Tu Peli Random</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" aria-current="page" routerLink="nosotros">
-            Nosotros
-          </a>
-        </li>
-      </ul>
+    <!-- Navegación principal -->
+    <div class="navbar-nav" [class.active]="mobileMenuOpen">
+      <a
+        routerLink="pelirandom"
+        class="nav-link peli-random-btn"
+        routerLinkActive="active"
+      >
+        <div class="random-btn-content">
+          <div class="random-icon-container">
+            <i class="fas fa-dice"></i>
+            <div class="sparkle sparkle-1"></div>
+            <div class="sparkle sparkle-2"></div>
+            <div class="sparkle sparkle-3"></div>
+          </div>
+          <span class="random-text">
+            <span class="random-main">Peli</span>
+            <span class="random-highlight">Random</span>
+          </span>
+        </div>
+        <div class="random-btn-glow"></div>
+      </a>
+    </div>
 
-      <form class="d-flex" role="search">
-        <input
-          class="form-control me-2"
-          type="search"
-          placeholder="Buscar"
-          aria-label="Search"
-          [(ngModel)]="searchTerm"
-          name="searchTerm"
-        />
-        <button class="btn btn-dark" type="button" (click)="onSearch()">
-          Buscar
-        </button>
-      </form>
+    <!-- Sección derecha -->
+    <div class="navbar-actions" [class.active]="mobileMenuOpen">
+      <!-- Buscador -->
+      <div class="search-container">
+        <div class="search-input-group">
+          <input
+            type="search"
+            class="search-input"
+            placeholder="Buscar películas..."
+            [(ngModel)]="searchTerm"
+            name="searchTerm"
+            (keypress)="onSearchKeyPress($event)"
+          />
+          <button class="search-btn" type="button" (click)="onSearch()">
+            <i class="fas fa-search"></i>
+          </button>
+        </div>
+      </div>
 
-      <div class="d-flex align-items-center ms-3">
+      <!-- Botón de Favoritos -->
+      <button
+        class="favorites-btn"
+        (click)="toggleFavoritos()"
+        [class.active]="favoritosAbierto"
+        title="Mis Favoritos"
+      >
+        <i class="fas fa-star"></i>
+        <span class="favorites-count" *ngIf="favoritosCount > 0">{{
+          favoritosCount
+        }}</span>
+      </button>
+
+      <!-- Sección de usuario -->
+      <div class="user-section">
         <ng-container *ngIf="isAuthenticated; else loginBlock">
-          <ng-container *ngIf="userData$ | async as any">
-            <a (click)="irAlPerfil()" style="cursor: pointer">
-              <img
-                class="usuario"
-                src="assets/images/PinClipart.com_appliance-repair-clipart_4968268.png"
-                alt="Usuario Logo"
-                style="width: 32px; height: 32px"
-              />
+          <div class="user-info" (click)="toggleUserMenu()">
+            <div class="user-avatar">
+              <i class="fas fa-user"></i>
+            </div>
+            <span class="user-name">{{
+              user.userData?.username || "Usuario"
+            }}</span>
+            <i
+              class="fas fa-chevron-down dropdown-icon"
+              [class.rotated]="userMenuOpen"
+            ></i>
+          </div>
+
+          <!-- Menú desplegable de usuario -->
+          <div class="user-dropdown" [class.active]="userMenuOpen">
+            <a (click)="irAlPerfil()" class="dropdown-item">
+              <i class="fas fa-user-circle"></i>
+              Mi Perfil
             </a>
-            <span class="text-white ms-2" style="font-size: 0.9rem">
-              Hola,
-              {{ user.userData.username || "Usuario" }}
-            </span>
-            <button class="btn btn-outline-light ms-2" (click)="logout()">
-              Cerrar sesión
-            </button>
-          </ng-container>
+            <div class="dropdown-divider"></div>
+            <a (click)="logout()" class="dropdown-item logout">
+              <i class="fas fa-sign-out-alt"></i>
+              Cerrar Sesión
+            </a>
+          </div>
         </ng-container>
 
         <ng-template #loginBlock>
-          <a (click)="login()" class="nav-link ms-2" style="cursor: pointer">
-            <img
-              class="usuario"
-              src="assets/images/PinClipart.com_appliance-repair-clipart_4968268.png"
-              alt="Usuario Logo"
-              style="width: 32px; height: 32px"
-            />
-          </a>
+          <button class="login-btn" (click)="login()">
+            <i class="fas fa-sign-in-alt"></i>
+            <span>Iniciar Sesión</span>
+          </button>
         </ng-template>
       </div>
     </div>
   </div>
+
+  <!-- Línea decorativa inferior -->
+  <div class="navbar-bottom-line"></div>
 </nav>
