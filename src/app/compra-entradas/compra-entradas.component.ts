@@ -32,6 +32,24 @@ export class CompraEntradasComponent implements OnInit, OnDestroy {
   slideInterval: any;
   isTransitioning: boolean = false;
 
+  // Propiedades para filtros y "Ver más"
+  filtroFormato: string = 'todos';
+  filtroIdioma: string = 'todos';
+  filtroAccesible: boolean = false;
+  filtroFamiliar: boolean = false;
+  peliculasMostradas: number = 6;
+  mostrarTodasLasPeliculas: boolean = false;
+
+  // Propiedades para el carousel "Disfruta CinemaLand"
+  currentCarouselSlide: number = 0;
+  carouselSlides: any[] = [
+    { id: 1, type: 'ofertas' },
+    { id: 2, type: 'social' },
+    { id: 3, type: 'accesibilidad' },
+    { id: 4, type: 'peli-random' },
+  ];
+  carouselInterval: any;
+
   // Getter para la película actual
   get currentMovie() {
     return this.featuredMovies[this.currentSlide] || null;
@@ -67,6 +85,9 @@ export class CompraEntradasComponent implements OnInit, OnDestroy {
       localStorage.clear();
       this.Crearlista();
     }
+
+    // Inicializar carousel
+    this.startCarousel();
 
     /*if (lastSelectedMovieId) {
       const id = parseInt(lastSelectedMovieId, 10);
@@ -386,7 +407,119 @@ export class CompraEntradasComponent implements OnInit, OnDestroy {
     this.favoritosService.toggleFavoritos();
   }
 
+  // Métodos para filtros y "Ver más"
+  setFiltroFormato(formato: string) {
+    this.filtroFormato = formato;
+    this.resetearVista();
+  }
+
+  setFiltroIdioma(idioma: string) {
+    this.filtroIdioma = idioma;
+    this.resetearVista();
+  }
+
+  toggleFiltroAccesible() {
+    this.filtroAccesible = !this.filtroAccesible;
+    this.resetearVista();
+  }
+
+  toggleFiltroFamiliar() {
+    this.filtroFamiliar = !this.filtroFamiliar;
+    this.resetearVista();
+  }
+
+  getEstrenosFiltrados(): any[] {
+    let peliculasFiltradas = [...this.estrenos];
+
+    // Por ahora simulamos que todas las películas tienen diferentes formatos/idiomas
+    // En una implementación real, estas propiedades vendrían de la API
+    if (this.filtroFormato !== 'todos') {
+      peliculasFiltradas = peliculasFiltradas.filter((pelicula) => {
+        // Simular diferentes formatos basado en el ID
+        const formatos =
+          pelicula.id % 4 === 0
+            ? ['2D', '3D']
+            : pelicula.id % 3 === 0
+            ? ['2D', 'IMAX']
+            : ['2D'];
+        return formatos.includes(this.filtroFormato);
+      });
+    }
+
+    if (this.filtroIdioma !== 'todos') {
+      peliculasFiltradas = peliculasFiltradas.filter((pelicula) => {
+        // Simular diferentes idiomas basado en el ID
+        const idiomas =
+          pelicula.id % 5 === 0
+            ? ['español', 'subtitulado']
+            : pelicula.id % 2 === 0
+            ? ['ingles']
+            : ['español'];
+        return idiomas.includes(this.filtroIdioma);
+      });
+    }
+
+    if (this.filtroAccesible) {
+      peliculasFiltradas = peliculasFiltradas.filter((pelicula) => {
+        // Simular accesibilidad basado en el ID
+        return pelicula.id % 3 === 0;
+      });
+    }
+
+    if (this.filtroFamiliar) {
+      peliculasFiltradas = peliculasFiltradas.filter((pelicula) => {
+        // Simular contenido familiar basado en la calificación
+        return pelicula.vote_average >= 7.0;
+      });
+    }
+
+    return peliculasFiltradas;
+  }
+
+  verMasPeliculas() {
+    this.mostrarTodasLasPeliculas = true;
+  }
+
+  resetearVista() {
+    this.mostrarTodasLasPeliculas = false;
+    this.peliculasMostradas = 6;
+  }
+
+  // Métodos para el carousel "Disfruta CinemaLand"
+  nextCarouselSlide() {
+    this.currentCarouselSlide =
+      (this.currentCarouselSlide + 1) % this.carouselSlides.length;
+  }
+
+  previousCarouselSlide() {
+    this.currentCarouselSlide =
+      this.currentCarouselSlide === 0
+        ? this.carouselSlides.length - 1
+        : this.currentCarouselSlide - 1;
+  }
+
+  goToCarouselSlide(index: number) {
+    this.currentCarouselSlide = index;
+  }
+
+  startCarousel() {
+    this.carouselInterval = setInterval(() => {
+      this.nextCarouselSlide();
+    }, 5000); // Cambia slide cada 5 segundos
+  }
+
+  stopCarousel() {
+    if (this.carouselInterval) {
+      clearInterval(this.carouselInterval);
+    }
+  }
+
+  irAPeliRandom() {
+    this.router.navigate(['/pelirandom']);
+  }
+
   ngOnDestroy() {
     this.stopSlideshow();
+    this.stopCarousel();
   }
 }

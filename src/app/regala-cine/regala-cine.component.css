@@ -1,0 +1,410 @@
+/* Contenedor principal */
+.regala-cine-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%);
+  color: #f1f1f1;
+}
+
+/* Banner principal */
+.hero-banner {
+  position: relative;
+  min-height: 60vh;
+  background: linear-gradient(135deg, #6a1b9a, #8e24aa, #ab47bc);
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  overflow: hidden;
+}
+
+.banner-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 1;
+}
+
+.banner-content {
+  flex: 1;
+  z-index: 2;
+  max-width: 600px;
+}
+
+.gift-icon {
+  font-size: 4rem;
+  color: #d4af37;
+  margin-bottom: 20px;
+}
+
+.main-title {
+  font-size: 3.5rem;
+  font-weight: 800;
+  color: white;
+  margin: 0 0 20px 0;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+  line-height: 1.1;
+}
+
+.subtitle {
+  font-size: 1.3rem;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0 0 40px 0;
+  font-weight: 400;
+}
+
+.experience-icons {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.icon-item {
+  width: 60px;
+  height: 60px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+.icon-item:hover {
+  background: rgba(212, 175, 55, 0.3);
+  transform: scale(1.1);
+}
+
+.icon-item i {
+  font-size: 1.5rem;
+  color: white;
+}
+
+.banner-image {
+  flex: 1;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.couple-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+/* Sección de experiencias */
+.experiences-section {
+  padding: 80px 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.section-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: white;
+  margin: 0 0 20px 0;
+  line-height: 1.2;
+}
+
+.highlight {
+  color: #d4af37;
+}
+
+.section-description {
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0 0 60px 0;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.6;
+}
+
+/* Pasos */
+.steps-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 40px;
+  margin-top: 60px;
+}
+
+.step-item {
+  text-align: center;
+  padding: 30px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.step-item:hover {
+  transform: translateY(-5px);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(212, 175, 55, 0.3);
+}
+
+.step-number {
+  font-size: 3rem;
+  font-weight: 800;
+  color: #d4af37;
+  margin-bottom: 20px;
+}
+
+.step-item h3 {
+  font-size: 1.3rem;
+  color: white;
+  margin: 0 0 15px 0;
+  font-weight: 600;
+}
+
+.step-item p {
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Sección de regalos */
+.gifts-section {
+  padding: 80px 20px;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.gift-cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+  max-width: 1400px;
+  margin: 60px auto 0 auto;
+}
+
+/* Tarjetas de regalo */
+.gift-card {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  padding: 30px;
+  position: relative;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+  backdrop-filter: blur(10px);
+}
+
+.gift-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+}
+
+.gift-card.classic {
+  border-color: #3498db;
+}
+
+.gift-card.classic:hover {
+  box-shadow: 0 15px 40px rgba(52, 152, 219, 0.2);
+}
+
+.gift-card.premium {
+  border-color: #d4af37;
+}
+
+.gift-card.premium:hover {
+  box-shadow: 0 15px 40px rgba(212, 175, 55, 0.2);
+}
+
+.gift-card.vip {
+  border-color: #e74c3c;
+}
+
+.gift-card.vip:hover {
+  box-shadow: 0 15px 40px rgba(231, 76, 60, 0.2);
+}
+
+.gift-card.custom {
+  border-color: #9b59b6;
+}
+
+.gift-card.custom:hover {
+  box-shadow: 0 15px 40px rgba(155, 89, 182, 0.2);
+}
+
+.popular-badge {
+  position: absolute;
+  top: -10px;
+  right: 20px;
+  background: linear-gradient(135deg, #d4af37, #b8860b);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  transform: rotate(3deg);
+}
+
+.card-header {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.card-header h3 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: white;
+  margin: 0 0 10px 0;
+}
+
+.price {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #d4af37;
+}
+
+.benefits-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 30px 0;
+}
+
+.benefits-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 12px;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.benefits-list i {
+  color: #27ae60;
+  margin-top: 2px;
+  min-width: 16px;
+}
+
+/* Botones */
+.gift-btn {
+  width: 100%;
+  padding: 15px;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.gift-btn {
+  background: linear-gradient(135deg, #3498db, #2980b9);
+  color: white;
+}
+
+.premium-btn {
+  background: linear-gradient(135deg, #d4af37, #b8860b);
+  color: white;
+}
+
+.vip-btn {
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
+  color: white;
+}
+
+.custom-btn {
+  background: linear-gradient(135deg, #9b59b6, #8e44ad);
+  color: white;
+}
+
+.gift-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* CTA Final */
+.cta-section {
+  padding: 80px 20px;
+  text-align: center;
+  background: linear-gradient(135deg, #2c3e50, #34495e);
+}
+
+.cta-section h2 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: white;
+  margin: 0 0 20px 0;
+}
+
+.cta-section p {
+  font-size: 1.2rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0 0 40px 0;
+}
+
+.main-cta-btn {
+  padding: 20px 40px;
+  background: linear-gradient(135deg, #d4af37, #b8860b);
+  color: white;
+  border: none;
+  border-radius: 50px;
+  font-size: 1.2rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.main-cta-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .hero-banner {
+    flex-direction: column;
+    text-align: center;
+    min-height: 80vh;
+    padding: 40px 20px;
+  }
+
+  .main-title {
+    font-size: 2.5rem;
+  }
+
+  .section-title {
+    font-size: 2rem;
+  }
+
+  .steps-container {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .gift-cards-container {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .experience-icons {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .main-title {
+    font-size: 2rem;
+  }
+
+  .cta-section h2 {
+    font-size: 1.8rem;
+  }
+
+  .gift-card {
+    padding: 20px;
+  }
+}

@@ -11,38 +11,31 @@
           [alt]="currentMovie.title"
           class="hero-bg-image"
           *ngIf="currentMovie.backdrop_path"
-          (load)="onImageLoad()"
-          (error)="onImageError()"
-          #heroImage
         />
-        <!-- Imagen de fallback si no hay backdrop -->
         <div class="hero-fallback-bg" *ngIf="!currentMovie.backdrop_path"></div>
+
+        <!-- Overlay con gradiente -->
         <div class="hero-overlay"></div>
       </div>
 
       <div class="hero-content">
         <div class="hero-container">
           <div class="hero-info">
-            <div class="movie-badges">
-              <span class="badge badge-new">ESTRENO</span>
-              <span class="badge badge-rating">{{
-                currentMovie.vote_average | number : "1.1"
-              }}</span>
+            <div class="hero-badges">
+              <span class="badge-estreno">ESTRENO</span>
+              <span class="badge-rating">
+                <i class="fas fa-star"></i>
+                {{ currentMovie.vote_average | number : "1.1" }}
+              </span>
             </div>
 
             <h1 class="hero-title">{{ currentMovie.title }}</h1>
+            <p class="hero-description">{{ currentMovie.overview }}</p>
 
-            <p class="hero-description">
-              {{
-                currentMovie.overview ||
-                  "Descubre las mejores películas en CinemaLand"
-              }}
-            </p>
-
-            <div class="movie-details">
+            <div class="hero-details">
               <span class="detail-item">
                 <i class="fas fa-clock"></i>
-                150 min
+                120 min
               </span>
               <span class="detail-item">
                 <i class="fas fa-calendar"></i>
@@ -181,10 +174,109 @@
     <div class="section-header">
       <h2 class="section-title">🎬 En Cartelera</h2>
       <p class="section-subtitle">Los mejores estrenos disponibles ahora</p>
+
+      <!-- Sistema de filtros -->
+      <div class="filtros-container">
+        <div class="filtros-row">
+          <div class="filtro-grupo">
+            <label class="filtro-label">Formato:</label>
+            <div class="filtro-opciones">
+              <button
+                class="filtro-btn"
+                [class.active]="filtroFormato === 'todos'"
+                (click)="setFiltroFormato('todos')"
+              >
+                Todos
+              </button>
+              <button
+                class="filtro-btn"
+                [class.active]="filtroFormato === '2D'"
+                (click)="setFiltroFormato('2D')"
+              >
+                2D
+              </button>
+              <button
+                class="filtro-btn"
+                [class.active]="filtroFormato === '3D'"
+                (click)="setFiltroFormato('3D')"
+              >
+                3D
+              </button>
+              <button
+                class="filtro-btn"
+                [class.active]="filtroFormato === 'IMAX'"
+                (click)="setFiltroFormato('IMAX')"
+              >
+                IMAX
+              </button>
+            </div>
+          </div>
+
+          <div class="filtro-grupo">
+            <label class="filtro-label">Idioma:</label>
+            <div class="filtro-opciones">
+              <button
+                class="filtro-btn"
+                [class.active]="filtroIdioma === 'todos'"
+                (click)="setFiltroIdioma('todos')"
+              >
+                Todos
+              </button>
+              <button
+                class="filtro-btn"
+                [class.active]="filtroIdioma === 'español'"
+                (click)="setFiltroIdioma('español')"
+              >
+                Español
+              </button>
+              <button
+                class="filtro-btn"
+                [class.active]="filtroIdioma === 'ingles'"
+                (click)="setFiltroIdioma('ingles')"
+              >
+                Inglés
+              </button>
+              <button
+                class="filtro-btn"
+                [class.active]="filtroIdioma === 'subtitulado'"
+                (click)="setFiltroIdioma('subtitulado')"
+              >
+                Subtitulado
+              </button>
+            </div>
+          </div>
+
+          <div class="filtro-grupo">
+            <label class="filtro-label">Otras opciones:</label>
+            <div class="filtro-opciones">
+              <button
+                class="filtro-btn"
+                [class.active]="filtroAccesible"
+                (click)="toggleFiltroAccesible()"
+              >
+                <i class="fas fa-wheelchair"></i> Accesible
+              </button>
+              <button
+                class="filtro-btn"
+                [class.active]="filtroFamiliar"
+                (click)="toggleFiltroFamiliar()"
+              >
+                <i class="fas fa-baby"></i> Familiar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="peliculas-grid">
-      <div *ngFor="let pelicula of estrenos" class="pelicula-card-modern">
+      <div
+        *ngFor="let pelicula of getEstrenosFiltrados(); let i = index"
+        class="pelicula-card-modern"
+        [style.display]="
+          mostrarTodasLasPeliculas || i < peliculasMostradas ? 'block' : 'none'
+        "
+      >
         <div class="card-image-container">
           <img
             [src]="'https://image.tmdb.org/t/p/w400/' + pelicula.poster_path"
@@ -236,61 +328,141 @@
         </div>
       </div>
     </div>
+
+    <!-- Botón Ver más -->
+    <div
+      class="ver-mas-container"
+      *ngIf="
+        !mostrarTodasLasPeliculas &&
+        getEstrenosFiltrados().length > peliculasMostradas
+      "
+    >
+      <button class="btn-ver-mas" (click)="verMasPeliculas()">
+        <i class="fas fa-plus-circle"></i>
+        Ver más películas
+      </button>
+    </div>
   </section>
 
-  <!-- Sección de películas fuera de cartelera -->
-  <section class="cartelera-section">
+  <!-- Sección Disfruta CinemaLand -->
+  <section class="disfruta-section">
     <div class="section-header">
-      <h2 class="section-title">� Películas Populares</h2>
-      <p class="section-subtitle">Las favoritas del público</p>
+      <h2 class="section-title">🎪 Disfruta CinemaLand</h2>
+      <p class="section-subtitle">
+        Descubre todas las experiencias que tenemos para ti
+      </p>
     </div>
 
-    <div class="peliculas-grid">
+    <div class="carousel-container">
       <div
-        *ngFor="let pelicula of peliculasViejas"
-        class="pelicula-card-modern"
+        class="carousel-track"
+        [style.transform]="'translateX(' + -currentCarouselSlide * 100 + '%)'"
       >
-        <div class="card-image-container">
-          <img
-            [src]="'https://image.tmdb.org/t/p/w400/' + pelicula.poster_path"
-            alt="{{ pelicula.title }}"
-            class="card-poster"
-          />
-          <div class="card-overlay">
-            <div class="card-rating">
-              <i class="fas fa-star"></i>
-              {{ pelicula.vote_average | number : "1.1" }}
+        <!-- Slide 1: Ofertas especiales -->
+        <div class="carousel-slide">
+          <div class="promo-card ofertas">
+            <div class="promo-icon">
+              <i class="fas fa-percentage"></i>
             </div>
-            <button
-              class="btn-favorite-card"
-              (click)="toggleFavorito(pelicula)"
-              [class.active]="esFavorito(pelicula.id)"
-            >
-              <i class="fas fa-heart"></i>
-            </button>
+            <h3 class="promo-title">Ofertas Especiales</h3>
+            <p class="promo-description">
+              Hasta 30% de descuento en entradas para funciones matinée
+            </p>
+            <ul class="promo-list">
+              <li><i class="fas fa-clock"></i> Matinée antes de las 16:00</li>
+              <li><i class="fas fa-users"></i> Descuentos grupales</li>
+              <li>
+                <i class="fas fa-birthday-cake"></i> Promociones cumpleañeros
+              </li>
+            </ul>
+            <button class="promo-btn">Ver Ofertas</button>
           </div>
         </div>
 
-        <div class="card-content">
-          <div class="card-info">
-            <h4 class="card-title">{{ pelicula.title }}</h4>
-            <div class="card-meta">
-              <span class="card-year">{{
-                pelicula.release_date | date : "yyyy"
-              }}</span>
-              <span class="card-badge popular">POPULAR</span>
+        <!-- Slide 2: Características sociales -->
+        <div class="carousel-slide">
+          <div class="promo-card social">
+            <div class="promo-icon">
+              <i class="fas fa-share-alt"></i>
             </div>
+            <h3 class="promo-title">CinemaLand Social</h3>
+            <p class="promo-description">
+              Comparte tu experiencia y conecta con otros cinéfilos
+            </p>
+            <ul class="promo-list">
+              <li>
+                <i class="fas fa-heart"></i> Guarda tus películas favoritas
+              </li>
+              <li><i class="fas fa-star"></i> Califica y reseña</li>
+              <li><i class="fas fa-comments"></i> Únete a las discusiones</li>
+            </ul>
+            <button class="promo-btn">Únete Ahora</button>
           </div>
-          <div class="card-actions">
-            <button
-              class="btn-icon-card"
-              (click)="verDetalles(pelicula.id)"
-              title="Ver detalles completos"
-            >
-              <i class="fas fa-info-circle"></i>
+        </div>
+
+        <!-- Slide 3: Accesibilidad -->
+        <div class="carousel-slide">
+          <div class="promo-card accesibilidad">
+            <div class="promo-icon">
+              <i class="fas fa-wheelchair"></i>
+            </div>
+            <h3 class="promo-title">Cine Para Todos</h3>
+            <p class="promo-description">
+              Instalaciones completamente accesibles
+            </p>
+            <ul class="promo-list">
+              <li>
+                <i class="fas fa-wheelchair"></i> Acceso para sillas de ruedas
+              </li>
+              <li>
+                <i class="fas fa-deaf"></i> Subtítulos y audio descriptivo
+              </li>
+              <li><i class="fas fa-eye"></i> Asientos prioritarios</li>
+            </ul>
+            <button class="promo-btn">Más Info</button>
+          </div>
+        </div>
+
+        <!-- Slide 4: Peli Random -->
+        <div class="carousel-slide">
+          <div class="promo-card peli-random">
+            <div class="promo-icon">
+              <i class="fas fa-dice"></i>
+            </div>
+            <h3 class="promo-title">Peli Random</h3>
+            <p class="promo-description">
+              ¡Deja que el destino elija tu próxima película!
+            </p>
+            <ul class="promo-list">
+              <li>
+                <i class="fas fa-magic"></i> Recomendaciones personalizadas
+              </li>
+              <li><i class="fas fa-surprise"></i> Descubre nuevos géneros</li>
+              <li><i class="fas fa-gift"></i> Sorpresas especiales</li>
+            </ul>
+            <button class="promo-btn" (click)="irAPeliRandom()">
+              Probar Suerte
             </button>
           </div>
         </div>
+      </div>
+
+      <!-- Controles del carousel -->
+      <button class="carousel-btn prev" (click)="previousCarouselSlide()">
+        <i class="fas fa-chevron-left"></i>
+      </button>
+      <button class="carousel-btn next" (click)="nextCarouselSlide()">
+        <i class="fas fa-chevron-right"></i>
+      </button>
+
+      <!-- Indicadores del carousel -->
+      <div class="carousel-indicators">
+        <button
+          *ngFor="let slide of carouselSlides; let i = index"
+          class="carousel-indicator"
+          [class.active]="currentCarouselSlide === i"
+          (click)="goToCarouselSlide(i)"
+        ></button>
       </div>
     </div>
   </section>

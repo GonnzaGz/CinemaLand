@@ -793,22 +793,29 @@
 .section-header {
   text-align: center;
   margin-bottom: 50px;
+  padding: 0 20px;
 }
 
 .section-title {
+  font-family: "Ubuntu", sans-serif;
   font-size: 2.5rem;
-  font-weight: bold;
+  font-weight: 700;
   background: linear-gradient(135deg, #d4af37, #f4e4bc);
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .section-subtitle {
+  font-family: "Ubuntu", sans-serif;
   font-size: 1.2rem;
   color: #cccccc;
-  font-weight: 300;
+  font-weight: 400;
+  letter-spacing: 1px;
 }
 
 /* Grid moderno de películas */
@@ -1165,5 +1172,663 @@
     width: 32px;
     height: 32px;
     font-size: 0.8rem;
+  }
+}
+
+/* Estilos para filtros */
+.filtros-container {
+  margin: 30px 0;
+  padding: 25px;
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  border-radius: 15px;
+  border: 1px solid #d4af37;
+  box-shadow: 0 8px 32px rgba(212, 175, 55, 0.1);
+}
+
+.filtros-row {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.filtro-grupo {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.filtro-label {
+  font-family: "Ubuntu", sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #d4af37;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.filtro-opciones {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.filtro-btn {
+  padding: 8px 16px;
+  background: transparent;
+  border: 2px solid #444;
+  border-radius: 25px;
+  color: #ffffff;
+  font-family: "Ubuntu", sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.filtro-btn:hover {
+  border-color: #d4af37;
+  color: #d4af37;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2);
+}
+
+.filtro-btn.active {
+  background: linear-gradient(135deg, #d4af37 0%, #f4d03f 100%);
+  border-color: #d4af37;
+  color: #1a1a1a;
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+}
+
+.filtro-btn i {
+  font-size: 0.8rem;
+}
+
+/* Estilos para el botón "Ver más" */
+.ver-mas-container {
+  display: flex;
+  justify-content: center;
+  margin: 40px 0;
+}
+
+.btn-ver-mas {
+  padding: 15px 35px;
+  background: linear-gradient(135deg, #d4af37 0%, #f4d03f 100%);
+  border: none;
+  border-radius: 30px;
+  color: #1a1a1a;
+  font-family: "Ubuntu", sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 8px 25px rgba(212, 175, 55, 0.3);
+}
+
+.btn-ver-mas:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 35px rgba(212, 175, 55, 0.4);
+  background: linear-gradient(135deg, #f4d03f 0%, #d4af37 100%);
+}
+
+.btn-ver-mas i {
+  font-size: 1.2rem;
+  transition: transform 0.3s ease;
+}
+
+.btn-ver-mas:hover i {
+  transform: rotate(90deg);
+}
+
+/* Responsive para filtros */
+@media (max-width: 1024px) {
+  .filtros-container {
+    padding: 20px;
+  }
+
+  .filtros-row {
+    gap: 15px;
+  }
+
+  .filtro-opciones {
+    gap: 8px;
+  }
+
+  .filtro-btn {
+    padding: 6px 12px;
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .filtros-container {
+    padding: 15px;
+    margin: 20px 0;
+  }
+
+  .filtros-row {
+    gap: 12px;
+  }
+
+  .filtro-label {
+    font-size: 0.9rem;
+  }
+
+  .filtro-opciones {
+    gap: 6px;
+  }
+
+  .filtro-btn {
+    padding: 5px 10px;
+    font-size: 0.8rem;
+  }
+
+  .btn-ver-mas {
+    padding: 12px 25px;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .filtros-container {
+    padding: 12px;
+  }
+
+  .filtro-grupo {
+    gap: 8px;
+  }
+
+  .filtro-label {
+    font-size: 0.85rem;
+  }
+
+  .filtro-btn {
+    padding: 4px 8px;
+    font-size: 0.75rem;
+  }
+
+  .btn-ver-mas {
+    padding: 10px 20px;
+    font-size: 0.9rem;
+  }
+}
+
+/* Estilos para la sección "Disfruta CinemaLand" */
+.disfruta-section {
+  margin: 80px 0;
+  padding: 0 40px;
+}
+
+.carousel-container {
+  position: relative;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  overflow: hidden;
+  border-radius: 20px;
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
+}
+
+.carousel-track {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+  width: 400%; /* 4 slides */
+}
+
+.carousel-slide {
+  width: 25%; /* 100% / 4 slides */
+  flex-shrink: 0;
+  padding: 0;
+}
+
+.promo-card {
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  padding: 40px;
+  height: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+}
+
+.promo-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0.1;
+  z-index: 1;
+}
+
+.promo-card.ofertas::before {
+  background: linear-gradient(45deg, #d4af37, #f4d03f);
+}
+
+.promo-card.social::before {
+  background: linear-gradient(45deg, #e74c3c, #ff6b6b);
+}
+
+.promo-card.accesibilidad::before {
+  background: linear-gradient(45deg, #3498db, #74b9ff);
+}
+
+.promo-card.peli-random::before {
+  background: linear-gradient(45deg, #9b59b6, #a29bfe);
+}
+
+.promo-card > * {
+  position: relative;
+  z-index: 2;
+}
+
+.promo-icon {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  font-size: 2rem;
+  color: #1a1a1a;
+}
+
+.promo-card.ofertas .promo-icon {
+  background: linear-gradient(135deg, #d4af37, #f4d03f);
+}
+
+.promo-card.social .promo-icon {
+  background: linear-gradient(135deg, #e74c3c, #ff6b6b);
+}
+
+.promo-card.accesibilidad .promo-icon {
+  background: linear-gradient(135deg, #3498db, #74b9ff);
+}
+
+.promo-card.peli-random .promo-icon {
+  background: linear-gradient(135deg, #9b59b6, #a29bfe);
+}
+
+.promo-title {
+  font-family: "Ubuntu", sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 15px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.promo-description {
+  font-family: "Ubuntu", sans-serif;
+  font-size: 1.1rem;
+  color: #cccccc;
+  margin-bottom: 25px;
+  line-height: 1.6;
+}
+
+.promo-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 25px 0;
+}
+
+.promo-list li {
+  font-family: "Ubuntu", sans-serif;
+  color: #ffffff;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.promo-list i {
+  color: #d4af37;
+  width: 16px;
+}
+
+.promo-btn {
+  padding: 12px 25px;
+  border: none;
+  border-radius: 25px;
+  color: #1a1a1a;
+  font-family: "Ubuntu", sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  align-self: flex-start;
+}
+
+.promo-card.ofertas .promo-btn {
+  background: linear-gradient(135deg, #d4af37, #f4d03f);
+}
+
+.promo-card.social .promo-btn {
+  background: linear-gradient(135deg, #e74c3c, #ff6b6b);
+}
+
+.promo-card.accesibilidad .promo-btn {
+  background: linear-gradient(135deg, #3498db, #74b9ff);
+}
+
+.promo-card.peli-random .promo-btn {
+  background: linear-gradient(135deg, #9b59b6, #a29bfe);
+}
+
+.promo-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+/* Controles del carousel */
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(212, 175, 55, 0.9);
+  border: none;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  color: #1a1a1a;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.carousel-btn:hover {
+  background: #d4af37;
+  transform: translateY(-50%) scale(1.1);
+}
+
+.carousel-btn.prev {
+  left: -25px;
+}
+
+.carousel-btn.next {
+  right: -25px;
+}
+
+/* Indicadores del carousel */
+.carousel-indicators {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  z-index: 10;
+}
+
+.carousel-indicator {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.carousel-indicator.active {
+  background: #d4af37;
+  transform: scale(1.2);
+}
+
+.carousel-indicator:hover {
+  background: rgba(212, 175, 55, 0.7);
+}
+
+/* Responsive para carousel */
+@media (max-width: 1024px) {
+  .disfruta-section {
+    padding: 0 20px;
+    margin: 60px 0;
+  }
+
+  .promo-card {
+    padding: 30px;
+    height: 350px;
+  }
+
+  .promo-title {
+    font-size: 1.7rem;
+  }
+
+  .promo-description {
+    font-size: 1rem;
+  }
+
+  .carousel-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+  }
+
+  .carousel-btn.prev {
+    left: -20px;
+  }
+
+  .carousel-btn.next {
+    right: -20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .disfruta-section {
+    padding: 0 15px;
+    margin: 40px 0;
+  }
+
+  .promo-card {
+    padding: 25px;
+    height: 320px;
+  }
+
+  .promo-icon {
+    width: 60px;
+    height: 60px;
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+  }
+
+  .promo-title {
+    font-size: 1.5rem;
+    margin-bottom: 12px;
+  }
+
+  .promo-description {
+    font-size: 0.9rem;
+    margin-bottom: 20px;
+  }
+
+  .promo-list li {
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+  }
+
+  .promo-btn {
+    padding: 10px 20px;
+    font-size: 0.9rem;
+  }
+
+  .carousel-btn {
+    width: 35px;
+    height: 35px;
+    font-size: 0.9rem;
+  }
+
+  .carousel-btn.prev {
+    left: -15px;
+  }
+
+  .carousel-btn.next {
+    right: -15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .disfruta-section {
+    padding: 0 10px;
+  }
+
+  .promo-card {
+    padding: 20px;
+    height: 280px;
+  }
+
+  .promo-icon {
+    width: 50px;
+    height: 50px;
+    font-size: 1.2rem;
+  }
+
+  .promo-title {
+    font-size: 1.3rem;
+  }
+
+  .promo-description {
+    font-size: 0.85rem;
+  }
+
+  .promo-list li {
+    font-size: 0.8rem;
+  }
+
+  .promo-btn {
+    padding: 8px 16px;
+    font-size: 0.8rem;
+  }
+
+  .carousel-btn.prev {
+    left: -10px;
+  }
+
+  .carousel-btn.next {
+    right: -10px;
+  }
+
+  .carousel-indicator {
+    width: 8px;
+    height: 8px;
+  }
+}
+
+/* Optimizaciones finales y consistencia */
+/* Smooth scrolling para mejor UX */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Animaciones de entrada para secciones */
+.cartelera-section,
+.disfruta-section {
+  opacity: 0;
+  animation: fadeInUp 0.8s ease-out forwards;
+}
+
+.cartelera-section:nth-child(1) {
+  animation-delay: 0.2s;
+}
+
+.cartelera-section:nth-child(2) {
+  animation-delay: 0.4s;
+}
+
+.disfruta-section {
+  animation-delay: 0.6s;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Efectos de brillo en botones */
+.btn-primary-card,
+.btn-ver-mas,
+.promo-btn {
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.btn-primary-card::before,
+.btn-ver-mas::before,
+.promo-btn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: left 0.5s ease;
+  z-index: -1;
+}
+
+.btn-primary-card:hover::before,
+.btn-ver-mas:hover::before,
+.promo-btn:hover::before {
+  left: 100%;
+}
+
+/* Mejorar la consistencia de colores */
+.compra-container {
+  background: transparent;
+  min-height: 100vh;
+  transition: margin-left 0.3s ease;
+}
+
+.compra-container.con-panel-abierto {
+  margin-left: 300px;
+}
+
+/* Estilo mejorado para indicadores activos */
+.filtro-btn.active,
+.carousel-indicator.active {
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+}
+
+/* Mejorar la legibilidad en móviles */
+@media (max-width: 480px) {
+  .section-title {
+    font-size: 2rem;
+    letter-spacing: 1px;
+  }
+
+  .section-subtitle {
+    font-size: 1rem;
+  }
+
+  .cartelera-section,
+  .disfruta-section {
+    margin: 50px auto;
   }
 }

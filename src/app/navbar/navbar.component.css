@@ -12,13 +12,15 @@
 }
 
 .navbar-container {
-  max-width: 1200px;
+  max-width: none;
+  width: 100%;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 5px 200px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 70px;
+  height: 75px;
+  position: relative;
 }
 
 /* Logo y marca */
@@ -29,20 +31,15 @@
   color: #d4af37;
   font-weight: bold;
   font-size: 1.5rem;
-  transition: all 0.3s ease;
-}
-
-.navbar-brand:hover {
-  transform: scale(1.05);
-  color: #d4af37;
-  text-decoration: none;
 }
 
 .brand-logo {
-  width: 45px;
-  height: 35px;
-  margin-right: 12px;
-  transition: all 0.3s ease;
+  width: 130px;
+  height: 120px;
+  margin-right: 20px;
+  object-fit: contain; /* Mantiene las proporciones de la imagen */
+  object-position: center; /* Centra la imagen */
+  display: block;
 }
 
 .brand-text {
@@ -87,23 +84,32 @@
 
 /* Navegación principal */
 .navbar-nav {
-  display: flex;
+  display: flex !important;
   align-items: center;
-  gap: 30px;
+  gap: 15px;
+  position: absolute !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  flex-direction: row !important;
+  background: none !important;
+  height: auto !important;
+  width: auto !important;
+  padding: 0 !important;
 }
 
 .nav-link {
   color: #ffffff;
   text-decoration: none;
   font-weight: 500;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 10px 15px;
-  border-radius: 25px;
+  gap: 6px;
+  padding: 8px 12px;
+  border-radius: 20px;
   transition: all 0.3s ease;
   position: relative;
+  white-space: nowrap;
 }
 
 .nav-link i {
@@ -337,7 +343,8 @@
 .navbar-actions {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 15px;
+  height: 100%;
 }
 
 /* Buscador */
@@ -436,6 +443,29 @@
   align-items: center;
   justify-content: center;
   font-weight: bold;
+}
+
+/* Botón de usuario simplificado */
+.user-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  border-radius: 50%;
+  width: 45px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1.2rem;
+}
+
+.user-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: #d4af37;
+  color: #d4af37;
+  transform: scale(1.1);
 }
 
 /* Sección de usuario */
@@ -581,48 +611,67 @@
 }
 
 /* Responsive Design */
-@media (max-width: 1024px) {
-  .search-input {
-    width: 150px;
+@media (max-width: 1200px) {
+  .navbar-container {
+    padding: 5px 150px;
   }
 
   .navbar-nav {
-    gap: 20px;
+    gap: 12px !important;
   }
 
-  /* Ajustes para botón Peli Random en tablets */
-  .peli-random-btn {
-    padding: 8px 14px;
-  }
-
-  .random-main {
-    font-size: 0.8rem;
-  }
-
-  .random-highlight {
+  .nav-link {
     font-size: 0.85rem;
+    padding: 6px 8px;
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 992px) {
+  .navbar-container {
+    padding: 5px 100px;
+  }
+
+  .navbar-nav {
+    gap: 8px !important;
+  }
+
+  .nav-link span {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 500px) {
+  .navbar-container {
+    padding: 5px 20px;
+  }
+
   .mobile-toggle {
     display: flex;
     z-index: 1021;
   }
 
   .navbar-nav {
-    position: fixed;
-    top: 70px;
-    left: -100%;
-    width: 100%;
-    height: calc(100vh - 70px);
-    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    padding-top: 50px;
+    position: fixed !important;
+    top: 75px !important;
+    left: -100% !important;
+    width: 100% !important;
+    height: calc(100vh - 75px) !important;
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%) !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+    align-items: center !important;
+    padding-top: 50px !important;
     transition: left 0.3s ease;
-    gap: 20px;
+    gap: 20px !important;
+  }
+
+  .navbar-nav.active {
+    left: 0 !important;
+  }
+
+  .nav-link span {
+    display: inline;
+    font-size: 1rem;
   }
 
   .navbar-nav.active {

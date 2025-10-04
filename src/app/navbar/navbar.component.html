@@ -4,10 +4,9 @@
     <a routerLink="" class="navbar-brand">
       <img
         class="brand-logo"
-        src="assets/images/cinemaland-Logo.png"
+        src="assets/images/LogoCinemaLand-Mascota.png"
         alt="CinemaLand Logo"
       />
-      <span class="brand-text">CinemaLand</span>
     </a>
 
     <!-- Botón mobile toggle -->
@@ -24,6 +23,41 @@
 
     <!-- Navegación principal -->
     <div class="navbar-nav" [class.active]="mobileMenuOpen">
+      <a
+        routerLink=""
+        class="nav-link"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+      >
+        <i class="fas fa-film"></i>
+        <span>Películas</span>
+      </a>
+
+      <a routerLink="candy" class="nav-link" routerLinkActive="active">
+        <i class="fas fa-candy-cane"></i>
+        <span>Candy</span>
+      </a>
+
+      <a routerLink="cine-fan" class="nav-link" routerLinkActive="active">
+        <i class="fas fa-star"></i>
+        <span>Cine Fan</span>
+      </a>
+
+      <a routerLink="regala-cine" class="nav-link" routerLinkActive="active">
+        <i class="fas fa-gift"></i>
+        <span>Regalá Cine</span>
+      </a>
+
+      <a routerLink="store" class="nav-link" routerLinkActive="active">
+        <i class="fas fa-shopping-bag"></i>
+        <span>Store</span>
+      </a>
+
+      <a routerLink="elegi-pelicula" class="nav-link" routerLinkActive="active">
+        <i class="fas fa-search"></i>
+        <span>Elegí Película</span>
+      </a>
+
       <a
         routerLink="pelirandom"
         class="nav-link peli-random-btn"
@@ -47,23 +81,6 @@
 
     <!-- Sección derecha -->
     <div class="navbar-actions" [class.active]="mobileMenuOpen">
-      <!-- Buscador -->
-      <div class="search-container">
-        <div class="search-input-group">
-          <input
-            type="search"
-            class="search-input"
-            placeholder="Buscar películas..."
-            [(ngModel)]="searchTerm"
-            name="searchTerm"
-            (keypress)="onSearchKeyPress($event)"
-          />
-          <button class="search-btn" type="button" (click)="onSearch()">
-            <i class="fas fa-search"></i>
-          </button>
-        </div>
-      </div>
-
       <!-- Botón de Favoritos -->
       <button
         class="favorites-btn"
@@ -77,43 +94,18 @@
         }}</span>
       </button>
 
-      <!-- Sección de usuario -->
-      <div class="user-section">
-        <ng-container *ngIf="isAuthenticated; else loginBlock">
-          <div class="user-info" (click)="toggleUserMenu()">
-            <div class="user-avatar">
-              <i class="fas fa-user"></i>
-            </div>
-            <span class="user-name">{{
-              user.userData?.username || "Usuario"
-            }}</span>
-            <i
-              class="fas fa-chevron-down dropdown-icon"
-              [class.rotated]="userMenuOpen"
-            ></i>
-          </div>
+      <!-- Icono de usuario simplificado -->
+      <ng-container *ngIf="isAuthenticated; else loginBlock">
+        <button class="user-btn" (click)="toggleUserMenu()" title="Mi Cuenta">
+          <i class="fas fa-user"></i>
+        </button>
+      </ng-container>
 
-          <!-- Menú desplegable de usuario -->
-          <div class="user-dropdown" [class.active]="userMenuOpen">
-            <a (click)="irAlPerfil()" class="dropdown-item">
-              <i class="fas fa-user-circle"></i>
-              Mi Perfil
-            </a>
-            <div class="dropdown-divider"></div>
-            <a (click)="logout()" class="dropdown-item logout">
-              <i class="fas fa-sign-out-alt"></i>
-              Cerrar Sesión
-            </a>
-          </div>
-        </ng-container>
-
-        <ng-template #loginBlock>
-          <button class="login-btn" (click)="login()">
-            <i class="fas fa-sign-in-alt"></i>
-            <span>Iniciar Sesión</span>
-          </button>
-        </ng-template>
-      </div>
+      <ng-template #loginBlock>
+        <button class="user-btn" (click)="login()" title="Iniciar Sesión">
+          <i class="fas fa-user"></i>
+        </button>
+      </ng-template>
     </div>
   </div>
 

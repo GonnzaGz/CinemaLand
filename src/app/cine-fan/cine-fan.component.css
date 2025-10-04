@@ -1,0 +1,276 @@
+/* Contenedor principal */
+.cine-fan-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%);
+  color: #f1f1f1;
+  padding: 40px 20px;
+}
+
+/* Header */
+.header-section {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.main-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: white;
+  margin: 0 0 10px 0;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.subtitle {
+  font-size: 1.2rem;
+  color: #d4af37;
+  margin: 0;
+  font-weight: 600;
+}
+
+/* Cards de membresías */
+.membership-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 30px;
+  max-width: 1200px;
+  margin: 0 auto 50px auto;
+}
+
+/* Tarjeta base */
+.membership-card {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  padding: 30px;
+  position: relative;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+  backdrop-filter: blur(10px);
+}
+
+.membership-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+}
+
+/* Tarjeta Black */
+.black-card {
+  background: linear-gradient(135deg, #2c3e50, #34495e);
+  border-color: #ecf0f1;
+}
+
+.black-card:hover {
+  box-shadow: 0 15px 40px rgba(236, 240, 241, 0.2);
+}
+
+/* Tarjeta Plus */
+.plus-card {
+  background: linear-gradient(135deg, #f39c12, #e67e22);
+  border-color: #f1c40f;
+}
+
+.plus-card:hover {
+  box-shadow: 0 15px 40px rgba(241, 196, 15, 0.2);
+}
+
+/* Tarjeta Fan */
+.fan-card {
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
+  border-color: #e74c3c;
+}
+
+.fan-card:hover {
+  box-shadow: 0 15px 40px rgba(231, 76, 60, 0.2);
+}
+
+/* Header de tarjeta */
+.card-header {
+  text-align: center;
+  margin-bottom: 30px;
+  position: relative;
+}
+
+.card-title {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: white;
+  margin: 0;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.most-chosen {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  background: linear-gradient(135deg, #d4af37, #b8860b);
+  color: white;
+  padding: 5px 15px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  transform: rotate(10deg);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Lista de beneficios */
+.benefits-list {
+  margin-bottom: 30px;
+}
+
+.benefit-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+  margin-bottom: 20px;
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+
+.benefit-item:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateX(5px);
+}
+
+.benefit-item i {
+  color: #d4af37;
+  font-size: 1.2rem;
+  margin-top: 2px;
+  min-width: 20px;
+}
+
+.benefit-text {
+  flex: 1;
+}
+
+.benefit-text strong {
+  display: block;
+  color: white;
+  font-weight: 700;
+  margin-bottom: 5px;
+  font-size: 0.95rem;
+}
+
+.benefit-text p {
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+/* Botones de suscripción */
+.subscribe-btn {
+  width: 100%;
+  padding: 15px;
+  border: none;
+  border-radius: 10px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.black-btn {
+  background: linear-gradient(135deg, #ecf0f1, #bdc3c7);
+  color: #2c3e50;
+}
+
+.black-btn:hover {
+  background: linear-gradient(135deg, #bdc3c7, #95a5a6);
+  transform: translateY(-2px);
+}
+
+.plus-btn {
+  background: linear-gradient(135deg, #f1c40f, #f39c12);
+  color: white;
+}
+
+.plus-btn:hover {
+  background: linear-gradient(135deg, #f39c12, #e67e22);
+  transform: translateY(-2px);
+}
+
+.fan-btn {
+  background: linear-gradient(135deg, #ffffff, #ecf0f1);
+  color: #e74c3c;
+}
+
+.fan-btn:hover {
+  background: linear-gradient(135deg, #ecf0f1, #bdc3c7);
+  transform: translateY(-2px);
+}
+
+/* Información adicional */
+.info-section {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 30px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.info-text {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9rem;
+  margin: 10px 0;
+  line-height: 1.5;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .cine-fan-container {
+    padding: 20px 10px;
+  }
+
+  .main-title {
+    font-size: 2rem;
+  }
+
+  .membership-cards {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .membership-card {
+    padding: 20px;
+  }
+
+  .card-title {
+    font-size: 1.5rem;
+  }
+
+  .most-chosen {
+    position: static;
+    display: inline-block;
+    transform: none;
+    margin-top: 10px;
+  }
+
+  .benefit-item {
+    flex-direction: column;
+    text-align: center;
+    gap: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .main-title {
+    font-size: 1.5rem;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+  }
+
+  .benefit-text strong {
+    font-size: 0.9rem;
+  }
+
+  .benefit-text p {
+    font-size: 0.8rem;
+  }
+}

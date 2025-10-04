@@ -6,9 +6,24 @@ import { PelisearchComponent } from './pelisearch/pelisearch.component';
 import { Error404Component } from './error404/error404.component';
 import { NosotrosComponent } from './nosotros/nosotros.component';
 import { LoginComponent } from './login/login.component';
+import { CandyComponent } from './candy/candy.component';
+import { CineFanComponent } from './cine-fan/cine-fan.component';
+import { RegalaCineComponent } from './regala-cine/regala-cine.component';
+import { StoreComponent } from './store/store.component';
+import { ElegiPeliculaComponent } from './elegi-pelicula/elegi-pelicula.component';
 
 export const routes: Routes = [
   { path: '', component: CompraEntradasComponent },
+
+  { path: 'candy', component: CandyComponent },
+
+  { path: 'cine-fan', component: CineFanComponent },
+
+  { path: 'regala-cine', component: RegalaCineComponent },
+
+  { path: 'store', component: StoreComponent },
+
+  { path: 'elegi-pelicula', component: ElegiPeliculaComponent },
 
   { path: 'pelirandom', component: PelirandomComponent },
 

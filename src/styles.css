@@ -1,7 +1,16 @@
+/* Importar fuente Ubuntu de Google Fonts */
+@import url("https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;700&display=swap");
+
+/* Aplicar fuente Ubuntu a todos los elementos */
+* {
+  font-family: "Ubuntu", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen, sans-serif;
+}
+
 /* Estilos generales para la página */
 
 html {
-  scrollbar-color: red #1e1e1e; /* thumb y track */
+  scrollbar-color: #292929 #161616; /* thumb y track */
   scrollbar-width: thin;
 }
 
@@ -12,6 +21,8 @@ body {
   overflow-x: hidden;
   color: #f1f1f1;
   background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%);
+  font-family: "Ubuntu", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen, sans-serif;
 }
 
 /* Compensar el navbar sticky */
