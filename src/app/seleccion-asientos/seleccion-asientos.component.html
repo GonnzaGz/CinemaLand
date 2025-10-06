@@ -47,7 +47,8 @@
     <div *ngIf="!esEstreno" class="success-message">
       <h2 class="success-title">Película no disponible</h2>
       <p class="success-description">
-        Esta película no está disponible para compra de entradas en este momento.
+        Esta película no está disponible para compra de entradas en este
+        momento.
       </p>
       <button class="btn btn-secondary" (click)="goBack()">
         <i class="fas fa-arrow-left"></i>
@@ -77,7 +78,10 @@
               (change)="onSucursalChange(sucursalSeleccionada)"
             >
               <option value="">Selecciona una sucursal...</option>
-              <option *ngFor="let sucursal of sucursales" [value]="sucursal.NOMBRE">
+              <option
+                *ngFor="let sucursal of sucursales"
+                [value]="sucursal.NOMBRE"
+              >
                 {{ sucursal.NOMBRE }}
               </option>
             </select>
@@ -85,7 +89,10 @@
         </div>
 
         <!-- Step 2: Schedule Selection -->
-        <div class="step-card" [class.active]="sucursalSeleccionada && !horarioSeleccionado">
+        <div
+          class="step-card"
+          [class.active]="sucursalSeleccionada && !horarioSeleccionado"
+        >
           <div class="step-header">
             <div class="step-number">2</div>
             <h3 class="step-title">Elige tu horario</h3>
@@ -108,7 +115,7 @@
             </select>
           </div>
           <div *ngIf="!sucursalSeleccionada" class="form-group">
-            <p style="color: #666; font-style: italic;">
+            <p style="color: #666; font-style: italic">
               Primero selecciona una sucursal
             </p>
           </div>
@@ -116,7 +123,10 @@
       </div>
 
       <!-- Seat Selection -->
-      <div *ngIf="sucursalSeleccionada && horarioSeleccionado" class="seat-selection-container fade-in">
+      <div
+        *ngIf="sucursalSeleccionada && horarioSeleccionado"
+        class="seat-selection-container fade-in"
+      >
         <h3 class="seats-title">
           <i class="fas fa-couch"></i>
           Selecciona tus asientos
@@ -126,7 +136,10 @@
 
         <div class="seats-grid">
           <div *ngFor="let fila of filasAsientos" class="seat-row">
-            <span class="row-label">{{ fila[0]?.nombre?.[0] || fila[0]?.ASIENTO?.[0] }}</span>
+            <span
+              class="row-label"
+              >{{ fila[0]?.nombre?.[0] || fila[0]?.ASIENTO?.[0] }}</span
+            >
             <span
               *ngFor="let asiento of fila"
               class="seat"
@@ -156,7 +169,10 @@
       </div>
 
       <!-- Payment Method -->
-      <div *ngIf="horarioSeleccionado && asientosSeleccionados.length > 0" class="step-card active fade-in">
+      <div
+        *ngIf="horarioSeleccionado && asientosSeleccionados.length > 0"
+        class="step-card active fade-in"
+      >
         <div class="step-header">
           <div class="step-number">3</div>
           <h3 class="step-title">Método de pago</h3>
@@ -182,7 +198,10 @@
       </div>
 
       <!-- Purchase Summary -->
-      <div *ngIf="asientosSeleccionados.length > 0" class="purchase-summary fade-in">
+      <div
+        *ngIf="asientosSeleccionados.length > 0"
+        class="purchase-summary fade-in"
+      >
         <h3 class="summary-title">
           <i class="fas fa-receipt"></i>
           Resumen de compra
@@ -206,20 +225,27 @@
         <div class="summary-item">
           <span class="summary-label">Asientos:</span>
           <span class="summary-value">
-            <span *ngFor="let asiento of asientosSeleccionados; let last = last">
-              {{ asiento.nombre || asiento.ASIENTO }}<span *ngIf="!last">, </span>
+            <span
+              *ngFor="let asiento of asientosSeleccionados; let last = last"
+            >
+              {{ asiento.nombre || asiento.ASIENTO
+              }}<span *ngIf="!last">, </span>
             </span>
           </span>
         </div>
 
         <div class="summary-item">
           <span class="summary-label">Cantidad:</span>
-          <span class="summary-value">{{ asientosSeleccionados.length }} entrada(s)</span>
+          <span class="summary-value"
+            >{{ asientosSeleccionados.length }} entrada(s)</span
+          >
         </div>
 
         <div class="summary-item">
           <span class="summary-label">Total:</span>
-          <span class="summary-value total-amount">{{ precioTotal | currency : "ARS $" }}</span>
+          <span class="summary-value total-amount">{{
+            precioTotal | currency : "ARS $"
+          }}</span>
         </div>
 
         <button
@@ -228,7 +254,9 @@
           (click)="confirmarCompra()"
         >
           <i class="fas fa-ticket-alt"></i>
-          <span *ngIf="!modoPago; else confirmText">Selecciona método de pago</span>
+          <span *ngIf="!modoPago; else confirmText"
+            >Selecciona método de pago</span
+          >
           <ng-template #confirmText>Confirmar compra</ng-template>
         </button>
       </div>
@@ -247,5 +275,4 @@
       </div>
     </div>
   </section>
-</div>
 </div>
