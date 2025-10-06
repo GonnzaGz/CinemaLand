@@ -35,9 +35,8 @@ export class CompraEntradasComponent implements OnInit, OnDestroy {
   // Propiedades para filtros y "Ver más"
   filtroFormato: string = 'todos';
   filtroIdioma: string = 'todos';
-  filtroAccesible: boolean = false;
-  filtroFamiliar: boolean = false;
-  peliculasMostradas: number = 6;
+  filtroEdad: string = 'todos';
+  peliculasMostradas: number = 10;
   mostrarTodasLasPeliculas: boolean = false;
 
   // Propiedades para el carousel "Disfruta CinemaLand"
@@ -49,6 +48,7 @@ export class CompraEntradasComponent implements OnInit, OnDestroy {
     { id: 4, type: 'peli-random' },
   ];
   carouselInterval: any;
+  isCarouselTransitioning: boolean = false;
 
   // Getter para la película actual
   get currentMovie() {
@@ -86,8 +86,10 @@ export class CompraEntradasComponent implements OnInit, OnDestroy {
       this.Crearlista();
     }
 
-    // Inicializar carousel
-    this.startCarousel();
+    // Inicializar carousel con un pequeño delay
+    setTimeout(() => {
+      this.startCarousel();
+    }, 1000);
 
     /*if (lastSelectedMovieId) {
       const id = parseInt(lastSelectedMovieId, 10);
@@ -103,20 +105,89 @@ export class CompraEntradasComponent implements OnInit, OnDestroy {
       next: (data: any) => {
         console.log('Películas recibidas:', data);
         if (data && data.results) {
-          // Asegurar que tenemos al menos 20 películas para dividir
-          const todasLasPeliculas = data.results.slice(0, 20);
+          // Tomar suficientes películas para garantizar 25 disponibles
+          const todasLasPeliculas = data.results.slice(0, 50);
 
-          // Tomar las primeras 10 para "En Cartelera"
-          this.estrenos = todasLasPeliculas.slice(0, 10);
+          // Priorizar películas en cartelera (últimos 2 meses + próximos estrenos)
+          const peliculasEnCartelera = todasLasPeliculas.filter(
+            (pelicula: any) => this.estaEnCartelera(pelicula.release_date)
+          );
 
-          // Tomar las siguientes 10 para "Películas Populares"
-          this.peliculasViejas = todasLasPeliculas.slice(10, 20);
+          // Tomar las 25 mejores películas combinando cartelera y populares
+          const peliculasDestacadas: any[] = [];
 
-          // Configurar películas destacadas para el hero
-          this.setupFeaturedMovies(data.results);
+          // Primero agregar películas en cartelera con buen rating
+          const carteleraDestacadas = peliculasEnCartelera
+            .filter((pelicula: any) => pelicula.vote_average >= 7.0)
+            .map((pelicula: any) => ({
+              ...pelicula,
+              esDestacada: true,
+              clasificacionEdad: this.getClasificacionEdadSimulada(pelicula.id),
+            }));
+          peliculasDestacadas.push(...carteleraDestacadas);
+
+          // Luego agregar otras películas en cartelera
+          if (peliculasDestacadas.length < 25) {
+            const carteleraRestantes = peliculasEnCartelera
+              .filter((pelicula: any) => pelicula.vote_average < 7.0)
+              .sort((a: any, b: any) => b.vote_average - a.vote_average)
+              .slice(0, 25 - peliculasDestacadas.length)
+              .map((pelicula: any) => ({
+                ...pelicula,
+                esDestacada: true,
+                clasificacionEdad: this.getClasificacionEdadSimulada(
+                  pelicula.id
+                ),
+              }));
+            peliculasDestacadas.push(...carteleraRestantes);
+          }
+
+          // Finalmente, completar con las mejores películas sin restricción de fecha
+          if (peliculasDestacadas.length < 25) {
+            const peliculasRestantes = todasLasPeliculas
+              .filter(
+                (pelicula: any) =>
+                  !peliculasDestacadas.find(
+                    (dest: any) => dest.id === pelicula.id
+                  )
+              )
+              .sort((a: any, b: any) => b.vote_average - a.vote_average)
+              .slice(0, 25 - peliculasDestacadas.length)
+              .map((pelicula: any) => ({
+                ...pelicula,
+                esDestacada: true,
+                clasificacionEdad: this.getClasificacionEdadSimulada(
+                  pelicula.id
+                ),
+              }));
+            peliculasDestacadas.push(...peliculasRestantes);
+          }
+
+          // Garantizar exactamente 25 películas
+          this.estrenos = peliculasDestacadas.slice(0, 25);
           console.log(
-            'Estrenos:',
+            '🎬 PELÍCULAS CARGADAS - Total garantizado:',
+            this.estrenos.length
+          );
+
+          // Las películas populares serán las que no son destacadas
+          this.peliculasViejas = todasLasPeliculas
+            .filter(
+              (pelicula: any) =>
+                !peliculasDestacadas.find(
+                  (dest: any) => dest.id === pelicula.id
+                )
+            )
+            .slice(0, 10);
+
+          // Configurar películas destacadas para el hero (tomar las top 5)
+          this.setupFeaturedMovies(peliculasDestacadas.slice(0, 5));
+          console.log(
+            'Películas cargadas correctamente:',
+            'Total destacadas:',
             this.estrenos.length,
+            'Películas en cartelera disponibles:',
+            peliculasEnCartelera.length,
             'Películas populares:',
             this.peliculasViejas.length
           );
@@ -231,22 +302,8 @@ export class CompraEntradasComponent implements OnInit, OnDestroy {
   }
 
   verDetalles(id: number) {
-    this.apiMovieService
-      .getDetalleMovie(id.toString())
-      .subscribe((data: any) => {
-        this.detallesPelicula = data;
-        this.peliculaSeleccionada = id;
-        this.selectedMovieId = id;
-
-        localStorage.setItem('selectedMovieId', id.toString());
-
-        setTimeout(() => {
-          const detallesDiv = document.getElementById('detalles-pelicula');
-          if (detallesDiv) {
-            detallesDiv.scrollIntoView({ behavior: 'smooth' });
-          }
-        }, 500);
-      });
+    // Navegar a la página de detalles
+    this.router.navigate(['/movie-details', id]);
   }
 
   comprarEntradas() {
@@ -418,18 +475,57 @@ export class CompraEntradasComponent implements OnInit, OnDestroy {
     this.resetearVista();
   }
 
-  toggleFiltroAccesible() {
-    this.filtroAccesible = !this.filtroAccesible;
+  setFiltroEdad(edad: string) {
+    this.filtroEdad = edad;
     this.resetearVista();
   }
 
-  toggleFiltroFamiliar() {
-    this.filtroFamiliar = !this.filtroFamiliar;
-    this.resetearVista();
+  getClasificacionEdadSimulada(id: number): string {
+    // Simular clasificación de edad basada en el ID de la película
+    const clasificaciones = ['ATP', '+13', '+16', '+18'];
+    return clasificaciones[id % clasificaciones.length];
+  }
+
+  estaEnCartelera(fechaEstreno: string): boolean {
+    if (!fechaEstreno) return false;
+
+    const fechaHoy = new Date();
+    const fechaPelicula = new Date(fechaEstreno);
+    const doseMesesAtras = new Date();
+    doseMesesAtras.setMonth(fechaHoy.getMonth() - 2);
+
+    // La película está en cartelera si fue estrenadaha hace máximo 2 meses
+    // o si es un estreno futuro (hasta 1 mes en el futuro)
+    const unMesAdelante = new Date();
+    unMesAdelante.setMonth(fechaHoy.getMonth() + 1);
+
+    return fechaPelicula >= doseMesesAtras && fechaPelicula <= unMesAdelante;
+  }
+
+  getTipoPelicula(fechaEstreno: string): string {
+    if (!fechaEstreno) return 'CARTELERA';
+
+    const fechaHoy = new Date();
+    const fechaPelicula = new Date(fechaEstreno);
+    const unMesAtras = new Date();
+    unMesAtras.setMonth(fechaHoy.getMonth() - 1);
+
+    // Si la película salió hace menos de 1 mes, es "ESTRENO"
+    if (fechaPelicula >= unMesAtras) {
+      return 'ESTRENO';
+    }
+
+    // Si está en cartelera pero no es estreno reciente
+    if (this.estaEnCartelera(fechaEstreno)) {
+      return 'CARTELERA';
+    }
+
+    return 'DESTACADA';
   }
 
   getEstrenosFiltrados(): any[] {
     let peliculasFiltradas = [...this.estrenos];
+    console.log('Películas antes del filtrado:', peliculasFiltradas.length);
 
     // Por ahora simulamos que todas las películas tienen diferentes formatos/idiomas
     // En una implementación real, estas propiedades vendrían de la API
@@ -444,6 +540,10 @@ export class CompraEntradasComponent implements OnInit, OnDestroy {
             : ['2D'];
         return formatos.includes(this.filtroFormato);
       });
+      console.log(
+        'Películas después del filtro formato:',
+        peliculasFiltradas.length
+      );
     }
 
     if (this.filtroIdioma !== 'todos') {
@@ -457,55 +557,90 @@ export class CompraEntradasComponent implements OnInit, OnDestroy {
             : ['español'];
         return idiomas.includes(this.filtroIdioma);
       });
+      console.log(
+        'Películas después del filtro idioma:',
+        peliculasFiltradas.length
+      );
     }
 
-    if (this.filtroAccesible) {
+    if (this.filtroEdad !== 'todos') {
       peliculasFiltradas = peliculasFiltradas.filter((pelicula) => {
-        // Simular accesibilidad basado en el ID
-        return pelicula.id % 3 === 0;
+        return pelicula.clasificacionEdad === this.filtroEdad;
       });
+      console.log(
+        'Películas después del filtro edad:',
+        peliculasFiltradas.length
+      );
     }
 
-    if (this.filtroFamiliar) {
-      peliculasFiltradas = peliculasFiltradas.filter((pelicula) => {
-        // Simular contenido familiar basado en la calificación
-        return pelicula.vote_average >= 7.0;
-      });
-    }
-
+    console.log('Películas finales filtradas:', peliculasFiltradas.length);
     return peliculasFiltradas;
   }
 
   verMasPeliculas() {
+    this.peliculasMostradas = 25; // Mostrar 25 películas destacadas
     this.mostrarTodasLasPeliculas = true;
   }
 
   resetearVista() {
     this.mostrarTodasLasPeliculas = false;
-    this.peliculasMostradas = 6;
+    this.peliculasMostradas = 10;
   }
 
   // Métodos para el carousel "Disfruta CinemaLand"
   nextCarouselSlide() {
+    if (this.isCarouselTransitioning) return;
+
+    this.isCarouselTransitioning = true;
     this.currentCarouselSlide =
       (this.currentCarouselSlide + 1) % this.carouselSlides.length;
+    console.log('Next carousel slide:', this.currentCarouselSlide);
+
+    setTimeout(() => {
+      this.isCarouselTransitioning = false;
+    }, 600);
   }
 
   previousCarouselSlide() {
+    if (this.isCarouselTransitioning) return;
+
+    this.isCarouselTransitioning = true;
     this.currentCarouselSlide =
       this.currentCarouselSlide === 0
         ? this.carouselSlides.length - 1
         : this.currentCarouselSlide - 1;
+    console.log('Previous carousel slide:', this.currentCarouselSlide);
+
+    setTimeout(() => {
+      this.isCarouselTransitioning = false;
+    }, 600);
   }
 
   goToCarouselSlide(index: number) {
-    this.currentCarouselSlide = index;
+    if (this.isCarouselTransitioning) return;
+
+    this.isCarouselTransitioning = true;
+
+    if (index >= 0 && index < this.carouselSlides.length) {
+      this.currentCarouselSlide = index;
+      console.log('Go to carousel slide:', this.currentCarouselSlide);
+    }
+
+    setTimeout(() => {
+      this.isCarouselTransitioning = false;
+    }, 600);
   }
 
   startCarousel() {
-    this.carouselInterval = setInterval(() => {
-      this.nextCarouselSlide();
-    }, 5000); // Cambia slide cada 5 segundos
+    this.stopCarousel();
+
+    if (this.carouselSlides.length > 1) {
+      this.carouselInterval = setInterval(() => {
+        if (!this.isCarouselTransitioning) {
+          this.nextCarouselSlide();
+        }
+      }, 5000);
+    }
   }
 
   stopCarousel() {
@@ -516,6 +651,43 @@ export class CompraEntradasComponent implements OnInit, OnDestroy {
 
   irAPeliRandom() {
     this.router.navigate(['/pelirandom']);
+  }
+
+  // Mapeo de IDs de géneros de TMDB a nombres en español
+  private genreMap: { [key: number]: string } = {
+    28: 'Acción',
+    12: 'Aventura',
+    16: 'Animación',
+    35: 'Comedia',
+    80: 'Crimen',
+    99: 'Documental',
+    18: 'Drama',
+    10751: 'Familiar',
+    14: 'Fantasía',
+    36: 'Historia',
+    27: 'Terror',
+    10402: 'Música',
+    9648: 'Misterio',
+    10749: 'Romance',
+    878: 'Ciencia Ficción',
+    10770: 'Película de TV',
+    53: 'Thriller',
+    10752: 'Guerra',
+    37: 'Western',
+  };
+
+  // Función para obtener géneros de una película
+  getMovieGenres(genreIds: number[]): string {
+    if (!genreIds || genreIds.length === 0) {
+      return 'Sin clasificar';
+    }
+
+    const genres = genreIds
+      .slice(0, 2) // Máximo 2 géneros para evitar textos muy largos
+      .map((id) => this.genreMap[id] || 'Desconocido')
+      .filter((genre) => genre !== 'Desconocido');
+
+    return genres.length > 0 ? genres.join(', ') : 'Sin clasificar';
   }
 
   ngOnDestroy() {

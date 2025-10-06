@@ -22,7 +22,6 @@
         <div class="hero-container">
           <div class="hero-info">
             <div class="hero-badges">
-              <span class="badge-estreno">ESTRENO</span>
               <span class="badge-rating">
                 <i class="fas fa-star"></i>
                 {{ currentMovie.vote_average | number : "1.1" }}
@@ -38,12 +37,12 @@
                 120 min
               </span>
               <span class="detail-item">
-                <i class="fas fa-calendar"></i>
-                {{ currentMovie.release_date | date : "yyyy" }}
+                <i class="fas fa-film"></i>
+                {{ getMovieGenres(currentMovie.genre_ids) }}
               </span>
               <span class="detail-item">
                 <i class="fas fa-star"></i>
-                Acción, Drama
+                {{ currentMovie.vote_average | number : "1.1" }}
               </span>
             </div>
 
@@ -136,7 +135,7 @@
 <!-- Panel lateral de favoritos -->
 <div class="panel-favoritos" [class.abierto]="favoritosAbierto">
   <div class="favoritos-header">
-    <h2 class="titulofav">Tus Favoritas ⭐</h2>
+    <h2 class="titulofav">Tus Favoritas</h2>
   </div>
   <div class="favoritos-content">
     <ul class="favoritos-lista">
@@ -144,6 +143,7 @@
         <div class="favorito-container">
           <img
             [src]="'https://image.tmdb.org/t/p/w200/' + pelicula.poster_path"
+            pel
             alt="Poster"
             class="favorito-poster"
           />
@@ -172,14 +172,14 @@
   <!-- Sección de películas en cartelera -->
   <section class="cartelera-section">
     <div class="section-header">
-      <h2 class="section-title">🎬 En Cartelera</h2>
-      <p class="section-subtitle">Los mejores estrenos disponibles ahora</p>
+      <h2 class="section-title">DESTACADAS en Cartelera</h2>
+      <p class="section-subtitle">Las películas destacadas en nuestros cines</p>
 
       <!-- Sistema de filtros -->
       <div class="filtros-container">
         <div class="filtros-row">
           <div class="filtro-grupo">
-            <label class="filtro-label">Formato:</label>
+            <label class="filtro-label">Formato</label>
             <div class="filtro-opciones">
               <button
                 class="filtro-btn"
@@ -213,7 +213,7 @@
           </div>
 
           <div class="filtro-grupo">
-            <label class="filtro-label">Idioma:</label>
+            <label class="filtro-label">Idioma</label>
             <div class="filtro-opciones">
               <button
                 class="filtro-btn"
@@ -247,21 +247,42 @@
           </div>
 
           <div class="filtro-grupo">
-            <label class="filtro-label">Otras opciones:</label>
+            <label class="filtro-label">Edad</label>
             <div class="filtro-opciones">
               <button
                 class="filtro-btn"
-                [class.active]="filtroAccesible"
-                (click)="toggleFiltroAccesible()"
+                [class.active]="filtroEdad === 'todos'"
+                (click)="setFiltroEdad('todos')"
               >
-                <i class="fas fa-wheelchair"></i> Accesible
+                Todos
               </button>
               <button
                 class="filtro-btn"
-                [class.active]="filtroFamiliar"
-                (click)="toggleFiltroFamiliar()"
+                [class.active]="filtroEdad === 'ATP'"
+                (click)="setFiltroEdad('ATP')"
               >
-                <i class="fas fa-baby"></i> Familiar
+                ATP
+              </button>
+              <button
+                class="filtro-btn"
+                [class.active]="filtroEdad === '+13'"
+                (click)="setFiltroEdad('+13')"
+              >
+                +13
+              </button>
+              <button
+                class="filtro-btn"
+                [class.active]="filtroEdad === '+16'"
+                (click)="setFiltroEdad('+16')"
+              >
+                +16
+              </button>
+              <button
+                class="filtro-btn"
+                [class.active]="filtroEdad === '+18'"
+                (click)="setFiltroEdad('+18')"
+              >
+                +18
               </button>
             </div>
           </div>
@@ -288,6 +309,9 @@
               <i class="fas fa-star"></i>
               {{ pelicula.vote_average | number : "1.1" }}
             </div>
+            <div class="card-destacada-icon" *ngIf="pelicula.esDestacada">
+              <i class="fas fa-award"></i>
+            </div>
             <button
               class="btn-favorite-card"
               (click)="toggleFavorito(pelicula)"
@@ -302,10 +326,29 @@
           <div class="card-info">
             <h4 class="card-title">{{ pelicula.title }}</h4>
             <div class="card-meta">
-              <span class="card-year">{{
-                pelicula.release_date | date : "yyyy"
-              }}</span>
-              <span class="card-badge">ESTRENO</span>
+              <span class="card-genre">
+                <i class="fas fa-film"></i>
+                {{ getMovieGenres(pelicula.genre_ids) }}
+              </span>
+              <span
+                class="card-badge"
+                [class.estreno]="
+                  getTipoPelicula(pelicula.release_date) === 'ESTRENO'
+                "
+              >
+                {{ getTipoPelicula(pelicula.release_date) }}
+              </span>
+              <span
+                class="card-age-rating"
+                [class]="
+                  'age-' +
+                  (pelicula.clasificacionEdad || 'ATP')
+                    .toLowerCase()
+                    .replace('+', 'plus')
+                "
+              >
+                {{ pelicula.clasificacionEdad || "ATP" }}
+              </span>
             </div>
           </div>
           <div class="card-actions">
@@ -322,7 +365,7 @@
               title="Comprar entradas"
             >
               <i class="fas fa-ticket-alt"></i>
-              Comprar Entradas
+              COMPRAR ENTRADAS
             </button>
           </div>
         </div>
@@ -347,102 +390,104 @@
   <!-- Sección Disfruta CinemaLand -->
   <section class="disfruta-section">
     <div class="section-header">
-      <h2 class="section-title">🎪 Disfruta CinemaLand</h2>
+      <h2 class="section-title">Disfruta CinemaLand</h2>
       <p class="section-subtitle">
         Descubre todas las experiencias que tenemos para ti
       </p>
     </div>
 
     <div class="carousel-container">
-      <div
-        class="carousel-track"
-        [style.transform]="'translateX(' + -currentCarouselSlide * 100 + '%)'"
-      >
-        <!-- Slide 1: Ofertas especiales -->
-        <div class="carousel-slide">
-          <div class="promo-card ofertas">
-            <div class="promo-icon">
-              <i class="fas fa-percentage"></i>
+      <div class="carousel-wrapper">
+        <div
+          class="carousel-track"
+          [style.transform]="'translateX(' + -currentCarouselSlide * 25 + '%)'"
+        >
+          <!-- Slide 1: Ofertas especiales -->
+          <div class="carousel-slide">
+            <div class="promo-card ofertas">
+              <div class="promo-icon">
+                <i class="fas fa-percentage"></i>
+              </div>
+              <h3 class="promo-title">Ofertas Especiales</h3>
+              <p class="promo-description">
+                Hasta 30% de descuento en entradas para funciones matinée
+              </p>
+              <ul class="promo-list">
+                <li><i class="fas fa-clock"></i> Matinée antes de las 16:00</li>
+                <li><i class="fas fa-users"></i> Descuentos grupales</li>
+                <li>
+                  <i class="fas fa-birthday-cake"></i> Promociones cumpleañeros
+                </li>
+              </ul>
+              <button class="promo-btn">Ver Ofertas</button>
             </div>
-            <h3 class="promo-title">Ofertas Especiales</h3>
-            <p class="promo-description">
-              Hasta 30% de descuento en entradas para funciones matinée
-            </p>
-            <ul class="promo-list">
-              <li><i class="fas fa-clock"></i> Matinée antes de las 16:00</li>
-              <li><i class="fas fa-users"></i> Descuentos grupales</li>
-              <li>
-                <i class="fas fa-birthday-cake"></i> Promociones cumpleañeros
-              </li>
-            </ul>
-            <button class="promo-btn">Ver Ofertas</button>
           </div>
-        </div>
 
-        <!-- Slide 2: Características sociales -->
-        <div class="carousel-slide">
-          <div class="promo-card social">
-            <div class="promo-icon">
-              <i class="fas fa-share-alt"></i>
+          <!-- Slide 2: Características sociales -->
+          <div class="carousel-slide">
+            <div class="promo-card social">
+              <div class="promo-icon">
+                <i class="fas fa-share-alt"></i>
+              </div>
+              <h3 class="promo-title">CinemaLand Social</h3>
+              <p class="promo-description">
+                Comparte tu experiencia y conecta con otros cinéfilos
+              </p>
+              <ul class="promo-list">
+                <li>
+                  <i class="fas fa-heart"></i> Guarda tus películas favoritas
+                </li>
+                <li><i class="fas fa-star"></i> Califica y reseña</li>
+                <li><i class="fas fa-comments"></i> Únete a las discusiones</li>
+              </ul>
+              <button class="promo-btn">Únete Ahora</button>
             </div>
-            <h3 class="promo-title">CinemaLand Social</h3>
-            <p class="promo-description">
-              Comparte tu experiencia y conecta con otros cinéfilos
-            </p>
-            <ul class="promo-list">
-              <li>
-                <i class="fas fa-heart"></i> Guarda tus películas favoritas
-              </li>
-              <li><i class="fas fa-star"></i> Califica y reseña</li>
-              <li><i class="fas fa-comments"></i> Únete a las discusiones</li>
-            </ul>
-            <button class="promo-btn">Únete Ahora</button>
           </div>
-        </div>
 
-        <!-- Slide 3: Accesibilidad -->
-        <div class="carousel-slide">
-          <div class="promo-card accesibilidad">
-            <div class="promo-icon">
-              <i class="fas fa-wheelchair"></i>
+          <!-- Slide 3: Accesibilidad -->
+          <div class="carousel-slide">
+            <div class="promo-card accesibilidad">
+              <div class="promo-icon">
+                <i class="fas fa-wheelchair"></i>
+              </div>
+              <h3 class="promo-title">Cine Para Todos</h3>
+              <p class="promo-description">
+                Instalaciones completamente accesibles
+              </p>
+              <ul class="promo-list">
+                <li>
+                  <i class="fas fa-wheelchair"></i> Acceso para sillas de ruedas
+                </li>
+                <li>
+                  <i class="fas fa-deaf"></i> Subtítulos y audio descriptivo
+                </li>
+                <li><i class="fas fa-eye"></i> Asientos prioritarios</li>
+              </ul>
+              <button class="promo-btn">Más Info</button>
             </div>
-            <h3 class="promo-title">Cine Para Todos</h3>
-            <p class="promo-description">
-              Instalaciones completamente accesibles
-            </p>
-            <ul class="promo-list">
-              <li>
-                <i class="fas fa-wheelchair"></i> Acceso para sillas de ruedas
-              </li>
-              <li>
-                <i class="fas fa-deaf"></i> Subtítulos y audio descriptivo
-              </li>
-              <li><i class="fas fa-eye"></i> Asientos prioritarios</li>
-            </ul>
-            <button class="promo-btn">Más Info</button>
           </div>
-        </div>
 
-        <!-- Slide 4: Peli Random -->
-        <div class="carousel-slide">
-          <div class="promo-card peli-random">
-            <div class="promo-icon">
-              <i class="fas fa-dice"></i>
+          <!-- Slide 4: Peli Random -->
+          <div class="carousel-slide">
+            <div class="promo-card peli-random">
+              <div class="promo-icon">
+                <i class="fas fa-dice"></i>
+              </div>
+              <h3 class="promo-title">Peli Random</h3>
+              <p class="promo-description">
+                ¡Deja que el destino elija tu próxima película!
+              </p>
+              <ul class="promo-list">
+                <li>
+                  <i class="fas fa-magic"></i> Recomendaciones personalizadas
+                </li>
+                <li><i class="fas fa-surprise"></i> Descubre nuevos géneros</li>
+                <li><i class="fas fa-gift"></i> Sorpresas especiales</li>
+              </ul>
+              <button class="promo-btn" (click)="irAPeliRandom()">
+                Probar Suerte
+              </button>
             </div>
-            <h3 class="promo-title">Peli Random</h3>
-            <p class="promo-description">
-              ¡Deja que el destino elija tu próxima película!
-            </p>
-            <ul class="promo-list">
-              <li>
-                <i class="fas fa-magic"></i> Recomendaciones personalizadas
-              </li>
-              <li><i class="fas fa-surprise"></i> Descubre nuevos géneros</li>
-              <li><i class="fas fa-gift"></i> Sorpresas especiales</li>
-            </ul>
-            <button class="promo-btn" (click)="irAPeliRandom()">
-              Probar Suerte
-            </button>
           </div>
         </div>
       </div>
@@ -466,42 +511,4 @@
       </div>
     </div>
   </section>
-
-  <div
-    *ngIf="detallesPelicula"
-    id="detalles-pelicula"
-    class="detalles-pelicula"
-  >
-    <button class="bg-transparent text-danger" (click)="cerrarDetalles()">
-      Cerrar ❌
-    </button>
-    <h3>Detalles de la Película</h3>
-    <h4>{{ detallesPelicula.title }}</h4>
-    <img
-      [src]="'https://image.tmdb.org/t/p/w500/' + detallesPelicula.poster_path"
-      alt="Foto de la película"
-    />
-    <p>{{ detallesPelicula.overview }}</p>
-    <p>Fecha de estreno: {{ detallesPelicula.release_date }}</p>
-
-    <!-- Este es el botón que muestra si es favorita o no -->
-    <button class="bg-transparent" (click)="toggleFavorito(detallesPelicula)">
-      {{ esFavorito(detallesPelicula.id) ? "⭐" : "☆" }}
-    </button>
-
-    <button
-      *ngIf="esEstreno"
-      (click)="comprarEntradas()"
-      class="comprar-entradas"
-    >
-      🎟️ Comprar Entradas 🎟️
-    </button>
-    <div
-      *ngIf="mensaje"
-      class="alert alert-danger mt-2"
-      style="font-size: 1rem"
-    >
-      {{ mensaje }}
-    </div>
-  </div>
 </div>

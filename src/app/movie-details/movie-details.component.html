@@ -1,0 +1,230 @@
+<!-- Loading state -->
+<div class="loading-container" *ngIf="loading">
+  <div class="loading-content">
+    <div class="loading-spinner">
+      <i class="fas fa-film fa-spin"></i>
+    </div>
+    <h2>Cargando detalles de la película...</h2>
+  </div>
+</div>
+
+<!-- Movie Details Page -->
+<div class="movie-details-page" *ngIf="!loading && movie">
+  <!-- Hero Section with Backdrop -->
+  <section class="hero-backdrop">
+    <div class="backdrop-container">
+      <img
+        [src]="'https://image.tmdb.org/t/p/w1280/' + movie.backdrop_path"
+        [alt]="movie.title"
+        class="backdrop-image"
+        *ngIf="movie.backdrop_path"
+      />
+      <div class="backdrop-overlay"></div>
+    </div>
+
+    <!-- Navigation and Actions -->
+    <div class="hero-nav">
+      <button class="btn-back" (click)="goBack()">
+        <i class="fas fa-arrow-left"></i>
+        Volver
+      </button>
+
+      <div class="hero-badges">
+        <span class="badge badge-rating" *ngIf="movie.vote_average">
+          <i class="fas fa-star"></i>
+          {{ movie.vote_average | number : "1.1" }}
+        </span>
+        <span class="badge badge-new" *ngIf="isNewRelease(movie.release_date)">
+          <i class="fas fa-fire"></i>
+          ESTRENO
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <section class="main-content">
+    <div class="content-container">
+      <!-- Movie Info Grid -->
+      <div class="movie-grid">
+        <!-- Poster Column -->
+        <div class="poster-column">
+          <div class="poster-container">
+            <img
+              [src]="'https://image.tmdb.org/t/p/w500/' + movie.poster_path"
+              [alt]="movie.title"
+              class="movie-poster"
+              *ngIf="movie.poster_path"
+            />
+            <div class="poster-fallback" *ngIf="!movie.poster_path">
+              <i class="fas fa-film"></i>
+            </div>
+          </div>
+
+          <!-- Action Buttons Mobile -->
+          <div class="action-buttons mobile-only">
+            <button
+              class="btn btn-primary full-width"
+              (click)="comprarEntradas()"
+            >
+              <i class="fas fa-ticket-alt"></i>
+              Comprar Entradas
+            </button>
+
+            <div class="secondary-actions">
+              <button
+                class="btn btn-favorite"
+                [class.active]="esFavorito(movie.id)"
+                (click)="toggleFavorito()"
+              >
+                <i class="fas fa-heart"></i>
+                {{
+                  esFavorito(movie.id) ? "En Favoritos" : "Agregar a Favoritos"
+                }}
+              </button>
+
+              <button class="btn btn-secondary" (click)="watchTrailer()">
+                <i class="fas fa-play"></i>
+                Ver Trailer
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Details Column -->
+        <div class="details-column">
+          <!-- Title and Basic Info -->
+          <div class="title-section">
+            <h1 class="movie-title">{{ movie.title }}</h1>
+            <h2
+              class="movie-subtitle"
+              *ngIf="movie.original_title !== movie.title"
+            >
+              {{ movie.original_title }}
+            </h2>
+
+            <div class="movie-meta">
+              <span class="meta-item">
+                <i class="fas fa-calendar"></i>
+                {{ getMovieYear(movie.release_date) }}
+              </span>
+              <span class="meta-item">
+                <i class="fas fa-clock"></i>
+                {{ getMovieDuration() }}
+              </span>
+              <span class="meta-item">
+                <i class="fas fa-film"></i>
+                {{ getMovieGenres(movie.genre_ids) }}
+              </span>
+              <span class="meta-item" *ngIf="movie.vote_count">
+                <i class="fas fa-users"></i>
+                {{ movie.vote_count }} votos
+              </span>
+            </div>
+          </div>
+
+          <!-- Synopsis -->
+          <div class="synopsis-section">
+            <h3 class="section-title">
+              <i class="fas fa-align-left"></i>
+              Sinopsis
+            </h3>
+            <p class="synopsis-text">
+              {{ movie.overview || "No hay descripción disponible." }}
+            </p>
+          </div>
+
+          <!-- Additional Details -->
+          <div class="additional-details">
+            <div class="detail-item" *ngIf="movie.release_date">
+              <h4 class="detail-title">
+                <i class="fas fa-calendar-alt"></i>
+                Fecha de estreno
+              </h4>
+              <p class="detail-value">
+                {{ movie.release_date | date : "dd/MM/yyyy" }}
+              </p>
+            </div>
+
+            <div class="detail-item" *ngIf="movie.budget && movie.budget > 0">
+              <h4 class="detail-title">
+                <i class="fas fa-dollar-sign"></i>
+                Presupuesto
+              </h4>
+              <p class="detail-value">
+                {{ movie.budget | currency : "USD" : "symbol" : "1.0-0" }}
+              </p>
+            </div>
+
+            <div class="detail-item" *ngIf="movie.revenue && movie.revenue > 0">
+              <h4 class="detail-title">
+                <i class="fas fa-chart-line"></i>
+                Recaudación
+              </h4>
+              <p class="detail-value">
+                {{ movie.revenue | currency : "USD" : "symbol" : "1.0-0" }}
+              </p>
+            </div>
+
+            <div class="detail-item" *ngIf="movie.spoken_languages?.length">
+              <h4 class="detail-title">
+                <i class="fas fa-language"></i>
+                Idiomas
+              </h4>
+              <p class="detail-value">
+                <span
+                  *ngFor="let lang of movie.spoken_languages; let last = last"
+                >
+                  {{ lang.name }}<span *ngIf="!last">, </span>
+                </span>
+              </p>
+            </div>
+          </div>
+
+          <!-- Action Buttons Desktop -->
+          <div class="action-buttons desktop-only">
+            <button class="btn btn-primary" (click)="comprarEntradas()">
+              <i class="fas fa-ticket-alt"></i>
+              Comprar Entradas
+            </button>
+
+            <button
+              class="btn btn-favorite"
+              [class.active]="esFavorito(movie.id)"
+              (click)="toggleFavorito()"
+            >
+              <i class="fas fa-heart"></i>
+              {{
+                esFavorito(movie.id) ? "En Favoritos" : "Agregar a Favoritos"
+              }}
+            </button>
+
+            <button class="btn btn-secondary" (click)="watchTrailer()">
+              <i class="fas fa-play"></i>
+              Ver Trailer
+            </button>
+          </div>
+
+          <!-- Error Message -->
+          <div class="error-message" *ngIf="mensaje">
+            <i class="fas fa-exclamation-triangle"></i>
+            {{ mensaje }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- Error State -->
+<div class="error-container" *ngIf="!loading && !movie">
+  <div class="error-content">
+    <i class="fas fa-film"></i>
+    <h2>Película no encontrada</h2>
+    <p>Lo sentimos, no pudimos encontrar los detalles de esta película.</p>
+    <button class="btn btn-primary" (click)="goBack()">
+      <i class="fas fa-arrow-left"></i>
+      Volver al catálogo
+    </button>
+  </div>
+</div>

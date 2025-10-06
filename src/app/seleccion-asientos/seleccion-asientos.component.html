@@ -1,101 +1,251 @@
-<div class="detalles-pelicula fade-in">
-  <h1>{{ movieDetails?.title }}</h1>
-  <img
-    *ngIf="movieDetails?.imageUrl"
-    [src]="movieDetails.imageUrl"
-    alt="{{ movieDetails?.title }}"
-  />
-  <h3>{{ movieDetails?.overview }}</h3>
-  <h3>{{ movieDetails?.release_date }}</h3>
-</div>
-
-<div *ngIf="esEstreno">
-  <div class="seleccion-asientos">
-    <div class="seleccion-asientos">
-      <div class="dropdown">
-        <label for="sucursal" class="fs-5">Selecciona una sucursal:</label>
-        <select
-          id="sucursal"
-          [(ngModel)]="sucursalSeleccionada"
-          (change)="onSucursalChange(this.sucursalSeleccionada)"
-        >
-          <option *ngFor="let sucursal of sucursales" [value]="sucursal.NOMBRE">
-            {{ sucursal.NOMBRE }}
-          </option>
-        </select>
+<!-- Seat Selection Page -->
+<div class="seat-selection-page">
+  <!-- Header Section -->
+  <section class="page-header">
+    <div class="header-container">
+      <!-- Navigation -->
+      <div class="header-nav">
+        <button class="btn-back" (click)="goBack()">
+          <i class="fas fa-arrow-left"></i>
+          Volver
+        </button>
+        <h1 class="page-title">Selección de Asientos</h1>
       </div>
 
-      <div class="dropdown" *ngIf="sucursalSeleccionada">
-        <label for="horario" class="fs-5">Selecciona el horario:</label>
-        <select
-          id="horario"
-          [(ngModel)]="horarioSeleccionado"
-          (change)="onHorarioChange(this.horarioSeleccionado)"
-        >
-          <option *ngFor="let hora of horariosPorSucursal" [value]="hora">
-            {{ hora }}
-          </option>
-        </select>
-      </div>
-
-      <div *ngIf="sucursalSeleccionada && horarioSeleccionado">
-        <h3 class="asientosTitulo fs-5">Selecciona tus asientos</h3>
-        <div *ngFor="let fila of filasAsientos" class="fila">
-          <span
-            *ngFor="let asiento of fila"
-            (click)="seleccionarAsiento(asiento)"
-            [class.selected]="asientosSeleccionados.includes(asiento)"
-          >
-            {{ asiento.nombre || asiento.ASIENTO }}
-          </span>
+      <!-- Movie Information Header -->
+      <div class="movie-header" *ngIf="movieDetails">
+        <img
+          [src]="'https://image.tmdb.org/t/p/w300/' + movieDetails.poster_path"
+          [alt]="movieDetails.title"
+          class="movie-poster-small"
+          *ngIf="movieDetails.poster_path"
+        />
+        <div class="movie-info">
+          <h2 class="movie-title">{{ movieDetails.title }}</h2>
+          <div class="movie-meta">
+            <span class="meta-item">
+              <i class="fas fa-calendar"></i>
+              {{ movieDetails.release_date | date : "yyyy" }}
+            </span>
+            <span class="meta-item">
+              <i class="fas fa-star"></i>
+              {{ movieDetails.vote_average | number : "1.1" }}
+            </span>
+            <span class="meta-item">
+              <i class="fas fa-clock"></i>
+              120 min
+            </span>
+          </div>
         </div>
       </div>
     </div>
+  </section>
 
-    <div
-      class="dropdown"
-      *ngIf="horarioSeleccionado && asientosSeleccionados.length > 0"
-    >
-      <label for="pago" class="fs-5">Selecciona el método de pago:</label>
-      <select
-        id="pago"
-        [(ngModel)]="modoPago"
-        (change)="onPagoChange()"
-        [disabled]="!horarioSeleccionado"
-      >
-        <option value="pago_mostrador">Pago en mostrador</option>
-        <option value="pago_online" [disabled]="true">
-          Pago online (PROXIMAMENTE)
-        </option>
-      </select>
-    </div>
-
-    <div class="resumen-compra">
-      <h3 class="text-dark">Resumen</h3>
-      <p class="text-dark">
-        Asientos seleccionados: {{ asientosSeleccionados.length }}
+  <!-- Main Content -->
+  <section class="main-content">
+    <!-- No Estreno Message -->
+    <div *ngIf="!esEstreno" class="success-message">
+      <h2 class="success-title">Película no disponible</h2>
+      <p class="success-description">
+        Esta película no está disponible para compra de entradas en este momento.
       </p>
-      <p class="text-dark">
-        Total a pagar: {{ precioTotal | currency : "ARS $" }}
-      </p>
-      <button
-        class="comprar-entradas"
-        [disabled]="!modoPago"
-        (click)="confirmarCompra()"
-      >
-        Confirmar compra
+      <button class="btn btn-secondary" (click)="goBack()">
+        <i class="fas fa-arrow-left"></i>
+        Volver al catálogo
       </button>
     </div>
 
-    <div *ngIf="compraConfirmada" class="mensaje-agradecimiento fade-in">
-      <h2>✨ ¡Gracias por tu compra! ✨</h2>
-      <p>
-        Tu compra ha sido confirmada con éxito. Hemos generado un PDF con los
-        detalles de tu compra y el código QR. ¡Disfruta de tu película! 🎬
-      </p>
-      <button class="btn-confirmacion" (click)="redirigirAPaginaPrincipal()">
-        Volver al inicio
-      </button>
+    <!-- Selection Process -->
+    <div *ngIf="esEstreno">
+      <!-- Step Cards -->
+      <div class="selection-steps">
+        <!-- Step 1: Cinema Selection -->
+        <div class="step-card" [class.active]="!sucursalSeleccionada">
+          <div class="step-header">
+            <div class="step-number">1</div>
+            <h3 class="step-title">Selecciona tu cine</h3>
+          </div>
+          <div class="form-group">
+            <label for="sucursal" class="form-label">
+              <i class="fas fa-map-marker-alt"></i>
+              Sucursal
+            </label>
+            <select
+              id="sucursal"
+              class="form-select"
+              [(ngModel)]="sucursalSeleccionada"
+              (change)="onSucursalChange(sucursalSeleccionada)"
+            >
+              <option value="">Selecciona una sucursal...</option>
+              <option *ngFor="let sucursal of sucursales" [value]="sucursal.NOMBRE">
+                {{ sucursal.NOMBRE }}
+              </option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Step 2: Schedule Selection -->
+        <div class="step-card" [class.active]="sucursalSeleccionada && !horarioSeleccionado">
+          <div class="step-header">
+            <div class="step-number">2</div>
+            <h3 class="step-title">Elige tu horario</h3>
+          </div>
+          <div class="form-group" *ngIf="sucursalSeleccionada">
+            <label for="horario" class="form-label">
+              <i class="fas fa-clock"></i>
+              Horario de función
+            </label>
+            <select
+              id="horario"
+              class="form-select"
+              [(ngModel)]="horarioSeleccionado"
+              (change)="onHorarioChange(horarioSeleccionado)"
+            >
+              <option value="">Selecciona un horario...</option>
+              <option *ngFor="let hora of horariosPorSucursal" [value]="hora">
+                {{ hora }}
+              </option>
+            </select>
+          </div>
+          <div *ngIf="!sucursalSeleccionada" class="form-group">
+            <p style="color: #666; font-style: italic;">
+              Primero selecciona una sucursal
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Seat Selection -->
+      <div *ngIf="sucursalSeleccionada && horarioSeleccionado" class="seat-selection-container fade-in">
+        <h3 class="seats-title">
+          <i class="fas fa-couch"></i>
+          Selecciona tus asientos
+        </h3>
+
+        <div class="screen"></div>
+
+        <div class="seats-grid">
+          <div *ngFor="let fila of filasAsientos" class="seat-row">
+            <span class="row-label">{{ fila[0]?.nombre?.[0] || fila[0]?.ASIENTO?.[0] }}</span>
+            <span
+              *ngFor="let asiento of fila"
+              class="seat"
+              [class.selected]="asientosSeleccionados.includes(asiento)"
+              [class.occupied]="asiento.ocupado"
+              (click)="seleccionarAsiento(asiento)"
+            >
+              {{ asiento.nombre?.slice(1) || asiento.ASIENTO?.slice(1) }}
+            </span>
+          </div>
+        </div>
+
+        <div class="seat-legend">
+          <div class="legend-item">
+            <div class="legend-seat legend-available"></div>
+            <span>Disponible</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-seat legend-selected"></div>
+            <span>Seleccionado</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-seat legend-occupied"></div>
+            <span>Ocupado</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Payment Method -->
+      <div *ngIf="horarioSeleccionado && asientosSeleccionados.length > 0" class="step-card active fade-in">
+        <div class="step-header">
+          <div class="step-number">3</div>
+          <h3 class="step-title">Método de pago</h3>
+        </div>
+        <div class="form-group">
+          <label for="pago" class="form-label">
+            <i class="fas fa-credit-card"></i>
+            Forma de pago
+          </label>
+          <select
+            id="pago"
+            class="form-select"
+            [(ngModel)]="modoPago"
+            (change)="onPagoChange()"
+          >
+            <option value="">Selecciona método de pago...</option>
+            <option value="pago_mostrador">Pago en mostrador</option>
+            <option value="pago_online" disabled>
+              Pago online (PRÓXIMAMENTE)
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Purchase Summary -->
+      <div *ngIf="asientosSeleccionados.length > 0" class="purchase-summary fade-in">
+        <h3 class="summary-title">
+          <i class="fas fa-receipt"></i>
+          Resumen de compra
+        </h3>
+
+        <div class="summary-item">
+          <span class="summary-label">Película:</span>
+          <span class="summary-value">{{ movieDetails?.title }}</span>
+        </div>
+
+        <div class="summary-item">
+          <span class="summary-label">Sucursal:</span>
+          <span class="summary-value">{{ sucursalSeleccionada }}</span>
+        </div>
+
+        <div class="summary-item">
+          <span class="summary-label">Horario:</span>
+          <span class="summary-value">{{ horarioSeleccionado }}</span>
+        </div>
+
+        <div class="summary-item">
+          <span class="summary-label">Asientos:</span>
+          <span class="summary-value">
+            <span *ngFor="let asiento of asientosSeleccionados; let last = last">
+              {{ asiento.nombre || asiento.ASIENTO }}<span *ngIf="!last">, </span>
+            </span>
+          </span>
+        </div>
+
+        <div class="summary-item">
+          <span class="summary-label">Cantidad:</span>
+          <span class="summary-value">{{ asientosSeleccionados.length }} entrada(s)</span>
+        </div>
+
+        <div class="summary-item">
+          <span class="summary-label">Total:</span>
+          <span class="summary-value total-amount">{{ precioTotal | currency : "ARS $" }}</span>
+        </div>
+
+        <button
+          class="btn btn-primary"
+          [disabled]="!modoPago"
+          (click)="confirmarCompra()"
+        >
+          <i class="fas fa-ticket-alt"></i>
+          <span *ngIf="!modoPago; else confirmText">Selecciona método de pago</span>
+          <ng-template #confirmText>Confirmar compra</ng-template>
+        </button>
+      </div>
+
+      <!-- Success Message -->
+      <div *ngIf="compraConfirmada" class="success-message fade-in">
+        <h2 class="success-title">✨ ¡Gracias por tu compra! ✨</h2>
+        <p class="success-description">
+          Tu compra ha sido confirmada con éxito. Hemos generado un PDF con los
+          detalles de tu compra y el código QR. ¡Disfruta de tu película! 🎬
+        </p>
+        <button class="btn btn-secondary" (click)="redirigirAPaginaPrincipal()">
+          <i class="fas fa-home"></i>
+          Volver al inicio
+        </button>
+      </div>
     </div>
-  </div>
+  </section>
+</div>
 </div>

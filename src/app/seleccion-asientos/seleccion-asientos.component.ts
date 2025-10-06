@@ -211,4 +211,8 @@ export class SeleccionAsientosComponent implements OnInit {
   redirigirAPaginaPrincipal(): void {
     this.router.navigate(['/']); // Redirigir a la página principal
   }
+
+  goBack(): void {
+    this.router.navigate(['/']); // Volver al catálogo de películas
+  }
 }

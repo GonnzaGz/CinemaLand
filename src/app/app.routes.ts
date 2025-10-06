@@ -11,9 +11,12 @@ import { CineFanComponent } from './cine-fan/cine-fan.component';
 import { RegalaCineComponent } from './regala-cine/regala-cine.component';
 import { StoreComponent } from './store/store.component';
 import { ElegiPeliculaComponent } from './elegi-pelicula/elegi-pelicula.component';
+import { MovieDetailsComponent } from './movie-details/movie-details.component';
 
 export const routes: Routes = [
   { path: '', component: CompraEntradasComponent },
+
+  { path: 'movie-details/:id', component: MovieDetailsComponent },
 
   { path: 'candy', component: CandyComponent },
 
