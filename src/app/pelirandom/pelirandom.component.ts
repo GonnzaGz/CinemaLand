@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { CommonModule, DatePipe, DecimalPipe } from '@angular/common';
 import { Pelicula } from '../pelisearch/pelicula.interface';
 import { ApipeliculasService } from '../service/apipeliculas.service';
 import { Categoria } from './categorias.interface';
@@ -7,14 +8,14 @@ import { Router, RouterLink } from '@angular/router';
 @Component({
   selector: 'app-pelirandom',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, CommonModule, DatePipe, DecimalPipe],
   templateUrl: './pelirandom.component.html',
   styleUrl: './pelirandom.component.css',
 })
 export class PelirandomComponent implements OnInit {
   peliculas: Pelicula[] = [];
   categorias: Categoria[] = [];
-  idcategorias: string[] = [];
+  idcategorias: number[] = [];
 
   activeIndex = 0;
   intervalId: any;
@@ -41,6 +42,15 @@ export class PelirandomComponent implements OnInit {
     }
   }
 
+  toggleCategory(item: any): void {
+    const index = this.idcategorias.indexOf(item.id);
+    if (index > -1) {
+      this.idcategorias.splice(index, 1);
+    } else {
+      this.idcategorias.push(item.id);
+    }
+  }
+
   Randompeli() {
     if (this.idcategorias.length === 0) {
       this.peliculas = [];
@@ -55,7 +65,7 @@ export class PelirandomComponent implements OnInit {
 
     this.idcategorias.forEach((element) => {
       this.apiMovieService
-        .getEstrenosPorCategoria(element)
+        .getEstrenosPorCategoria(element.toString())
         .subscribe((data) => {
           const pelisEstreno = data.results.slice(0, 5);
           this.peliculas.push(...pelisEstreno);

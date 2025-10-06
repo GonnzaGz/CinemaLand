@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, HostListener } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
@@ -94,6 +94,17 @@ export class NavbarComponent {
 
   toggleUserMenu() {
     this.userMenuOpen = !this.userMenuOpen;
+  }
+
+  // Cerrar menús al hacer clic fuera
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: Event) {
+    const target = event.target as HTMLElement;
+    const userMenuContainer = target.closest('.user-menu-container');
+
+    if (!userMenuContainer && this.userMenuOpen) {
+      this.userMenuOpen = false;
+    }
   }
 
   onSearchKeyPress(event: KeyboardEvent) {

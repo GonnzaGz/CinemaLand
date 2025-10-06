@@ -94,11 +94,58 @@
         }}</span>
       </button>
 
-      <!-- Icono de usuario simplificado -->
+      <!-- Icono de usuario con menú desplegable -->
       <ng-container *ngIf="isAuthenticated; else loginBlock">
-        <button class="user-btn" (click)="toggleUserMenu()" title="Mi Cuenta">
-          <i class="fas fa-user"></i>
-        </button>
+        <div class="user-menu-container">
+          <button class="user-btn" (click)="toggleUserMenu()" title="Mi Cuenta">
+            <i class="fas fa-user"></i>
+            <span class="user-name" *ngIf="user?.name">{{ user.name }}</span>
+          </button>
+
+          <!-- Menú desplegable de usuario -->
+          <div class="user-dropdown" [class.show]="userMenuOpen">
+            <div class="user-info">
+              <div class="user-avatar">
+                <i class="fas fa-user-circle"></i>
+              </div>
+              <div class="user-details">
+                <h4 class="user-name-display">{{ user?.name || "Usuario" }}</h4>
+                <p class="user-email">
+                  {{ user?.email || "email@ejemplo.com" }}
+                </p>
+              </div>
+            </div>
+
+            <div class="user-menu-divider"></div>
+
+            <div class="user-menu-items">
+              <a class="user-menu-item" (click)="irAlPerfil()">
+                <i class="fas fa-user-cog"></i>
+                <span>Mi Perfil</span>
+              </a>
+
+              <a class="user-menu-item" (click)="toggleFavoritos()">
+                <i class="fas fa-heart"></i>
+                <span>Mis Favoritos</span>
+                <span class="favorites-badge" *ngIf="favoritosCount > 0">{{
+                  favoritosCount
+                }}</span>
+              </a>
+
+              <a class="user-menu-item" routerLink="/compra-entradas">
+                <i class="fas fa-ticket-alt"></i>
+                <span>Mis Entradas</span>
+              </a>
+
+              <div class="user-menu-divider"></div>
+
+              <a class="user-menu-item logout-item" (click)="logout()">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Cerrar Sesión</span>
+              </a>
+            </div>
+          </div>
+        </div>
       </ng-container>
 
       <ng-template #loginBlock>

@@ -445,28 +445,7 @@
   font-weight: bold;
 }
 
-/* Botón de usuario simplificado */
-.user-btn {
-  background: rgba(255, 255, 255, 0.1);
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  color: white;
-  border-radius: 50%;
-  width: 45px;
-  height: 45px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-size: 1.2rem;
-}
-
-.user-btn:hover {
-  background: rgba(255, 255, 255, 0.2);
-  border-color: #d4af37;
-  color: #d4af37;
-  transform: scale(1.1);
-}
+/* Botón de usuario - ver estilos completos en sección de menú desplegable */
 
 /* Sección de usuario */
 .user-section {
@@ -739,5 +718,189 @@
 
   .sparkle {
     display: none; /* Ocultar sparkles en móvil para mejor rendimiento */
+  }
+}
+
+/* === MENÚ DESPLEGABLE DE USUARIO === */
+.user-menu-container {
+  position: relative;
+}
+
+.user-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  border-radius: 50px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1.1rem;
+  padding: 0 15px;
+  gap: 10px;
+  min-width: 45px;
+}
+
+.user-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: #d4af37;
+  color: #d4af37;
+  transform: scale(1.05);
+}
+
+.user-name {
+  font-size: 0.9rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Menú desplegable */
+.user-dropdown {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  width: 280px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: 15px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-20px);
+  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  z-index: 1050;
+}
+
+.user-dropdown.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/* Información del usuario */
+.user-info {
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background: linear-gradient(
+    135deg,
+    rgba(212, 175, 55, 0.1),
+    rgba(220, 38, 38, 0.1)
+  );
+  border-radius: 15px 15px 0 0;
+}
+
+.user-avatar {
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, #d4af37, #f4e4bc);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #1a1a1a;
+  font-size: 1.8rem;
+}
+
+.user-details h4 {
+  margin: 0;
+  color: #1a1a1a;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.user-details p {
+  margin: 5px 0 0 0;
+  color: #666;
+  font-size: 0.85rem;
+}
+
+/* Divisor */
+.user-menu-divider {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(0, 0, 0, 0.1),
+    transparent
+  );
+  margin: 0 15px;
+}
+
+/* Items del menú */
+.user-menu-items {
+  padding: 15px 0;
+}
+
+.user-menu-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 20px;
+  color: #333;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  gap: 12px;
+  position: relative;
+}
+
+.user-menu-item:hover {
+  background: rgba(212, 175, 55, 0.1);
+  color: #d4af37;
+  transform: translateX(5px);
+}
+
+.user-menu-item i {
+  width: 20px;
+  text-align: center;
+  font-size: 1rem;
+}
+
+.user-menu-item span {
+  flex: 1;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.favorites-badge {
+  background: linear-gradient(135deg, #dc2626, #b91c1c);
+  color: white;
+  border-radius: 12px;
+  padding: 2px 8px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  min-width: 20px;
+  text-align: center;
+}
+
+.logout-item {
+  color: #dc2626;
+  margin-top: 5px;
+}
+
+.logout-item:hover {
+  background: rgba(220, 38, 38, 0.1);
+  color: #dc2626;
+}
+
+/* Responsive para el menú de usuario */
+@media (max-width: 768px) {
+  .user-dropdown {
+    width: 250px;
+    right: -10px;
+  }
+
+  .user-name {
+    display: none;
+  }
+
+  .user-btn {
+    width: 45px;
+    border-radius: 50%;
+    padding: 0;
   }
 }

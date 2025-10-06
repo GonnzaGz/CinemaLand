@@ -1,82 +1,151 @@
-<div class="container-random text-center">
-  <h1>Experiencia Random!</h1>
-  <h2 class="text-white bg-danger">15% de Descuento</h2>
-  <h2>Disfruta de la Nueva Experiencia de Ir al Cine!</h2>
-  <div class="row">
-    <div class="col">
-      <div>
-        <p>Selecciona tus categorias</p>
+<!-- PeliRandom Page -->
+<div class="pelirandom-page">
+  <!-- Header Section -->
+  <section class="page-header">
+    <div class="header-content">
+      <a class="btn-back" routerLink="/">
+        <i class="fas fa-arrow-left"></i>
+        Volver
+      </a>
+
+      <h1 class="page-title">
+        <i class="fas fa-dice"></i>
+        Experiencia Random!
+      </h1>
+
+      <div class="promo-badge">
+        <i class="fas fa-percentage"></i>
+        15% de Descuento
       </div>
-      <div class="row row-cols-lg-auto g-1 aling-items-center">
-        <div class="row justify-content-center">
-          @for(item of categorias; track $index){ @if($index >=
-          (categorias.length/2)){
-          <div class="col-6">
-            <div class="form-check form-switch">
+
+      <p class="page-subtitle">
+        ¡Disfruta de la Nueva Experiencia de Ir al Cine!
+      </p>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <section class="main-content">
+    <div class="selection-section">
+      <!-- Category Selector -->
+      <div class="category-selector">
+        <h2 class="section-title">
+          <i class="fas fa-tags"></i>
+          Selecciona tus Géneros
+        </h2>
+
+        <div class="categories-grid">
+          <div
+            *ngFor="let item of categorias; let i = index"
+            class="category-item"
+            [class.selected]="idcategorias.includes(item.id)"
+            (click)="toggleCategory(item)"
+          >
+            <div class="custom-checkbox">
               <input
-                class="form-check-input"
                 type="checkbox"
-                role="switch"
-                id="flexSwitchCheckChecked{{ item.id }}"
+                [id]="'category-' + item.id"
+                [checked]="idcategorias.includes(item.id)"
                 (change)="onCheckboxChange($event, item)"
               />
-              <label
-                class="form-check-label"
-                for="flexSwitchCheckChecked{{ item.id }}"
-                >{{ item.name }}</label
-              >
+              <div class="checkbox-visual"></div>
             </div>
+            <label [for]="'category-' + item.id" class="category-label">
+              {{ item.name }}
+            </label>
           </div>
-          }@else{
-          <div class="col-6">
-            <div class="form-check form-switch">
-              <input
-                class="form-check-input"
-                type="checkbox"
-                role="switch"
-                id="flexSwitchCheckChecked{{ item.id }}"
-                (change)="onCheckboxChange($event, item)"
-              />
-              <label
-                class="form-check-label"
-                for="flexSwitchCheckChecked{{ item.id }}"
-                >{{ item.name }}
-              </label>
-            </div>
-          </div>
-          } }
+        </div>
+
+        <div class="random-button-container">
+          <button
+            class="btn-random"
+            [class.loading]="loading"
+            [disabled]="idcategorias.length === 0 || loading"
+            (click)="Randompeli()"
+          >
+            <i class="fas fa-magic" *ngIf="!loading"></i>
+            <div
+              class="loading-spinner"
+              *ngIf="loading"
+              style="width: 20px; height: 20px; border-width: 2px"
+            ></div>
+            <span *ngIf="!loading">Buscar Random</span>
+            <span *ngIf="loading">Buscando...</span>
+          </button>
         </div>
       </div>
-      <div class="row justify-content-center">
-        <button class="btn btn-danger" (click)="Randompeli()">
-          Buscar Random
-        </button>
-      </div>
-    </div>
-    <div class="col-8 gx-6 gy-4">
-      <div id="carouselExample" class="carousel slide w-50">
-        <div class="carousel-inner">
-          @for(item of peliculas; track $index){
-          <div class="carousel-item" [class.active]="$index === activeIndex">
-            <a [routerLink]="['/peliculadetalle', item.id]"
-              ><img
-                [src]="'https://image.tmdb.org/t/p/w200/' + item.poster_path"
-                class="d-block w-100"
-                alt="..."
-            /></a>
-            <p>{{ item.title }}</p>
-            <p>{{ item.overview }}</p>
-            <p>{{ item.release_date }}</p>
-            <button
-              class="btn btn-danger mt-2"
-              (click)="irAComprarEntradas(item.id)"
+
+      <!-- Movie Roulette -->
+      <div class="roulette-section">
+        <h2 class="section-title">
+          <i class="fas fa-film"></i>
+          Tu Película Random
+        </h2>
+
+        <!-- Loading State -->
+        <div *ngIf="loading" class="loading-container">
+          <div class="loading-spinner"></div>
+          <p class="loading-text">Buscando tu película perfecta...</p>
+        </div>
+
+        <!-- Empty State -->
+        <div *ngIf="!loading && peliculas.length === 0" class="empty-state">
+          <i class="fas fa-dice"></i>
+          <h3>¡Hora de la sorpresa!</h3>
+          <p>
+            Selecciona algunos géneros y presiona "Buscar Random" para descubrir
+            tu próxima película favorita.
+          </p>
+        </div>
+
+        <!-- Movie Roulette -->
+        <div
+          *ngIf="!loading && peliculas.length > 0"
+          class="roulette-container"
+        >
+          <div class="movie-roulette">
+            <div
+              *ngFor="let movie of peliculas; let i = index"
+              class="movie-card"
+              [class.active]="i === activeIndex"
             >
-              🎟️ Comprar Entradas 🎟️
-            </button>
+              <img
+                [src]="'https://image.tmdb.org/t/p/w300/' + movie.poster_path"
+                [alt]="movie.title"
+                class="movie-poster"
+                *ngIf="movie.poster_path"
+              />
+              <div class="movie-poster fallback" *ngIf="!movie.poster_path">
+                <i class="fas fa-film"></i>
+              </div>
+
+              <div class="movie-info">
+                <h3 class="movie-title">{{ movie.title }}</h3>
+                <p class="movie-year">
+                  {{ movie.release_date | date : "yyyy" }}
+                </p>
+
+                <div class="movie-actions">
+                  <button
+                    class="btn-small btn-details"
+                    [routerLink]="['/movie-details', movie.id]"
+                  >
+                    <i class="fas"></i>
+                    Detalles
+                  </button>
+                  <button
+                    class="btn-small btn-tickets"
+                    (click)="irAComprarEntradas(movie.id)"
+                  >
+                    <i class="fas fa-ticket-alt"></i>
+                    Entradas
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
-          }
         </div>
       </div>
     </div>
-  </div>
+  </section>
 </div>
