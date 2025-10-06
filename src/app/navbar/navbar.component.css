@@ -741,3 +741,27 @@
     display: none; /* Ocultar sparkles en móvil para mejor rendimiento */
   }
 }
+.btn-daltonismo {
+  background-color: #ffcc00;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-weight: bold;
+  cursor: pointer;
+  color: #000;
+  transition: transform 0.2s ease, background-color 0.3s;
+}
+
+.color-mode-btn {
+  background-color: #0078d7;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.color-mode-btn:hover {
+  background-color: #005fa3;
+}

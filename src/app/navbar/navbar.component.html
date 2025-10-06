@@ -1,6 +1,6 @@
 <nav class="navbar-modern">
   <div class="navbar-container">
-    <!-- Logo y marca -->
+    <!-- Logo -->
     <a routerLink="" class="navbar-brand">
       <img
         class="brand-logo"
@@ -23,46 +23,25 @@
 
     <!-- Navegación principal -->
     <div class="navbar-nav" [class.active]="mobileMenuOpen">
-      <a
-        routerLink=""
-        class="nav-link"
-        routerLinkActive="active"
-        [routerLinkActiveOptions]="{ exact: true }"
-      >
-        <i class="fas fa-film"></i>
-        <span>Películas</span>
+      <a routerLink="" class="nav-link" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        <i class="fas fa-film"></i><span>Películas</span>
       </a>
-
       <a routerLink="candy" class="nav-link" routerLinkActive="active">
-        <i class="fas fa-candy-cane"></i>
-        <span>Candy</span>
+        <i class="fas fa-candy-cane"></i><span>Candy</span>
       </a>
-
       <a routerLink="cine-fan" class="nav-link" routerLinkActive="active">
-        <i class="fas fa-star"></i>
-        <span>Cine Fan</span>
+        <i class="fas fa-star"></i><span>Cine Fan</span>
       </a>
-
       <a routerLink="regala-cine" class="nav-link" routerLinkActive="active">
-        <i class="fas fa-gift"></i>
-        <span>Regalá Cine</span>
+        <i class="fas fa-gift"></i><span>Regalá Cine</span>
       </a>
-
       <a routerLink="store" class="nav-link" routerLinkActive="active">
-        <i class="fas fa-shopping-bag"></i>
-        <span>Store</span>
+        <i class="fas fa-shopping-bag"></i><span>Store</span>
       </a>
-
       <a routerLink="elegi-pelicula" class="nav-link" routerLinkActive="active">
-        <i class="fas fa-search"></i>
-        <span>Elegí Película</span>
+        <i class="fas fa-search"></i><span>Elegí Película</span>
       </a>
-
-      <a
-        routerLink="pelirandom"
-        class="nav-link peli-random-btn"
-        routerLinkActive="active"
-      >
+      <a routerLink="pelirandom" class="nav-link peli-random-btn" routerLinkActive="active">
         <div class="random-btn-content">
           <div class="random-icon-container">
             <i class="fas fa-dice"></i>
@@ -81,20 +60,22 @@
 
     <!-- Sección derecha -->
     <div class="navbar-actions" [class.active]="mobileMenuOpen">
-      <!-- Botón de Favoritos -->
+      <!-- Botón modo daltonismo -->
       <button
-        class="favorites-btn"
-        (click)="toggleFavoritos()"
-        [class.active]="favoritosAbierto"
-        title="Mis Favoritos"
+        (click)="toggleColorBlindMode()"
+        class="btn-daltonismo"
+        [class.active]="isColorBlindMode"
       >
-        <i class="fas fa-star"></i>
-        <span class="favorites-count" *ngIf="favoritosCount > 0">{{
-          favoritosCount
-        }}</span>
+        {{ isColorBlindMode ? '🌈 Desactivar Modo Daltonismo' : '🦉 Modo Daltonismo' }}
       </button>
 
-      <!-- Icono de usuario simplificado -->
+      <!-- Botón de Favoritos -->
+      <button class="favorites-btn" (click)="toggleFavoritos()" [class.active]="favoritosAbierto" title="Mis Favoritos">
+        <i class="fas fa-star"></i>
+        <span class="favorites-count" *ngIf="favoritosCount > 0">{{ favoritosCount }}</span>
+      </button>
+
+      <!-- Icono de usuario -->
       <ng-container *ngIf="isAuthenticated; else loginBlock">
         <button class="user-btn" (click)="toggleUserMenu()" title="Mi Cuenta">
           <i class="fas fa-user"></i>
@@ -109,6 +90,5 @@
     </div>
   </div>
 
-  <!-- Línea decorativa inferior -->
   <div class="navbar-bottom-line"></div>
 </nav>

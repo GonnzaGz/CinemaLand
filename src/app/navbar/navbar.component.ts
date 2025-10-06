@@ -1,11 +1,11 @@
 import { Component, inject } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { CommonModule } from '@angular/common';
 import { ApipeliculasService } from '../service/apipeliculas.service';
 import { AuthService } from '../service/auth.service';
 import { FavoritosService } from '../service/favoritos.service';
+import { ColorModeService } from '../services/color-mode.service';
 
 @Component({
   selector: 'app-navbar',
@@ -24,29 +24,35 @@ export class NavbarComponent {
   favoritosCount: number = 0;
   mobileMenuOpen: boolean = false;
   userMenuOpen: boolean = false;
+
+  isColorBlindMode: boolean = false; // 👈 agregado
+
   private favoritosService = inject(FavoritosService);
 
   constructor(
     private apiMovieService: ApipeliculasService,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private colorModeService: ColorModeService
   ) {
     this.isAuthenticated$ = this.authService.isAuthenticated$;
     this.userData$ = this.authService.userData$;
 
-    // Suscribirse al estado del panel de favoritos
     this.favoritosService.favoritosAbierto$.subscribe(
       (estado) => (this.favoritosAbierto = estado)
     );
 
     this.authService.isAuthenticated$.subscribe((data) => {
-      console.log('auth', data);
       this.isAuthenticated = data.isAuthenticated;
     });
     this.authService.userData$.subscribe((data) => {
       this.user = data;
     });
+
+    // Inicializar modo daltonismo
+    this.isColorBlindMode = this.colorModeService.isColorBlindMode();
   }
+
   onSearch() {
     this.apiMovieService.getbusquedamultiple(this.searchTerm).subscribe({
       next: (data: any) => {
@@ -57,9 +63,7 @@ export class NavbarComponent {
           this.searchTerm = '';
         }
       },
-      error: (error) => {
-        console.error(error);
-      },
+      error: (error) => console.error(error),
     });
   }
 
@@ -69,19 +73,6 @@ export class NavbarComponent {
 
   logout(): void {
     this.authService.logout();
-  }
-
-  comprarEntradas() {
-    // if (!this.isAuthenticated) {
-    //   alert('Debes iniciar sesión para comprar entradas.');
-    //   this.login();
-    //   return;
-    // }
-    // this.router.navigate(['']);
-  }
-
-  irAlPerfil() {
-    this.router.navigate(['/login']);
   }
 
   toggleFavoritos() {
@@ -97,14 +88,21 @@ export class NavbarComponent {
   }
 
   onSearchKeyPress(event: KeyboardEvent) {
-    if (event.key === 'Enter') {
-      this.onSearch();
-    }
+    if (event.key === 'Enter') this.onSearch();
   }
 
-  // Cerrar menús al hacer clic fuera
   closeMenus() {
     this.mobileMenuOpen = false;
     this.userMenuOpen = false;
   }
+
+toggleColorBlindMode() {
+  console.log('🦉 Clic detectado en el botón');
+  this.colorModeService.toggleColorBlindMode();
+  this.isColorBlindMode = this.colorModeService.isColorBlindMode();
+  console.log('Modo Daltonismo activo:', this.isColorBlindMode);
+  console.log('Clases del body:', document.body.classList.toString());
 }
+
+}
+
