@@ -242,6 +242,29 @@
         </div>
 
         <div class="summary-item">
+          <span class="summary-label">Subtotal:</span>
+          <span class="summary-value">{{
+            precioSubtotal | currency : "ARS $"
+          }}</span>
+        </div>
+
+        <!-- Descuento Social -->
+        <div class="summary-item discount-section" *ngIf="tieneDescuentoSocial">
+          <div class="discount-info">
+            <i class="fas fa-heart discount-icon"></i>
+            <div class="discount-details">
+              <span class="discount-title"
+                >Descuento Social ({{ descuentoPorcentaje }}%)</span
+              >
+              <span class="discount-type">{{ tipoDescuento }}</span>
+            </div>
+            <span class="discount-amount"
+              >-{{ montoDescuento | currency : "ARS $" }}</span
+            >
+          </div>
+        </div>
+
+        <div class="summary-item total-section">
           <span class="summary-label">Total:</span>
           <span class="summary-value total-amount">{{
             precioTotal | currency : "ARS $"

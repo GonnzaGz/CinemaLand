@@ -1,23 +1,454 @@
-.login-container {
-  max-width: 400px;
-  margin: 5rem auto;
+/* === LOGIN PAGE STYLES === */
+.login-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
   padding: 2rem;
-  background-color: #1e1e1ece;
-  color: #f1f1f1;
-  border-radius: 12px;
-  box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
-  font-family: Arial, sans-serif;
+  position: relative;
+  overflow-x: hidden;
 }
 
-.login-container h2 {
+.login-page::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+      circle at 20% 80%,
+      rgba(212, 175, 55, 0.1) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 80% 20%,
+      rgba(220, 38, 38, 0.1) 0%,
+      transparent 50%
+    );
+  animation: backgroundShift 8s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes backgroundShift {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.6; }
+}
+
+.login-container {
+  max-width: 800px;
+  margin: 0 auto;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  border-radius: 20px;
+  padding: 3rem;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  position: relative;
+  z-index: 2;
+}
+
+/* === USER PROFILE STYLES === */
+.user-profile {
+  color: white;
+}
+
+.profile-header {
   text-align: center;
-  margin-bottom: 1.5rem;
-  color: #e50914;
+  margin-bottom: 3rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-form {
+.profile-avatar {
+  font-size: 5rem;
+  color: #d4af37;
+  margin-bottom: 1rem;
+  text-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+}
+
+.profile-header h2 {
+  font-size: 2.5rem;
+  margin: 0;
+  background: linear-gradient(135deg, #d4af37, #f4e4bc);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: none;
+}
+
+.profile-subtitle {
+  color: #cccccc;
+  font-size: 1.1rem;
+  margin: 0.5rem 0 0 0;
+}
+
+/* === INFO CARDS === */
+.profile-info {
+  display: grid;
+  gap: 2rem;
+}
+
+.info-card {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  padding: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.info-card h3 {
+  color: #d4af37;
+  margin: 0 0 1.5rem 0;
+  font-size: 1.3rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.info-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+}
+
+.info-item i {
+  color: #d4af37;
+  font-size: 1.2rem;
+  width: 20px;
+  text-align: center;
+}
+
+.info-item div {
+  flex: 1;
+}
+
+.info-item label {
+  display: block;
+  color: #888;
+  font-size: 0.9rem;
+  margin-bottom: 0.2rem;
+}
+
+.info-item span {
+  color: white;
+  font-weight: 500;
+  font-size: 1rem;
+}
+
+/* === DISCOUNT SECTION === */
+.discount-section {
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.1), rgba(220, 38, 38, 0.1));
+  border-radius: 15px;
+  padding: 2rem;
+  border: 1px solid rgba(212, 175, 55, 0.3);
+}
+
+.discount-section h3 {
+  color: #d4af37;
+  margin: 0 0 1rem 0;
+  font-size: 1.4rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.discount-description {
+  color: #cccccc;
+  margin-bottom: 2rem;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.discount-options {
+  display: grid;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.discount-option {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.discount-option:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(212, 175, 55, 0.3);
+}
+
+/* === CHECKBOX STYLES === */
+.checkbox-container {
+  margin-bottom: 1rem;
+}
+
+.discount-checkbox {
+  display: none;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.3s ease;
+}
+
+.checkbox-label i {
+  font-size: 2rem;
+  color: #666;
+  transition: all 0.3s ease;
+}
+
+.discount-checkbox:checked + .checkbox-label i {
+  color: #d4af37;
+  transform: scale(1.1);
+}
+
+.label-content {
+  flex: 1;
+}
+
+.label-title {
+  display: block;
+  color: white;
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-bottom: 0.3rem;
+}
+
+.label-subtitle {
+  display: block;
+  color: #d4af37;
+  font-size: 0.9rem;
+}
+
+/* === FILE UPLOAD STYLES === */
+.file-upload-container {
+  margin-top: 1rem;
   display: flex;
   flex-direction: column;
+  gap: 0.5rem;
+}
+
+.file-upload-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: linear-gradient(135deg, #d4af37, #f4e4bc);
+  color: #1a1a1a;
+  padding: 12px 20px;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  text-decoration: none;
+  border: none;
+  font-size: 0.9rem;
+  width: fit-content;
+}
+
+.file-upload-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+}
+
+.file-input {
+  display: none;
+}
+
+.file-status {
+  color: #4ade80;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.file-status i {
+  color: #4ade80;
+}
+
+/* === DISCOUNT STATUS === */
+.discount-status {
+  margin-top: 1rem;
+}
+
+.status-active {
+  background: linear-gradient(135deg, rgba(74, 222, 128, 0.2), rgba(34, 197, 94, 0.2));
+  border: 1px solid rgba(74, 222, 128, 0.3);
+  border-radius: 12px;
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.status-active i {
+  font-size: 2rem;
+  color: #4ade80;
+}
+
+.status-active strong {
+  color: #4ade80;
+  font-size: 1.1rem;
+}
+
+.status-active p {
+  color: #cccccc;
+  margin: 0.5rem 0 0 0;
+  font-size: 0.9rem;
+}
+
+/* === LOGIN PROMPT STYLES === */
+.login-prompt {
+  text-align: center;
+  color: white;
+}
+
+.login-header {
+  margin-bottom: 3rem;
+}
+
+.login-icon {
+  font-size: 4rem;
+  color: #d4af37;
+  margin-bottom: 1rem;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+.login-header h2 {
+  font-size: 2.5rem;
+  margin: 0;
+  background: linear-gradient(135deg, #d4af37, #f4e4bc);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.login-header p {
+  color: #cccccc;
+  font-size: 1.1rem;
+  margin: 1rem 0 0 0;
+}
+
+/* === BUTTONS === */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 15px 30px;
+  border-radius: 50px;
+  font-weight: 600;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1rem;
+}
+
+.btn-login {
+  background: linear-gradient(135deg, #d4af37, #f4e4bc);
+  color: #1a1a1a;
+  margin-bottom: 3rem;
+  font-size: 1.1rem;
+  padding: 18px 35px;
+}
+
+.btn-login:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(212, 175, 55, 0.3);
+}
+
+.btn-primary {
+  background: linear-gradient(135dc, #dc2626, #b91c1c);
+  color: white;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(220, 38, 38, 0.3);
+}
+
+/* === LOGIN BENEFITS === */
+.login-benefits {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  padding: 2rem;
+  text-align: left;
+}
+
+.login-benefits h3 {
+  color: #d4af37;
+  margin: 0 0 1.5rem 0;
+  font-size: 1.2rem;
+  text-align: center;
+}
+
+.login-benefits ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.login-benefits li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 1rem;
+  padding: 0.8rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+}
+
+.login-benefits li i {
+  color: #d4af37;
+  font-size: 1.1rem;
+  width: 20px;
+}
+
+/* === PROFILE ACTIONS === */
+.profile-actions {
+  text-align: center;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+  .login-page {
+    padding: 1rem;
+  }
+  
+  .login-container {
+    padding: 2rem;
+  }
+  
+  .profile-header h2 {
+    font-size: 2rem;
+  }
+  
+  .login-header h2 {
+    font-size: 2rem;
+  }
+  
+  .discount-options {
+    gap: 1rem;
+  }
+  
+  .discount-option {
+    padding: 1rem;
+  }
+}
 }
 
 label {

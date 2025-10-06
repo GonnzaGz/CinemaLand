@@ -18,8 +18,15 @@ export class SeleccionAsientosComponent implements OnInit {
   movieId: string | undefined;
   movieDetails: any;
   precioTotal: number = 0;
+  precioSubtotal: number = 0;
   compraConfirmada: boolean = false; // Cambiar a verdadero una vez que la compra esté confirmada
   esEstreno: boolean = false;
+
+  // Propiedades para descuentos sociales
+  tieneDescuentoSocial: boolean = false;
+  descuentoPorcentaje: number = 0;
+  montoDescuento: number = 0;
+  tipoDescuento: string = '';
 
   // Filas de asientos
   fila1 = this.generarAsientos('A', 5, 5000);
@@ -60,6 +67,7 @@ export class SeleccionAsientosComponent implements OnInit {
       }
     });
     this.generaSucursal();
+    this.cargarDescuentoSocial();
   }
 
   obtenerDetallesDePelicula(id: string): void {
@@ -112,10 +120,48 @@ export class SeleccionAsientosComponent implements OnInit {
   }
 
   actualizarPrecios(): void {
-    this.precioTotal = this.asientosSeleccionados.reduce(
+    this.precioSubtotal = this.asientosSeleccionados.reduce(
       (total: any, asiento: any) => total + 10000,
       0
     );
+
+    this.aplicarDescuentos();
+  }
+
+  cargarDescuentoSocial(): void {
+    const descuentoData = localStorage.getItem('descuentoSocial');
+    if (descuentoData) {
+      try {
+        const descuento = JSON.parse(descuentoData);
+        if (descuento.activo) {
+          this.tieneDescuentoSocial = true;
+          this.descuentoPorcentaje = descuento.porcentaje;
+          this.tipoDescuento =
+            descuento.tipo === 'discapacidad'
+              ? 'Certificado de Discapacidad'
+              : 'Vulnerabilidad Social';
+
+          console.log('Descuento social cargado:', descuento);
+        }
+      } catch (error) {
+        console.error('Error al cargar descuento social:', error);
+      }
+    }
+  }
+
+  aplicarDescuentos(): void {
+    if (this.tieneDescuentoSocial && this.descuentoPorcentaje > 0) {
+      this.montoDescuento =
+        (this.precioSubtotal * this.descuentoPorcentaje) / 100;
+      this.precioTotal = this.precioSubtotal - this.montoDescuento;
+
+      console.log(
+        `Descuento aplicado: ${this.descuentoPorcentaje}% = -$${this.montoDescuento}`
+      );
+    } else {
+      this.montoDescuento = 0;
+      this.precioTotal = this.precioSubtotal;
+    }
   }
 
   onPagoChange(): void {

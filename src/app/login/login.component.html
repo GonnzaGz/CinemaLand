@@ -1,9 +1,176 @@
-<div class="login-container">
-  <div *ngIf="isAuthenticated">
-    <h2>Bienvenido</h2>
-    <h6>
-      <strong>Usuario:</strong> {{ (userData$ | async)?.userData?.username }}
-    </h6>
-    <h6><strong>Email:</strong> {{ (userData$ | async)?.userData?.email }}</h6>
+<div class="login-page">
+  <div class="login-container">
+    <!-- Usuario autenticado -->
+    <div *ngIf="isAuthenticated" class="user-profile">
+      <div class="profile-header">
+        <div class="profile-avatar">
+          <i class="fas fa-user-circle"></i>
+        </div>
+        <h2>¡Bienvenido!</h2>
+        <p class="profile-subtitle">Gestiona tu perfil y preferencias</p>
+      </div>
+
+      <div class="profile-info">
+        <div class="info-card">
+          <h3>Información Personal</h3>
+          <div class="info-item">
+            <i class="fas fa-user"></i>
+            <div>
+              <label>Usuario:</label>
+              <span>{{ (userData$ | async)?.userData?.username }}</span>
+            </div>
+          </div>
+          <div class="info-item">
+            <i class="fas fa-envelope"></i>
+            <div>
+              <label>Email:</label>
+              <span>{{ (userData$ | async)?.userData?.email }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sección de Descuentos Sociales -->
+        <div class="discount-section">
+          <h3>
+            <i class="fas fa-heart"></i>
+            Programa de Inclusión Social
+          </h3>
+          <p class="discount-description">
+            Accede a descuentos especiales del 15% presentando la documentación
+            correspondiente
+          </p>
+
+          <div class="discount-options">
+            <div class="discount-option">
+              <div class="checkbox-container">
+                <input
+                  type="checkbox"
+                  id="discapacidad"
+                  [(ngModel)]="tieneDiscapacidad"
+                  (change)="onDiscountChange()"
+                  class="discount-checkbox"
+                />
+                <label for="discapacidad" class="checkbox-label">
+                  <i class="fas fa-wheelchair"></i>
+                  <div class="label-content">
+                    <span class="label-title">Certificado de Discapacidad</span>
+                    <span class="label-subtitle"
+                      >Descuento del 15% aplicable</span
+                    >
+                  </div>
+                </label>
+              </div>
+
+              <div class="file-upload-container" *ngIf="tieneDiscapacidad">
+                <label for="fileDiscapacidad" class="file-upload-btn">
+                  <i class="fas fa-cloud-upload-alt"></i>
+                  <span>Subir Certificado</span>
+                  <input
+                    type="file"
+                    id="fileDiscapacidad"
+                    (change)="onFileSelected($event, 'discapacidad')"
+                    accept=".pdf,.doc,.docx"
+                    class="file-input"
+                  />
+                </label>
+                <span class="file-status" *ngIf="archivoDiscapacidad">
+                  <i class="fas fa-check-circle"></i>
+                  {{ archivoDiscapacidad.name }}
+                </span>
+              </div>
+            </div>
+
+            <div class="discount-option">
+              <div class="checkbox-container">
+                <input
+                  type="checkbox"
+                  id="vulnerabilidad"
+                  [(ngModel)]="esSectorVulnerable"
+                  (change)="onDiscountChange()"
+                  class="discount-checkbox"
+                />
+                <label for="vulnerabilidad" class="checkbox-label">
+                  <i class="fas fa-hands-helping"></i>
+                  <div class="label-content">
+                    <span class="label-title">Vulnerabilidad Social</span>
+                    <span class="label-subtitle"
+                      >Descuento del 15% aplicable</span
+                    >
+                  </div>
+                </label>
+              </div>
+
+              <div class="file-upload-container" *ngIf="esSectorVulnerable">
+                <label for="fileVulnerabilidad" class="file-upload-btn">
+                  <i class="fas fa-cloud-upload-alt"></i>
+                  <span>Subir Certificado</span>
+                  <input
+                    type="file"
+                    id="fileVulnerabilidad"
+                    (change)="onFileSelected($event, 'vulnerabilidad')"
+                    accept=".pdf,.doc,.docx"
+                    class="file-input"
+                  />
+                </label>
+                <span class="file-status" *ngIf="archivoVulnerabilidad">
+                  <i class="fas fa-check-circle"></i>
+                  {{ archivoVulnerabilidad.name }}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Estado del descuento -->
+          <div class="discount-status" *ngIf="tieneDescuentoActivo">
+            <div class="status-active">
+              <i class="fas fa-badge-check"></i>
+              <div>
+                <strong>Descuento Activo: 15%</strong>
+                <p>
+                  Tu descuento social se aplicará automáticamente en la compra
+                  de entradas
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Acciones del usuario -->
+        <div class="profile-actions">
+          <button class="btn btn-primary" (click)="logout()">
+            <i class="fas fa-sign-out-alt"></i>
+            Cerrar Sesión
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Usuario no autenticado -->
+    <div *ngIf="!isAuthenticated" class="login-prompt">
+      <div class="login-header">
+        <div class="login-icon">
+          <i class="fas fa-film"></i>
+        </div>
+        <h2>Iniciar Sesión</h2>
+        <p>Accede a tu cuenta para disfrutar de descuentos especiales</p>
+      </div>
+
+      <button class="btn btn-login" (click)="login()">
+        <i class="fas fa-sign-in-alt"></i>
+        Iniciar Sesión con OAuth
+      </button>
+
+      <div class="login-benefits">
+        <h3>Beneficios al iniciar sesión:</h3>
+        <ul>
+          <li>
+            <i class="fas fa-heart"></i> Acceso a descuentos sociales del 15%
+          </li>
+          <li><i class="fas fa-star"></i> Guarda tus películas favoritas</li>
+          <li><i class="fas fa-ticket-alt"></i> Historial de compras</li>
+          <li><i class="fas fa-gift"></i> Ofertas exclusivas</li>
+        </ul>
+      </div>
+    </div>
   </div>
 </div>
