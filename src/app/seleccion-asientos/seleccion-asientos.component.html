@@ -264,6 +264,44 @@
           </div>
         </div>
 
+        <!-- Descuento PeliRandom -->
+        <div
+          class="summary-item discount-section pelirandom-discount"
+          *ngIf="tieneDescuentoPeliRandom"
+        >
+          <div class="discount-info">
+            <i class="fas fa-dice discount-icon"></i>
+            <div class="discount-details">
+              <span class="discount-title"
+                >Descuento PeliRandom ({{
+                  descuentoPorcentajePeliRandom
+                }}%)</span
+              >
+              <span class="discount-type">Búsqueda aleatoria de películas</span>
+            </div>
+            <span class="discount-amount"
+              >-{{ montoDescuentoPeliRandom | currency : "ARS $" }}</span
+            >
+          </div>
+        </div>
+
+        <!-- Total de descuentos (si hay múltiples) -->
+        <div
+          class="summary-item total-discount-section"
+          *ngIf="tieneDescuentoSocial && tieneDescuentoPeliRandom"
+        >
+          <div class="total-discount-info">
+            <div class="total-discount-details">
+              <span class="total-discount-title"
+                >Total Descuentos ({{ descuentoPorcentajeTotal }}%)</span
+              >
+            </div>
+            <span class="total-discount-amount"
+              >-{{ montoDescuentoTotal | currency : "ARS $" }}</span
+            >
+          </div>
+        </div>
+
         <div class="summary-item total-section">
           <span class="summary-label">Total:</span>
           <span class="summary-value total-amount">{{

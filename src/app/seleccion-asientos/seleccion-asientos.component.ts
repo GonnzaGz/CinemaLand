@@ -24,8 +24,13 @@ export class SeleccionAsientosComponent implements OnInit {
 
   // Propiedades para descuentos sociales
   tieneDescuentoSocial: boolean = false;
+  tieneDescuentoPeliRandom: boolean = false;
   descuentoPorcentaje: number = 0;
+  descuentoPorcentajePeliRandom: number = 0;
+  descuentoPorcentajeTotal: number = 0;
   montoDescuento: number = 0;
+  montoDescuentoPeliRandom: number = 0;
+  montoDescuentoTotal: number = 0;
   tipoDescuento: string = '';
 
   // Filas de asientos
@@ -68,6 +73,7 @@ export class SeleccionAsientosComponent implements OnInit {
     });
     this.generaSucursal();
     this.cargarDescuentoSocial();
+    this.cargarDescuentoPeliRandom();
   }
 
   obtenerDetallesDePelicula(id: string): void {
@@ -149,19 +155,62 @@ export class SeleccionAsientosComponent implements OnInit {
     }
   }
 
+  cargarDescuentoPeliRandom(): void {
+    const descuentoData = localStorage.getItem('descuentoPeliRandom');
+    if (descuentoData) {
+      try {
+        const descuento = JSON.parse(descuentoData);
+        if (descuento.activo) {
+          this.tieneDescuentoPeliRandom = true;
+          this.descuentoPorcentajePeliRandom = descuento.porcentaje;
+
+          console.log('Descuento PeliRandom cargado:', descuento);
+        }
+      } catch (error) {
+        console.error('Error al cargar descuento PeliRandom:', error);
+      }
+    }
+  }
+
   aplicarDescuentos(): void {
+    // Resetear valores
+    this.montoDescuento = 0;
+    this.montoDescuentoPeliRandom = 0;
+    this.montoDescuentoTotal = 0;
+    this.descuentoPorcentajeTotal = 0;
+
+    // Calcular descuento social
     if (this.tieneDescuentoSocial && this.descuentoPorcentaje > 0) {
       this.montoDescuento =
         (this.precioSubtotal * this.descuentoPorcentaje) / 100;
-      this.precioTotal = this.precioSubtotal - this.montoDescuento;
-
-      console.log(
-        `Descuento aplicado: ${this.descuentoPorcentaje}% = -$${this.montoDescuento}`
-      );
-    } else {
-      this.montoDescuento = 0;
-      this.precioTotal = this.precioSubtotal;
+      this.descuentoPorcentajeTotal += this.descuentoPorcentaje;
     }
+
+    // Calcular descuento PeliRandom
+    if (
+      this.tieneDescuentoPeliRandom &&
+      this.descuentoPorcentajePeliRandom > 0
+    ) {
+      this.montoDescuentoPeliRandom =
+        (this.precioSubtotal * this.descuentoPorcentajePeliRandom) / 100;
+      this.descuentoPorcentajeTotal += this.descuentoPorcentajePeliRandom;
+    }
+
+    // Sumar todos los descuentos
+    this.montoDescuentoTotal =
+      this.montoDescuento + this.montoDescuentoPeliRandom;
+    this.precioTotal = this.precioSubtotal - this.montoDescuentoTotal;
+
+    console.log(`Descuentos aplicados:`);
+    console.log(
+      `- Social: ${this.descuentoPorcentaje}% = -$${this.montoDescuento}`
+    );
+    console.log(
+      `- PeliRandom: ${this.descuentoPorcentajePeliRandom}% = -$${this.montoDescuentoPeliRandom}`
+    );
+    console.log(
+      `- Total: ${this.descuentoPorcentajeTotal}% = -$${this.montoDescuentoTotal}`
+    );
   }
 
   onPagoChange(): void {

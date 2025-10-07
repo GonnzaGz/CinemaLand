@@ -1,140 +1,277 @@
 <div class="elegi-pelicula-container">
   <!-- Header -->
   <div class="page-header">
-    <h1>
-      ESTÁS VIENDO PELÍCULAS DE TODO EL PAÍS, SELECCIONÁ UN CINE
-      <span class="highlight">AQUÍ</span>
-    </h1>
-  </div>
-
-  <!-- Calendario -->
-  <div class="calendar-section">
-    <div class="calendar-nav">
-      <button class="nav-btn">←</button>
-      <div class="calendar-days">
-        <div class="day-item">
-          <span class="day-name">HOY</span>
-        </div>
-        <div class="day-item active">
-          <span class="day-name">SÁB</span>
-          <span class="day-date">4/OCT</span>
-        </div>
-        <div class="day-item">
-          <span class="day-name">DOM</span>
-          <span class="day-date">5/OCT</span>
-        </div>
-        <div class="day-item">
-          <span class="day-name">LUN</span>
-          <span class="day-date">6/OCT</span>
-        </div>
-        <div class="day-item">
-          <span class="day-name">MAR</span>
-          <span class="day-date">7/OCT</span>
-        </div>
-      </div>
-      <button class="nav-btn">→</button>
-    </div>
+    <h1>PELÍCULAS EN CARTELERA</h1>
+    <p class="subtitle">
+      Descubre todas las películas disponibles en nuestros cines
+    </p>
   </div>
 
   <!-- Filtros -->
-  <div class="filters-section">
-    <div class="filter-group">
-      <select class="filter-select">
-        <option>Formatos</option>
-        <option>2D</option>
-        <option>3D</option>
-        <option>IMAX</option>
-        <option>4D</option>
-      </select>
+  <div class="filtros-container">
+    <div class="filtros-row">
+      <div class="filtro-grupo">
+        <label class="filtro-label">Formato</label>
+        <div class="filtro-opciones">
+          <button
+            class="filtro-btn"
+            [class.active]="filtroFormato === 'todos'"
+            (click)="setFiltroFormato('todos')"
+          >
+            Todos
+          </button>
+          <button
+            class="filtro-btn"
+            [class.active]="filtroFormato === '2D'"
+            (click)="setFiltroFormato('2D')"
+          >
+            2D
+          </button>
+          <button
+            class="filtro-btn"
+            [class.active]="filtroFormato === '3D'"
+            (click)="setFiltroFormato('3D')"
+          >
+            3D
+          </button>
+          <button
+            class="filtro-btn"
+            [class.active]="filtroFormato === 'IMAX'"
+            (click)="setFiltroFormato('IMAX')"
+          >
+            IMAX
+          </button>
+        </div>
+      </div>
 
-      <select class="filter-select">
-        <option>Idioma</option>
-        <option>Español</option>
-        <option>Inglés Subtitulado</option>
-        <option>Inglés Doblado</option>
-      </select>
+      <div class="filtro-grupo">
+        <label class="filtro-label">Idioma</label>
+        <div class="filtro-opciones">
+          <button
+            class="filtro-btn"
+            [class.active]="filtroIdioma === 'todos'"
+            (click)="setFiltroIdioma('todos')"
+          >
+            Todos
+          </button>
+          <button
+            class="filtro-btn"
+            [class.active]="filtroIdioma === 'español'"
+            (click)="setFiltroIdioma('español')"
+          >
+            Español
+          </button>
+          <button
+            class="filtro-btn"
+            [class.active]="filtroIdioma === 'ingles'"
+            (click)="setFiltroIdioma('ingles')"
+          >
+            Inglés
+          </button>
+          <button
+            class="filtro-btn"
+            [class.active]="filtroIdioma === 'subtitulado'"
+            (click)="setFiltroIdioma('subtitulado')"
+          >
+            Subtitulado
+          </button>
+        </div>
+      </div>
 
-      <select class="filter-select">
-        <option>Otras opciones</option>
-        <option>Solo adultos</option>
-        <option>Familiar</option>
-      </select>
+      <div class="filtro-grupo">
+        <label class="filtro-label">Edad</label>
+        <div class="filtro-opciones">
+          <button
+            class="filtro-btn"
+            [class.active]="filtroEdad === 'todos'"
+            (click)="setFiltroEdad('todos')"
+          >
+            Todos
+          </button>
+          <button
+            class="filtro-btn"
+            [class.active]="filtroEdad === 'ATP'"
+            (click)="setFiltroEdad('ATP')"
+          >
+            ATP
+          </button>
+          <button
+            class="filtro-btn"
+            [class.active]="filtroEdad === '+13'"
+            (click)="setFiltroEdad('+13')"
+          >
+            +13
+          </button>
+          <button
+            class="filtro-btn"
+            [class.active]="filtroEdad === '+16'"
+            (click)="setFiltroEdad('+16')"
+          >
+            +16
+          </button>
+          <button
+            class="filtro-btn"
+            [class.active]="filtroEdad === '+18'"
+            (click)="setFiltroEdad('+18')"
+          >
+            +18
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- Grid de películas -->
-  <div class="movies-grid">
-    <!-- Película 1 -->
-    <div class="movie-card">
-      <div class="movie-poster">
-        <img
-          src="assets/images/conjuro4.jpg"
-          alt="El Conjuro 4"
-          class="poster-img"
-        />
-        <div class="movie-rating">+13</div>
-        <div class="movie-duration">2h 15m</div>
-      </div>
-      <div class="movie-info">
-        <h3 class="movie-title">EL CONJURO 4: ÚLTIMOS RITOS</h3>
-        <p class="movie-details">2D - 4D E-MOTION - XD DIGITAL</p>
-        <p class="movie-genre">COMFORT - D-BOX - PREMIUM</p>
-        <button class="select-btn">SELECCIONAR HORARIOS</button>
+  <!-- Grid de Películas -->
+  <div class="peliculas-grid">
+    <div class="grid-container">
+      <div
+        class="pelicula-card-modern"
+        *ngFor="let pelicula of peliculasFiltradas"
+        (click)="verDetalles(pelicula.id)"
+      >
+        <!-- Imagen de la película -->
+        <div class="card-image-container">
+          <img
+            [src]="
+              pelicula.poster_path
+                ? 'https://image.tmdb.org/t/p/w500' + pelicula.poster_path
+                : 'assets/images/no-image.jpg'
+            "
+            [alt]="pelicula.title"
+            class="card-image"
+            loading="lazy"
+          />
+
+          <!-- Overlay con información -->
+          <div class="card-overlay">
+            <!-- Rating -->
+            <div class="rating-badge">
+              <i class="fas fa-star"></i>
+              <span>{{
+                (pelicula.vote_average | number : "1.1-1") || "N/A"
+              }}</span>
+            </div>
+
+            <!-- Clasificación de edad -->
+            <div class="age-rating">
+              {{ pelicula.clasificacionEdad }}
+            </div>
+
+            <!-- Botón de favoritos -->
+            <button
+              class="favorite-btn"
+              [class.is-favorite]="esFavorita(pelicula.id)"
+              (click)="toggleFavorito(pelicula, $event)"
+              [attr.aria-label]="
+                esFavorita(pelicula.id)
+                  ? 'Quitar de favoritos'
+                  : 'Agregar a favoritos'
+              "
+            >
+              <i class="fas fa-heart"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Contenido de la card -->
+        <div class="card-content">
+          <h3 class="movie-title">{{ pelicula.title }}</h3>
+
+          <div class="movie-badges">
+            <span class="movie-genre-badge">
+              <i class="fas fa-tag"></i>
+              {{ pelicula.genre_ids?.length ? "Acción, Drama" : "Película" }}
+            </span>
+            <span
+              class="movie-status-badge estreno"
+              *ngIf="pelicula.vote_average > 7.5"
+            >
+              ESTRENO
+            </span>
+            <span
+              class="movie-status-badge cartelera"
+              *ngIf="pelicula.vote_average <= 7.5"
+            >
+              CARTELERA
+            </span>
+            <span class="movie-rating-text">
+              +{{ pelicula.clasificacionEdad }}
+            </span>
+          </div>
+
+          <div class="movie-meta">
+            <span class="duration">
+              <i class="fas fa-clock"></i>
+              {{ (pelicula.id % 60) + 90 }} min
+            </span>
+          </div>
+
+          <p class="movie-description">
+            {{
+              pelicula.overview?.substring(0, 100) ||
+                "Descripción no disponible"
+            }}
+            <span *ngIf="pelicula.overview && pelicula.overview.length > 100"
+              >...</span
+            >
+          </p>
+        </div>
+
+        <!-- Acciones de la card -->
+        <div class="card-actions">
+          <button
+            class="btn-info"
+            (click)="verDetalles(pelicula.id); $event.stopPropagation()"
+            title="Ver información completa"
+          >
+            <i class="fas fa-info-circle"></i>
+          </button>
+
+          <button
+            class="btn-comprar-entradas"
+            (click)="verDetalles(pelicula.id); $event.stopPropagation()"
+          >
+            <i class="fas fa-ticket-alt"></i>
+            COMPRAR ENTRADA
+          </button>
+        </div>
       </div>
     </div>
+  </div>
 
-    <!-- Película 2 -->
-    <div class="movie-card">
-      <div class="movie-poster">
-        <img
-          src="assets/images/batalla-otra.jpg"
-          alt="Una Batalla tras Otra"
-          class="poster-img"
-        />
-        <div class="movie-rating">+16</div>
-        <div class="movie-duration">2h 30m</div>
-      </div>
-      <div class="movie-info">
-        <h3 class="movie-title">UNA BATALLA TRAS OTRA</h3>
-        <p class="movie-details">2D - D-BOX - PREMIUM CLASS</p>
-        <button class="select-btn">SELECCIONAR HORARIOS</button>
-      </div>
-    </div>
+  <!-- Botón Ver Más -->
+  <div class="ver-mas-section" *ngIf="peliculas.length > peliculasMostradas">
+    <button class="btn-ver-mas" (click)="verMasPeliculas()">
+      {{
+        mostrarTodasLasPeliculas ? "Ver Menos Películas" : "Ver Más Películas"
+      }}
+      <i
+        class="fas"
+        [class.fa-chevron-down]="!mostrarTodasLasPeliculas"
+        [class.fa-chevron-up]="mostrarTodasLasPeliculas"
+      ></i>
+    </button>
+  </div>
 
-    <!-- Película 3 -->
-    <div class="movie-card">
-      <div class="movie-poster">
-        <img
-          src="assets/images/avatar2.jpg"
-          alt="Avatar 2"
-          class="poster-img"
-        />
-        <div class="movie-rating">+13</div>
-        <div class="movie-duration">3h 12m</div>
-      </div>
-      <div class="movie-info">
-        <h3 class="movie-title">AVATAR: EL CAMINO DEL AGUA (2022)</h3>
-        <p class="movie-details">3D - D-BOX - 4D E-MOTION</p>
-        <button class="select-btn">SELECCIONAR HORARIOS</button>
-      </div>
-    </div>
-
-    <!-- Película 4 -->
-    <div class="movie-card">
-      <div class="movie-poster">
-        <img
-          src="assets/images/demon-slayer.jpg"
-          alt="Demon Slayer"
-          class="poster-img"
-        />
-        <div class="movie-rating">+16</div>
-        <div class="movie-duration">2h 35m</div>
-      </div>
-      <div class="movie-info">
-        <h3 class="movie-title">DEMON SLAYER: CASTILLO INFINITO</h3>
-        <p class="movie-details">2D - 4D E-MOTION - D-BOX - XD DIGITAL</p>
-        <button class="select-btn">SELECCIONAR HORARIOS</button>
-      </div>
+  <!-- Mensaje cuando no hay películas -->
+  <div class="no-movies" *ngIf="peliculasFiltradas.length === 0">
+    <div class="no-movies-content">
+      <i class="fas fa-film"></i>
+      <h3>No se encontraron películas</h3>
+      <p *ngIf="!filtrosAplicados">
+        No hay películas disponibles en este momento.
+      </p>
+      <p *ngIf="filtrosAplicados">
+        No hay películas disponibles con los filtros:
+        <strong>{{ textoFiltrosAplicados }}</strong>
+      </p>
+      <button
+        class="btn-primary"
+        (click)="limpiarFiltros()"
+        *ngIf="filtrosAplicados"
+      >
+        Limpiar Filtros
+      </button>
     </div>
   </div>
 </div>

@@ -30,6 +30,22 @@ export class PelirandomComponent implements OnInit {
     this.apiMovieService.getcategorias().subscribe((data) => {
       this.categorias = data.genres;
     });
+
+    // Función invisible que activa descuento del 15% por usar PeliRandom
+    this.activarDescuentoPeliRandom();
+  }
+
+  // Función invisible para activar descuento PeliRandom
+  private activarDescuentoPeliRandom(): void {
+    localStorage.setItem(
+      'descuentoPeliRandom',
+      JSON.stringify({
+        activo: true,
+        porcentaje: 15,
+        fecha: new Date().toISOString(),
+      })
+    );
+    console.log('Descuento PeliRandom activado: 15%');
   }
 
   onCheckboxChange(event: Event, item: any): void {

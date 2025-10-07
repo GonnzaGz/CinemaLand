@@ -445,6 +445,68 @@
   font-size: 1.3rem;
 }
 
+/* PeliRandom Discount */
+.pelirandom-discount {
+  background: linear-gradient(
+    135deg,
+    rgba(212, 175, 55, 0.1),
+    rgba(244, 228, 188, 0.1)
+  ) !important;
+  border: 1px solid rgba(212, 175, 55, 0.3) !important;
+}
+
+.pelirandom-discount .discount-icon {
+  color: #d4af37;
+}
+
+.pelirandom-discount .discount-title {
+  color: #d4af37;
+}
+
+.pelirandom-discount .discount-type {
+  color: #f4e4bc;
+}
+
+.pelirandom-discount .discount-amount {
+  color: #d4af37;
+}
+
+/* Total Discount Section */
+.total-discount-section {
+  background: linear-gradient(
+    135deg,
+    rgba(147, 51, 234, 0.1),
+    rgba(168, 85, 247, 0.1)
+  ) !important;
+  border: 1px solid rgba(147, 51, 234, 0.3) !important;
+  border-radius: 12px;
+  padding: 1rem !important;
+  margin: 1rem 0 !important;
+}
+
+.total-discount-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.total-discount-details {
+  flex: 1;
+}
+
+.total-discount-title {
+  color: #a855f7;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.total-discount-amount {
+  color: #a855f7;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
 /* Buttons */
 .btn {
   padding: 14px 28px;

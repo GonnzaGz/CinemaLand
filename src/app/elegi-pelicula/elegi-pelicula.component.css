@@ -1,240 +1,691 @@
+/* Contenedor principal */
 .elegi-pelicula-container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%);
-  color: #f1f1f1;
-  padding: 20px;
+  background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 50%, #0a0a0a 100%);
+  padding: 40px 20px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
+/* Header */
 .page-header {
   text-align: center;
-  padding: 40px 0;
+  margin-bottom: 50px;
+  padding: 0 20px;
 }
 
 .page-header h1 {
-  font-size: 2rem;
+  font-size: 3rem;
+  font-weight: bold;
   color: white;
-  margin: 0;
-  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 15px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 .highlight {
-  color: #e74c3c;
-  font-weight: 800;
+  color: #d4af37;
+  text-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
 }
 
-/* Calendario */
-.calendar-section {
-  margin: 40px 0;
+.subtitle {
+  font-size: 1.2rem;
+  color: #cccccc;
+  margin-top: 10px;
+  font-weight: 300;
 }
 
-.calendar-nav {
+/* Filtros con botones como en página principal */
+.filtros-container {
+  margin: 30px 0;
+  padding: 20px;
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  border-radius: 15px;
+  border: 1px solid #d4af37;
+  box-shadow: 0 8px 32px rgba(212, 175, 55, 0.1);
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.filtros-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 20px;
+  align-items: center;
+  justify-items: center;
+}
+
+.filtro-grupo {
   display: flex;
+  flex-direction: column;
+  gap: 8px;
   align-items: center;
   justify-content: center;
-  gap: 20px;
-  background: rgba(255, 255, 255, 0.05);
-  padding: 20px;
-  border-radius: 15px;
-  max-width: 800px;
-  margin: 0 auto;
+  width: 100%;
 }
 
-.nav-btn {
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
-  border: none;
-  padding: 10px 15px;
-  border-radius: 50%;
-  cursor: pointer;
-  font-size: 1.2rem;
-  transition: all 0.3s ease;
-}
-
-.nav-btn:hover {
-  background: rgba(212, 175, 55, 0.3);
-}
-
-.calendar-days {
-  display: flex;
-  gap: 10px;
-}
-
-.day-item {
-  text-align: center;
-  padding: 15px 20px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 10px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  min-width: 80px;
-}
-
-.day-item.active {
-  background: linear-gradient(135deg, #d4af37, #b8860b);
-  color: black;
-}
-
-.day-item:hover:not(.active) {
-  background: rgba(255, 255, 255, 0.2);
-}
-
-.day-name {
-  display: block;
-  font-weight: 600;
+.filtro-label {
+  font-family: "Ubuntu", sans-serif;
   font-size: 0.9rem;
-}
-
-.day-date {
+  font-weight: 600;
+  color: #d4af37;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 5px;
+  text-align: center;
+  width: 100%;
   display: block;
-  font-size: 0.8rem;
-  margin-top: 5px;
-  opacity: 0.8;
 }
 
-/* Filtros */
-.filters-section {
-  margin: 40px 0;
-}
-
-.filter-group {
+.filtro-opciones {
   display: flex;
-  gap: 20px;
-  justify-content: center;
+  gap: 8px;
   flex-wrap: wrap;
+  justify-content: center;
 }
 
-.filter-select {
-  padding: 12px 20px;
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 8px;
-  font-size: 1rem;
+.filtro-btn {
+  padding: 6px 12px;
+  background: transparent;
+  border: 2px solid #444;
+  border-radius: 20px;
+  color: #ffffff;
+  font-family: "Ubuntu", sans-serif;
+  font-size: 0.8rem;
+  font-weight: 500;
   cursor: pointer;
-  min-width: 150px;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
 }
 
-.filter-select option {
-  background: #2d2d2d;
-  color: white;
+.filtro-btn:hover {
+  border-color: #d4af37;
+  color: #d4af37;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2);
+}
+
+.filtro-btn.active {
+  background: linear-gradient(135deg, #d4af37 0%, #f4d03f 100%);
+  border-color: #d4af37;
+  color: #1a1a1a;
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+}
+
+.filtro-btn i {
+  font-size: 0.8rem;
+}
+
+/* Contador de resultados */
+.results-info {
+  max-width: 1400px;
+  margin: 20px auto;
+  padding: 0 20px;
+}
+
+.results-count {
+  background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  border-radius: 10px;
+  padding: 12px 20px;
+  color: #ffffff;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.results-count i {
+  color: #d4af37;
+  margin-right: 8px;
 }
 
 /* Grid de películas */
-.movies-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 30px;
+.peliculas-grid {
   max-width: 1400px;
   margin: 0 auto;
+  padding: 0 20px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
-.movie-card {
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 15px;
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(
+    5,
+    1fr
+  ); /* 5 columnas iguales como en página principal */
+  gap: 25px;
+  width: 100%;
+  max-width: 1400px;
+  align-items: stretch;
+}
+
+/* Tarjetas modernas de películas */
+.pelicula-card-modern {
+  background: linear-gradient(
+    145deg,
+    rgba(40, 40, 40, 0.9),
+    rgba(20, 20, 20, 0.9)
+  );
+  border-radius: 20px;
   overflow: hidden;
-  transition: all 0.3s ease;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid rgba(212, 175, 55, 0.1);
+  backdrop-filter: blur(10px);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%; /* Ancho completo de la columna */
+  height: 600px; /* Aumentar altura para dar más espacio */
+  min-height: 600px;
+  max-height: 600px;
+  cursor: pointer;
 }
 
-.movie-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 30px rgba(212, 175, 55, 0.2);
+.pelicula-card-modern:hover {
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  border-color: rgba(212, 175, 55, 0.3);
 }
 
-.movie-poster {
+.card-image-container {
   position: relative;
   overflow: hidden;
+  height: 350px; /* Altura como página principal */
+  min-height: 350px;
+  max-height: 350px;
+  flex: 0 0 350px;
 }
 
-.poster-img {
+.card-image {
   width: 100%;
-  height: 400px;
+  height: 100%;
   object-fit: cover;
+  transition: transform 0.4s ease;
 }
 
-.movie-rating {
+.pelicula-card-modern:hover .card-image {
+  transform: scale(1.1);
+}
+
+.card-overlay {
   position: absolute;
-  top: 15px;
-  left: 15px;
-  background: linear-gradient(135deg, #e74c3c, #c0392b);
-  color: white;
-  padding: 5px 10px;
-  border-radius: 15px;
-  font-weight: 600;
-  font-size: 0.9rem;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0.1) 50%,
+    rgba(0, 0, 0, 0.8) 100%
+  );
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 15px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
-.movie-duration {
+.pelicula-card-modern:hover .card-overlay {
+  opacity: 1;
+}
+
+.rating-badge {
+  background: rgba(212, 175, 55, 0.9);
+  color: black;
+  padding: 6px 12px;
+  border-radius: 15px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  backdrop-filter: blur(10px);
+}
+
+.age-rating {
   position: absolute;
   top: 15px;
   right: 15px;
-  background: rgba(0, 0, 0, 0.7);
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
   color: white;
-  padding: 5px 10px;
-  border-radius: 15px;
-  font-size: 0.9rem;
+  padding: 4px 8px;
+  border-radius: 8px;
+  font-size: 0.7rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
 }
 
-.movie-info {
-  padding: 20px;
+.favorite-btn {
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  z-index: 15;
+}
+
+.favorite-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.1);
+}
+
+.favorite-btn.is-favorite {
+  background: linear-gradient(135deg, #ff4444, #cc0000);
+  color: white;
+}
+
+.card-content {
+  padding: 15px 20px 10px; /* Reducir padding bottom para dar espacio a botones */
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  overflow: hidden;
+}
+
+/* Acciones de la card dentro del contenido */
+.card-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-top: auto;
+  padding: 15px 20px 20px; /* Aumentar padding superior */
+  border-top: 1px solid rgba(255, 255, 255, 0.1); /* Línea sutil de separación */
 }
 
 .movie-title {
+  font-size: 1.1rem;
+  font-weight: bold;
   color: white;
-  font-size: 1.2rem;
-  font-weight: 700;
-  margin: 0 0 10px 0;
+  margin-bottom: 12px;
   line-height: 1.3;
-}
-
-.movie-details {
-  color: rgba(255, 255, 255, 0.8);
-  font-size: 0.9rem;
-  margin: 5px 0;
-}
-
-.movie-genre {
-  color: rgba(255, 255, 255, 0.6);
-  font-size: 0.8rem;
-  margin: 5px 0 20px 0;
-}
-
-.select-btn {
-  width: 100%;
-  padding: 12px;
-  background: linear-gradient(135deg, #d4af37, #b8860b);
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
+  height: auto;
+  min-height: 2.6rem;
+  max-height: 3.9rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
   text-transform: uppercase;
 }
 
-.select-btn:hover {
-  background: linear-gradient(135deg, #b8860b, #9a7209);
+.movie-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 10px;
+  align-items: center;
+}
+
+.movie-genre-badge {
+  background: linear-gradient(135deg, #4ade80, #16a34a);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 8px;
+  font-size: 0.7rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.movie-status-badge {
+  padding: 4px 8px;
+  border-radius: 8px;
+  font-size: 0.7rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.movie-status-badge.estreno {
+  background: linear-gradient(135deg, #dc2626, #b91c1c);
+  color: white;
+}
+
+.movie-status-badge.cartelera {
+  background: linear-gradient(135deg, #16a34a, #15803d);
+  color: white;
+}
+
+.movie-rating-text {
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 8px;
+  font-size: 0.7rem;
+  font-weight: bold;
+}
+
+.movie-meta {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.genre {
+  color: #d4af37;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.duration {
+  color: #cccccc;
+  font-size: 0.8rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.duration i {
+  color: #d4af37;
+  font-size: 0.7rem;
+}
+
+.movie-description {
+  color: #cccccc;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  margin-bottom: 15px; /* Espaciado para separar de los botones */
+}
+
+.btn-comprar-entradas {
+  flex: 1;
+  background: linear-gradient(135deg, #d4af37, #b8860b);
+  color: black;
+  border: none;
+  padding: 8px 10px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  height: 35px;
+  min-height: 35px;
+  white-space: nowrap;
+}
+
+.btn-comprar-entradas:hover {
+  background: linear-gradient(135deg, #b8860b, #d4af37);
   transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(212, 175, 55, 0.4);
+}
+
+.btn-favoritos {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 10px;
+  border-radius: 50%;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  backdrop-filter: blur(10px);
+  flex-shrink: 0;
+}
+
+.btn-favoritos:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(212, 175, 55, 0.5);
+}
+
+.btn-favoritos.is-favorite {
+  background: linear-gradient(135deg, #ff4444, #cc0000);
+  color: white;
+  border-color: transparent;
+}
+
+.btn-info {
+  background: rgba(255, 255, 255, 0.1);
+  color: #d4af37;
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  padding: 8px;
+  border-radius: 50%;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 35px;
+  height: 35px;
+  backdrop-filter: blur(10px);
+  flex-shrink: 0;
+}
+
+.btn-info:hover {
+  background: rgba(212, 175, 55, 0.2);
+  border-color: rgba(212, 175, 55, 0.5);
+  transform: scale(1.1);
+}
+
+/* Ver más películas */
+.ver-mas-section {
+  text-align: center;
+  margin-top: 60px;
+  padding: 0 20px;
+}
+
+.btn-ver-mas {
+  background: linear-gradient(135deg, #d4af37, #b8860b);
+  color: black;
+  border: none;
+  padding: 15px 40px;
+  border-radius: 25px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.btn-ver-mas:hover {
+  background: linear-gradient(135deg, #b8860b, #d4af37);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(212, 175, 55, 0.3);
+}
+
+/* Sin películas */
+.no-movies {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  padding: 40px 20px;
+}
+
+.no-movies-content {
+  text-align: center;
+  color: white;
+  max-width: 500px;
+}
+
+.no-movies-content i {
+  font-size: 4rem;
+  color: #d4af37;
+  margin-bottom: 20px;
+}
+
+.no-movies-content h3 {
+  font-size: 2rem;
+  margin-bottom: 15px;
+  font-weight: bold;
+}
+
+.no-movies-content p {
+  font-size: 1.1rem;
+  color: #cccccc;
+  margin-bottom: 30px;
+  line-height: 1.6;
 }
 
 /* Responsive */
-@media (max-width: 768px) {
-  .calendar-nav {
-    flex-direction: column;
+@media (max-width: 1600px) {
+  .grid-container {
+    grid-template-columns: repeat(4, 1fr); /* 4 columnas */
+    gap: 20px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .grid-container {
+    grid-template-columns: repeat(3, 1fr); /* 3 columnas */
+    gap: 18px;
+  }
+
+  .filtros-row {
+    grid-template-columns: 1fr;
     gap: 15px;
   }
 
-  .calendar-days {
-    flex-wrap: wrap;
-    justify-content: center;
+  .filtro-grupo {
+    gap: 6px;
+  }
+}
+
+@media (max-width: 900px) {
+  .page-header h1 {
+    font-size: 2rem;
   }
 
-  .filter-group {
-    flex-direction: column;
-    align-items: center;
+  .filtros-container {
+    padding: 15px;
   }
 
-  .movies-grid {
+  .filtros-row {
     grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .filtro-label {
+    font-size: 0.85rem;
+  }
+
+  .filtro-btn {
+    padding: 4px 8px;
+    font-size: 0.75rem;
+  }
+
+  .grid-container {
+    grid-template-columns: repeat(2, 1fr); /* 2 columnas */
+    gap: 16px;
+  }
+
+  .pelicula-card-modern {
+    height: 480px; /* Ajustar altura para móvil */
+    min-height: 480px;
+    max-height: 480px;
+  }
+
+  .card-image-container {
+    height: 300px;
+    min-height: 300px;
+    max-height: 300px;
+  }
+}
+@media (max-width: 480px) {
+  .elegi-pelicula-container {
+    padding: 20px 10px;
+  }
+
+  .page-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .filtros-container {
+    padding: 12px;
+    margin: 20px 10px;
+  }
+
+  .filtro-grupo {
+    gap: 8px;
+  }
+
+  .filtro-label {
+    font-size: 0.85rem;
+  }
+
+  .filtro-btn {
+    padding: 4px 8px;
+    font-size: 0.75rem;
+  }
+
+  .peliculas-grid {
+    padding: 0 10px;
+  }
+
+  .grid-container {
+    grid-template-columns: 1fr; /* 1 columna en móvil */
+    gap: 15px;
+  }
+
+  .pelicula-card-modern {
+    height: 480px; /* Mantener altura consistente */
+    min-height: 480px;
+    max-height: 480px;
+    max-width: 350px;
+    margin: 0 auto;
+  }
+
+  .card-image-container {
+    height: 300px;
+    min-height: 300px;
+    max-height: 300px;
+  }
+
+  .card-actions {
+    padding: 10px 15px 15px; /* Reducir padding en móvil */
+  }
+
+  .btn-comprar-entradas {
+    font-size: 0.7rem; /* Texto más pequeño en móvil */
+    padding: 8px 10px;
   }
 }
