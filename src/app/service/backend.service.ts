@@ -66,7 +66,7 @@ export class BackendService {
   }
 
   public getHorariosbyId(id: number) {
-    return this.http.get(`${this.url}/horarios`);
+    return this.http.get(`${this.url}/horarios/${id}`);
   }
 
   public postHorarios(elemento: any) {

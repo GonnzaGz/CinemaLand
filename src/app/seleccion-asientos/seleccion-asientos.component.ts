@@ -45,7 +45,7 @@ export class SeleccionAsientosComponent implements OnInit {
   sucursales: any = [];
   sucursalSeleccionada: string | null = null;
   modoPago: string | null = null;
-  horarioSeleccionado: any = []; // Nuevo campo para horario
+  horarioSeleccionado: string = ''; // Cambiado de array a string
   diaCompra: string = new Date().toLocaleDateString(); // Fecha actual de la compra
   horaCompra: string = new Date().toLocaleTimeString(); // Hora de la compra
   sucursalCompletaHorarios: any = [];
@@ -232,15 +232,35 @@ export class SeleccionAsientosComponent implements OnInit {
   generarFilas() {
     const chunkSize = 15;
     this.filasAsientos = [];
+
+    if (!this.asientosFiltrados || this.asientosFiltrados.length === 0) {
+      console.warn('No hay asientos filtrados para generar filas');
+      return;
+    }
+
     for (let i = 0; i < this.asientosFiltrados.length; i += chunkSize) {
       this.filasAsientos.push(this.asientosFiltrados.slice(i, i + chunkSize));
     }
+
+    console.log('Filas de asientos generadas:', this.filasAsientos.length);
   }
   onHorarioChange(e: any) {
+    console.log('Horario seleccionado:', e);
+    console.log('Datos completos de sucursal:', this.sucursalCompletaHorarios);
+
     this.asientosFiltrados = this.sucursalCompletaHorarios.filter(
       (item: any) => item.HORARIO === e
     );
+
+    console.log('Asientos filtrados:', this.asientosFiltrados);
+    console.log(
+      'Cantidad de asientos filtrados:',
+      this.asientosFiltrados.length
+    );
+
     this.generarFilas();
+
+    console.log('Filas generadas:', this.filasAsientos);
   }
 
   async confirmarCompra(): Promise<void> {

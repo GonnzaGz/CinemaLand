@@ -134,7 +134,14 @@
 
         <div class="screen"></div>
 
-        <div class="seats-grid">
+        <!-- Mensaje cuando no hay asientos disponibles -->
+        <div *ngIf="filasAsientos.length === 0" class="no-seats-message">
+          <p>No hay asientos disponibles para este horario.</p>
+          <p>Por favor, selecciona otro horario.</p>
+        </div>
+
+        <!-- Grid de asientos cuando hay datos -->
+        <div *ngIf="filasAsientos.length > 0" class="seats-grid">
           <div *ngFor="let fila of filasAsientos" class="seat-row">
             <span
               class="row-label"
