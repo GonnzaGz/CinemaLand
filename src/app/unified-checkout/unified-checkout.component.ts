@@ -441,7 +441,7 @@ export class UnifiedCheckoutComponent implements OnInit, OnDestroy {
       // Importar jsPDF y QRCode de forma más específica
       console.log('📦 Importando jsPDF y QRCode...');
       const jsPDF = (await import('jspdf')).default;
-      const QRCode = await import('qrcode');
+      const QRCode = (await import('qrcode')).default;
       console.log('✅ Librerías importadas exitosamente');
 
       const pdf = new jsPDF();
