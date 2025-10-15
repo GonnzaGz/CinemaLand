@@ -310,17 +310,19 @@
           }}</span>
         </div>
 
-        <button
-          class="btn btn-primary"
-          [disabled]="!modoPago"
-          (click)="confirmarCompra()"
-        >
-          <i class="fas fa-ticket-alt"></i>
-          <span *ngIf="!modoPago; else confirmText"
-            >Selecciona método de pago</span
+        <div class="button-container">
+          <button
+            class="btn btn-primary"
+            [disabled]="!modoPago"
+            (click)="confirmarCompra()"
           >
-          <ng-template #confirmText>Confirmar compra</ng-template>
-        </button>
+            <i class="fas fa-ticket-alt"></i>
+            <span *ngIf="!modoPago; else confirmText"
+              >Selecciona método de pago</span
+            >
+            <ng-template #confirmText>Confirmar compra</ng-template>
+          </button>
+        </div>
       </div>
 
       <!-- Success Message -->
@@ -330,10 +332,15 @@
           Tu compra ha sido confirmada con éxito. Hemos generado un PDF con los
           detalles de tu compra y el código QR. ¡Disfruta de tu película! 🎬
         </p>
-        <button class="btn btn-secondary" (click)="redirigirAPaginaPrincipal()">
-          <i class="fas fa-home"></i>
-          Volver al inicio
-        </button>
+        <div class="button-container">
+          <button
+            class="btn btn-secondary"
+            (click)="redirigirAPaginaPrincipal()"
+          >
+            <i class="fas fa-home"></i>
+            Volver al inicio
+          </button>
+        </div>
       </div>
     </div>
   </section>

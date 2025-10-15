@@ -71,9 +71,17 @@ export class SeleccionAsientosComponent implements OnInit {
         this.obtenerDetallesDePelicula(this.movieId);
       }
     });
+
+    // Verificar si viene de PeliRandom mediante queryParams
+    this.route.queryParams.subscribe((params) => {
+      const fromPeliRandom = params['fromPeliRandom'];
+      if (fromPeliRandom === 'true') {
+        this.cargarDescuentoPeliRandom();
+      }
+    });
+
     this.generaSucursal();
     this.cargarDescuentoSocial();
-    this.cargarDescuentoPeliRandom();
   }
 
   // Getter para debuggear la condición de visibilidad
@@ -245,7 +253,6 @@ export class SeleccionAsientosComponent implements OnInit {
   }
 
   generarFilas() {
-    const chunkSize = 15;
     this.filasAsientos = [];
 
     if (!this.asientosFiltrados || this.asientosFiltrados.length === 0) {
@@ -253,11 +260,31 @@ export class SeleccionAsientosComponent implements OnInit {
       return;
     }
 
-    for (let i = 0; i < this.asientosFiltrados.length; i += chunkSize) {
-      this.filasAsientos.push(this.asientosFiltrados.slice(i, i + chunkSize));
-    }
+    // Agrupar asientos por la primera letra de ASIENTO (A, B, C, etc.)
+    const filasPorLetra: { [key: string]: any[] } = {};
+
+    this.asientosFiltrados.forEach((asiento: any) => {
+      const letra = asiento.ASIENTO?.[0] || 'A'; // Primera letra del asiento
+      if (!filasPorLetra[letra]) {
+        filasPorLetra[letra] = [];
+      }
+      filasPorLetra[letra].push(asiento);
+    });
+
+    // Convertir a array ordenado alfabéticamente
+    const letrasOrdenadas = Object.keys(filasPorLetra).sort();
+    letrasOrdenadas.forEach((letra) => {
+      // Ordenar asientos dentro de cada fila por número
+      filasPorLetra[letra].sort((a, b) => {
+        const numA = parseInt(a.ASIENTO?.slice(1) || '0');
+        const numB = parseInt(b.ASIENTO?.slice(1) || '0');
+        return numA - numB;
+      });
+      this.filasAsientos.push(filasPorLetra[letra]);
+    });
 
     console.log('Filas de asientos generadas:', this.filasAsientos.length);
+    console.log('Filas por letra:', filasPorLetra);
   }
   onHorarioChange(e: any) {
     console.log('Horario seleccionado:', e);

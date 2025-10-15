@@ -600,15 +600,22 @@
 .success-title {
   font-size: 2rem;
   font-weight: bold;
-  color: #22c55e;
+  color: #d4af37;
   margin-bottom: 1rem;
 }
 
 .success-description {
   font-size: 1.1rem;
-  color: #cccccc;
+  color: #ffffff;
   line-height: 1.6;
   margin-bottom: 2rem;
+}
+
+/* Button container for centering */
+.button-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 1.5rem;
 }
 
 /* Loading States */
