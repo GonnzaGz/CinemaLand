@@ -76,6 +76,21 @@ export class SeleccionAsientosComponent implements OnInit {
     this.cargarDescuentoPeliRandom();
   }
 
+  // Getter para debuggear la condición de visibilidad
+  get puedeSeleccionarAsientos(): boolean {
+    const resultado = !!(
+      this.sucursalSeleccionada &&
+      this.horarioSeleccionado &&
+      this.horarioSeleccionado.length > 0
+    );
+    console.log('Puede seleccionar asientos:', resultado, {
+      sucursal: this.sucursalSeleccionada,
+      horario: this.horarioSeleccionado,
+      horarioLength: this.horarioSeleccionado?.length,
+    });
+    return resultado;
+  }
+
   obtenerDetallesDePelicula(id: string): void {
     this.apiMovieService.getDetalleMovie(id).subscribe(
       (data: any) => {

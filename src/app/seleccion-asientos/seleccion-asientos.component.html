@@ -123,10 +123,7 @@
       </div>
 
       <!-- Seat Selection -->
-      <div
-        *ngIf="sucursalSeleccionada && horarioSeleccionado"
-        class="seat-selection-container fade-in"
-      >
+      <div *ngIf="puedeSeleccionarAsientos" class="seat-selection-container">
         <h3 class="seats-title">
           <i class="fas fa-couch"></i>
           Selecciona tus asientos
