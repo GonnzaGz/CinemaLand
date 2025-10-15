@@ -438,9 +438,9 @@ export class UnifiedCheckoutComponent implements OnInit, OnDestroy {
   async generatePurchaseReceipt(order: Order): Promise<void> {
     console.log('🎯 generatePurchaseReceipt() iniciado con orden:', order);
     try {
-      // Importar jsPDF y QRCode
+      // Importar jsPDF y QRCode de forma más específica
       console.log('📦 Importando jsPDF y QRCode...');
-      const { jsPDF } = await import('jspdf');
+      const jsPDF = (await import('jspdf')).default;
       const QRCode = await import('qrcode');
       console.log('✅ Librerías importadas exitosamente');
 

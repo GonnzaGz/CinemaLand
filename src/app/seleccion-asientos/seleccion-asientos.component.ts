@@ -509,6 +509,14 @@ export class SeleccionAsientosComponent implements OnInit {
 
   nextStep(): void {
     console.log('nextStep() llamado. currentStep:', this.currentStep);
+
+    // Si estamos en el paso 2 (selección de asientos) y queremos ir al paso 3 (pago)
+    if (this.currentStep === 2) {
+      console.log('Abriendo modal de checkout desde step 2');
+      this.goToCheckout();
+      return;
+    }
+
     if (this.currentStep < 4) {
       this.goToStep(this.currentStep + 1);
     }
@@ -854,13 +862,18 @@ export class SeleccionAsientosComponent implements OnInit {
 
   // Método para preparar y abrir el checkout modal
   openCheckoutModal(): void {
+    console.log('🎯 openCheckoutModal() iniciado');
+    console.log('Asientos seleccionados:', this.asientosSeleccionados);
+
     // Preparar el carrito con los asientos seleccionados
     this.cartService.clearCart(); // Limpiar carrito anterior
 
     // Crear el item del carrito basado en la selección de asientos
     const asientos = this.asientosSeleccionados
-      .map((a: any) => a.ASIENTO)
+      .map((a: any) => a.ASIENTO || a.nombre || a.id)
       .join(', ');
+
+    console.log('Asientos formateados:', asientos);
 
     const ticketProduct = {
       id: this.movieId || '',
@@ -911,7 +924,9 @@ export class SeleccionAsientosComponent implements OnInit {
     }
 
     // Abrir el modal
+    console.log('🚀 Abriendo modal de checkout...');
     this.showCheckoutModal = true;
+    console.log('✅ showCheckoutModal = true');
   }
 
   // Método para cerrar el checkout modal
