@@ -175,7 +175,7 @@
       <!-- Payment Method -->
       <div
         *ngIf="horarioSeleccionado && asientosSeleccionados.length > 0"
-        class="step-card active fade-in"
+        class="step-card active"
       >
         <div class="step-header">
           <div class="step-number">3</div>
@@ -202,10 +202,7 @@
       </div>
 
       <!-- Purchase Summary -->
-      <div
-        *ngIf="asientosSeleccionados.length > 0"
-        class="purchase-summary fade-in"
-      >
+      <div *ngIf="asientosSeleccionados.length > 0" class="purchase-summary">
         <h3 class="summary-title">
           <i class="fas fa-receipt"></i>
           Resumen de compra
@@ -327,7 +324,7 @@
       </div>
 
       <!-- Success Message -->
-      <div *ngIf="compraConfirmada" class="success-message fade-in">
+      <div *ngIf="compraConfirmada" class="success-message">
         <h2 class="success-title">✨ ¡Gracias por tu compra! ✨</h2>
         <p class="success-description">
           Tu compra ha sido confirmada con éxito. Hemos generado un PDF con los

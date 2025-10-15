@@ -125,6 +125,9 @@
   border-radius: 20px;
   padding: 2rem;
   transition: all 0.3s ease;
+  position: relative;
+  z-index: 5;
+  margin-bottom: 2rem;
 }
 
 .step-card:hover {
@@ -357,6 +360,8 @@
   border-radius: 20px;
   padding: 2rem;
   margin-bottom: 2rem;
+  position: relative;
+  z-index: 8;
 }
 
 .summary-title {
@@ -549,6 +554,8 @@
   background: linear-gradient(135deg, #d4af37, #b8860b);
   color: #1a1a1a;
   box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+  position: relative;
+  z-index: 12;
 }
 
 .btn-primary:hover:not(:disabled) {
@@ -586,6 +593,8 @@
   padding: 3rem 2rem;
   text-align: center;
   margin: 2rem 0;
+  position: relative;
+  z-index: 15;
 }
 
 .success-title {
