@@ -416,7 +416,11 @@
               <p><strong>Horario:</strong> {{ horarioSeleccionado }}</p>
               <p>
                 <strong>Asientos:</strong>
-                {{ asientosSeleccionados.map(a => a.ASIENTO).join(', ') }}
+                <span
+                  *ngFor="let asiento of asientosSeleccionados; let last = last"
+                >
+                  {{ asiento.ASIENTO }}<span *ngIf="!last">, </span>
+                </span>
               </p>
             </div>
 
