@@ -327,13 +327,29 @@ export class CartService {
   }
 
   private generateItemId(product: CartProduct, specificData?: any): string {
-    // Generar ID único basado en producto y datos específicos
+    // Generar ID único basado en producto y datos específicos, sin timestamp
+    // para que productos idénticos se agrupen correctamente
     const baseId = `${product.category}_${product.id}`;
     if (specificData) {
-      const dataHash = JSON.stringify(specificData);
+      // Ordenar las claves del objeto para que el hash sea consistente
+      const sortedData = this.sortObjectKeys(specificData);
+      const dataHash = JSON.stringify(sortedData);
       return `${baseId}_${btoa(dataHash).slice(0, 8)}`;
     }
     return baseId;
+  }
+
+  private sortObjectKeys(obj: any): any {
+    if (typeof obj !== 'object' || obj === null) return obj;
+    if (Array.isArray(obj)) return obj.map((item) => this.sortObjectKeys(item));
+
+    const sorted: any = {};
+    Object.keys(obj)
+      .sort()
+      .forEach((key) => {
+        sorted[key] = this.sortObjectKeys(obj[key]);
+      });
+    return sorted;
   }
 
   private generateOrderId(): string {

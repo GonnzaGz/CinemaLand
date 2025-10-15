@@ -152,7 +152,22 @@ export class CandyComponent implements OnInit {
 
   // Remover del carrito
   removeFromCart(productId: number) {
+    // Remover del carrito local
     this.cart = this.cart.filter((item) => item.product.id !== productId);
+
+    // También remover del CartService
+    // Buscar el item en el CartService por su patrón de ID
+    const cartItems = this.cartService.getCart();
+    const itemToRemove = cartItems.find(
+      (item: any) =>
+        item.product.category === 'candy' &&
+        item.product.id === productId.toString()
+    );
+
+    if (itemToRemove) {
+      this.cartService.removeFromCart(itemToRemove.id);
+    }
+
     this.saveCartToStorage();
   }
 
@@ -161,6 +176,19 @@ export class CandyComponent implements OnInit {
     const item = this.cart.find((item) => item.product.id === productId);
     if (item) {
       item.quantity = Math.max(1, quantity);
+
+      // También actualizar en CartService
+      const cartItems = this.cartService.getCart();
+      const serviceItem = cartItems.find(
+        (cartItem: any) =>
+          cartItem.product.category === 'candy' &&
+          cartItem.product.id === productId.toString()
+      );
+
+      if (serviceItem) {
+        this.cartService.updateQuantity(serviceItem.id, quantity);
+      }
+
       this.saveCartToStorage();
     }
   }

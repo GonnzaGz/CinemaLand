@@ -929,9 +929,7 @@ export class SeleccionAsientosComponent implements OnInit {
     console.log('Orden completada:', order);
     this.compraConfirmada = true;
     this.showCheckoutModal = false;
-
-    // Generar PDF automáticamente
-    this.generatePurchaseReceipt(order);
+    // El PDF se genera automáticamente en UnifiedCheckout
   }
 
   // Método para manejar orden fallida

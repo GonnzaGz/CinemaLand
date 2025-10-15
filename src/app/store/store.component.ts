@@ -260,7 +260,17 @@ export class StoreComponent implements OnInit {
     this.cart = this.cart.filter((item) => item.product.id !== productId);
 
     // También remover del CartService
-    this.cartService.removeFromCart(productId.toString());
+    // Buscar el item correcto en el CartService
+    const cartItems = this.cartService.getCart();
+    const itemToRemove = cartItems.find(
+      (item: any) =>
+        item.product.category === 'store' &&
+        item.product.id === productId.toString()
+    );
+
+    if (itemToRemove) {
+      this.cartService.removeFromCart(itemToRemove.id);
+    }
 
     this.saveCart();
     this.showNotification('Producto eliminado del carrito');
@@ -273,6 +283,19 @@ export class StoreComponent implements OnInit {
         this.removeFromCart(productId);
       } else if (quantity <= item.product.stock) {
         item.quantity = quantity;
+
+        // También actualizar en CartService
+        const cartItems = this.cartService.getCart();
+        const serviceItem = cartItems.find(
+          (cartItem: any) =>
+            cartItem.product.category === 'store' &&
+            cartItem.product.id === productId.toString()
+        );
+
+        if (serviceItem) {
+          this.cartService.updateQuantity(serviceItem.id, quantity);
+        }
+
         this.saveCart();
       } else {
         alert('Cantidad solicitada supera el stock disponible');
