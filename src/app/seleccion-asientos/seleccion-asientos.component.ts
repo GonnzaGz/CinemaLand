@@ -358,42 +358,13 @@ export class SeleccionAsientosComponent implements OnInit {
   generarFilas() {
     this.filasAsientos = [];
 
-    if (!this.asientosFiltrados || this.asientosFiltrados.length === 0) {
-      console.warn('No hay asientos filtrados para generar filas');
-      // Generar estructura estándar de cine: 10 filas de 15 asientos
-      this.generarEstructuraCine();
-      return;
-    }
-
-    // Si hay datos del backend, agrupar por letra
-    const filasPorLetra: { [key: string]: any[] } = {};
-
-    this.asientosFiltrados.forEach((asiento: any) => {
-      const letra = asiento.ASIENTO?.[0] || 'A';
-      if (!filasPorLetra[letra]) {
-        filasPorLetra[letra] = [];
-      }
-      filasPorLetra[letra].push(asiento);
-    });
-
-    // Convertir a array ordenado alfabéticamente
-    const letrasOrdenadas = Object.keys(filasPorLetra).sort();
-    letrasOrdenadas.forEach((letra) => {
-      // Ordenar asientos dentro de cada fila por número
-      filasPorLetra[letra].sort((a, b) => {
-        const numA = parseInt(a.ASIENTO?.slice(1) || '0');
-        const numB = parseInt(b.ASIENTO?.slice(1) || '0');
-        return numA - numB;
-      });
-      this.filasAsientos.push(filasPorLetra[letra]);
-    });
-
-    console.log('Filas de asientos generadas:', this.filasAsientos.length);
-    console.log('Filas por letra:', filasPorLetra);
+    // Siempre generar estructura estándar de cine: 10 filas (A-J) x 15 asientos (1-15)
+    this.generarEstructuraCine();
   }
 
   // Generar estructura estándar de cine: 10 filas (A-J) x 15 asientos (1-15)
   generarEstructuraCine() {
+    this.filasAsientos = []; // Limpiar array primero
     const letras = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
     const asientosPorFila = 15;
 
@@ -411,6 +382,8 @@ export class SeleccionAsientosComponent implements OnInit {
     });
 
     console.log('Estructura estándar de cine generada: 10 filas x 15 asientos');
+    console.log('Total de filas:', this.filasAsientos.length);
+    console.log('Asientos por fila:', this.filasAsientos[0]?.length);
   }
   onHorarioChange(e: any) {
     console.log('Horario seleccionado:', e);
@@ -779,14 +752,14 @@ export class SeleccionAsientosComponent implements OnInit {
 
       yPos += 10;
       pdf.setFont('helvetica', 'normal');
-      pdf.text(`Nombre: ${this.customerInfo.name}`, 20, yPos);
+      pdf.text(`Nombre: ${order.customerInfo.name}`, 20, yPos);
       yPos += 7;
-      pdf.text(`Email: ${this.customerInfo.email}`, 20, yPos);
+      pdf.text(`Email: ${order.customerInfo.email}`, 20, yPos);
       yPos += 7;
-      pdf.text(`Teléfono: ${this.customerInfo.phone}`, 20, yPos);
+      pdf.text(`Teléfono: ${order.customerInfo.phone}`, 20, yPos);
       yPos += 7;
       pdf.text(
-        `${this.customerInfo.documentType}: ${this.customerInfo.documentNumber}`,
+        `${order.customerInfo.documentType}: ${order.customerInfo.documentNumber}`,
         20,
         yPos
       );
@@ -956,6 +929,9 @@ export class SeleccionAsientosComponent implements OnInit {
     console.log('Orden completada:', order);
     this.compraConfirmada = true;
     this.showCheckoutModal = false;
+
+    // Generar PDF automáticamente
+    this.generatePurchaseReceipt(order);
   }
 
   // Método para manejar orden fallida
