@@ -12,11 +12,12 @@ import {
   PaymentInfo,
   Order,
 } from '../service/cart.service';
+import { UnifiedCheckoutComponent } from '../unified-checkout/unified-checkout.component';
 
 @Component({
   selector: 'app-seleccion-asientos',
   standalone: true,
-  imports: [CommonModule, FormsModule], // Add FormsModule here
+  imports: [CommonModule, FormsModule, UnifiedCheckoutComponent], // Add UnifiedCheckoutComponent here
   templateUrl: './seleccion-asientos.component.html',
   styleUrls: ['./seleccion-asientos.component.css'],
 })
@@ -39,10 +40,10 @@ export class SeleccionAsientosComponent implements OnInit {
   montoDescuentoTotal: number = 0;
   tipoDescuento: string = '';
 
-  // Filas de asientos
-  fila1 = this.generarAsientos('A', 5, 5000);
-  fila2 = this.generarAsientos('B', 5, 5000);
-  fila3 = this.generarAsientos('C', 5, 5000);
+  // Filas de asientos - 10 filas (A-J) x 15 asientos cada una
+  fila1 = this.generarAsientos('A', 15, 5000);
+  fila2 = this.generarAsientos('B', 15, 5000);
+  fila3 = this.generarAsientos('C', 15, 5000);
 
   // Almacena asientos seleccionados
   asientosSeleccionados: any = [];
@@ -94,6 +95,10 @@ export class SeleccionAsientosComponent implements OnInit {
   cardExpiry: string = '';
   cardCvv: string = '';
   termsAccepted: boolean = false;
+
+  // Unified checkout properties
+  showCheckoutModal: boolean = false;
+  allowPickupPayment: boolean = true; // Permitir pago en mostrador
 
   private apiMovieService = inject(ApipeliculasService);
   private router = inject(Router); // Inyectamos Router para la redirección
@@ -204,11 +209,11 @@ export class SeleccionAsientosComponent implements OnInit {
     }
     this.actualizarPrecios();
 
-    // Si hay asientos seleccionados y estamos en el paso 2, avanzar al paso 3
+    // Si hay asientos seleccionados y estamos en el paso 2, abrir checkout
     if (this.asientosSeleccionados.length > 0 && this.currentStep === 2) {
       // Pequeño delay para que el usuario vea la selección
       setTimeout(() => {
-        this.goToStep(3);
+        this.goToCheckout();
       }, 500);
     }
   }
@@ -875,5 +880,93 @@ export class SeleccionAsientosComponent implements OnInit {
     } catch (error) {
       console.error('Error generando el PDF de la entrada:', error);
     }
+  }
+
+  // ============= UNIFIED CHECKOUT INTEGRATION =============
+
+  // Método para preparar y abrir el checkout modal
+  openCheckoutModal(): void {
+    // Preparar el carrito con los asientos seleccionados
+    this.cartService.clearCart(); // Limpiar carrito anterior
+
+    // Crear el item del carrito basado en la selección de asientos
+    const asientos = this.asientosSeleccionados
+      .map((a: any) => a.ASIENTO)
+      .join(', ');
+
+    const ticketProduct = {
+      id: this.movieId || '',
+      name: `${this.movieDetails?.title} - ${asientos}`,
+      description: `Sucursal: ${this.sucursalSeleccionada} | Horario: ${this.horarioSeleccionado}`,
+      price: this.precioTotal / this.asientosSeleccionados.length, // Precio por entrada
+      image: this.movieDetails?.poster_path
+        ? `https://image.tmdb.org/t/p/w300/${this.movieDetails.poster_path}`
+        : '',
+      category: 'movie-ticket' as const,
+      type: 'cinema-ticket',
+      metadata: {
+        movieId: this.movieId,
+        cinema: this.sucursalSeleccionada,
+        schedule: this.horarioSeleccionado,
+        seats: asientos,
+        discounts: {
+          social: this.tieneDescuentoSocial,
+          peliRandom: this.tieneDescuentoPeliRandom,
+          totalDiscount: this.montoDescuentoTotal,
+        },
+      },
+    };
+
+    const specificData = {
+      cinema: this.sucursalSeleccionada,
+      schedule: this.horarioSeleccionado,
+      seats: this.asientosSeleccionados,
+      discounts: this.montoDescuentoTotal,
+    };
+
+    // Agregar al carrito
+    this.cartService.addToCart(
+      ticketProduct,
+      this.asientosSeleccionados.length,
+      specificData
+    );
+
+    // Aplicar descuentos si corresponde
+    if (this.tieneDescuentoSocial) {
+      // Aplicar descuento social
+      this.cartService.applyPromoCode('SOCIAL');
+    }
+
+    if (this.tieneDescuentoPeliRandom) {
+      // Aplicar descuento PeliRandom
+      this.cartService.applyPromoCode('PELIRANDOM');
+    }
+
+    // Abrir el modal
+    this.showCheckoutModal = true;
+  }
+
+  // Método para cerrar el checkout modal
+  closeCheckoutModal(): void {
+    this.showCheckoutModal = false;
+  }
+
+  // Método para manejar orden completada
+  onOrderCompleted(order: Order): void {
+    console.log('Orden completada:', order);
+    this.compraConfirmada = true;
+    this.showCheckoutModal = false;
+  }
+
+  // Método para manejar orden fallida
+  onOrderFailed(error: string): void {
+    console.error('Error en la orden:', error);
+    alert('Error al procesar la compra: ' + error);
+  }
+
+  // Actualizar el método para avanzar al paso 3 y abrir checkout
+  goToCheckout(): void {
+    this.currentStep = 3;
+    this.openCheckoutModal();
   }
 }

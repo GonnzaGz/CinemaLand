@@ -166,7 +166,7 @@
   <!-- Componente Unified Checkout -->
   <app-unified-checkout
     [showModal]="showCheckoutModal"
-    [allowPickupPayment]="false"
+    [allowPickupPayment]="true"
     (closeModal)="closeCheckoutModal()"
     (orderCompleted)="onOrderCompleted($event)"
     (orderFailed)="onOrderFailed($event)"
