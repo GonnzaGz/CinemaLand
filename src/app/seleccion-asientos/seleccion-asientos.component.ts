@@ -6,6 +6,12 @@ import { FormsModule } from '@angular/forms';
 import { jsPDF } from 'jspdf';
 import QRCode from 'qrcode';
 import { BackendService } from '../service/backend.service';
+import {
+  CartService,
+  CustomerInfo,
+  PaymentInfo,
+  Order,
+} from '../service/cart.service';
 
 @Component({
   selector: 'app-seleccion-asientos',
@@ -56,12 +62,46 @@ export class SeleccionAsientosComponent implements OnInit {
   // QR code
   qrCodeDataUrl: string = ''; // URL del código QR
 
+  // Checkout system properties
+  currentStep: number = 1; // 1: Cine, 2: Horario/Asientos, 3: Pago, 4: Confirmación
+  isProcessing: boolean = false;
+
+  // Customer and payment info
+  customerInfo: CustomerInfo = {
+    name: '',
+    email: '',
+    phone: '',
+    address: '',
+    city: '',
+    postalCode: '',
+    documentType: 'DNI',
+    documentNumber: '',
+  };
+
+  paymentInfo: PaymentInfo = {
+    method: 'credit-card',
+    cardName: '',
+    cardNumber: '',
+    cardExpiry: '',
+    cardCvv: '',
+    billingAddress: '',
+  };
+
+  // Payment method auxiliary properties
+  paymentMethod: 'credit-card' | 'mercado-pago' | 'cash-pickup' = 'credit-card';
+  cardName: string = '';
+  cardNumber: string = '';
+  cardExpiry: string = '';
+  cardCvv: string = '';
+  termsAccepted: boolean = false;
+
   private apiMovieService = inject(ApipeliculasService);
   private router = inject(Router); // Inyectamos Router para la redirección
 
   constructor(
     private route: ActivatedRoute,
-    private backendService: BackendService
+    private backendService: BackendService,
+    private cartService: CartService
   ) {}
 
   ngOnInit(): void {
@@ -90,6 +130,15 @@ export class SeleccionAsientosComponent implements OnInit {
 
     this.generaSucursal();
     this.cargarDescuentoSocial();
+
+    // Inicializar checkout system
+    this.initializeCheckout();
+  }
+
+  // Inicializar sistema de checkout
+  initializeCheckout(): void {
+    // Sincronizar método de pago inicial
+    this.onPaymentMethodChange();
   }
 
   // Getter para debuggear la condición de visibilidad
@@ -154,6 +203,14 @@ export class SeleccionAsientosComponent implements OnInit {
       this.asientosSeleccionados.push(asiento);
     }
     this.actualizarPrecios();
+
+    // Si hay asientos seleccionados y estamos en el paso 2, avanzar al paso 3
+    if (this.asientosSeleccionados.length > 0 && this.currentStep === 2) {
+      // Pequeño delay para que el usuario vea la selección
+      setTimeout(() => {
+        this.goToStep(3);
+      }, 500);
+    }
   }
 
   actualizarPrecios(): void {
@@ -285,6 +342,11 @@ export class SeleccionAsientosComponent implements OnInit {
       this.horariosPorSucursal = Array.from(
         new Set(this.sucursalCompletaHorarios.map((item: any) => item.HORARIO))
       );
+
+      // Avanzar automáticamente al paso 2 (horario/asientos)
+      if (this.sucursalSeleccionada) {
+        this.goToStep(2);
+      }
     });
   }
 
@@ -430,5 +492,388 @@ export class SeleccionAsientosComponent implements OnInit {
 
   goBack(): void {
     this.router.navigate(['/']); // Volver al catálogo de películas
+  }
+
+  // ============= CHECKOUT SYSTEM METHODS =============
+
+  // Navegación de pasos
+  goToStep(step: number): void {
+    console.log(
+      'goToStep() llamado con step:',
+      step,
+      'desde currentStep:',
+      this.currentStep
+    );
+
+    if (step === 2 && !this.sucursalSeleccionada) {
+      console.log(
+        'Bloqueado: no se puede ir al paso 2 sin seleccionar sucursal'
+      );
+      return;
+    }
+    if (
+      step === 3 &&
+      (!this.sucursalSeleccionada ||
+        !this.horarioSeleccionado ||
+        this.asientosSeleccionados.length === 0)
+    ) {
+      console.log(
+        'Bloqueado: no se puede ir al paso 3 sin completar selección de asientos'
+      );
+      return;
+    }
+    if (
+      step === 4 &&
+      (!this.isCustomerInfoValid() || !this.isPaymentInfoValid())
+    ) {
+      console.log('Bloqueado: no se puede ir al paso 4 sin información válida');
+      return;
+    }
+
+    console.log('Avanzando al paso:', step);
+    this.currentStep = step;
+  }
+
+  nextStep(): void {
+    console.log('nextStep() llamado. currentStep:', this.currentStep);
+    if (this.currentStep < 4) {
+      this.goToStep(this.currentStep + 1);
+    }
+  }
+
+  previousStep(): void {
+    if (this.currentStep > 1) {
+      this.currentStep--;
+    }
+  }
+
+  // Validaciones
+  isCustomerInfoValid(): boolean {
+    const isValid = !!(
+      this.customerInfo.name?.trim() &&
+      this.customerInfo.email?.trim() &&
+      this.customerInfo.phone?.trim() &&
+      this.customerInfo.documentType?.trim() &&
+      this.customerInfo.documentNumber?.trim()
+    );
+
+    console.log('Validando información del cliente:', {
+      name: this.customerInfo.name,
+      email: this.customerInfo.email,
+      phone: this.customerInfo.phone,
+      documentType: this.customerInfo.documentType,
+      documentNumber: this.customerInfo.documentNumber,
+      isValid: isValid,
+    });
+
+    return isValid;
+  }
+
+  isPaymentInfoValid(): boolean {
+    console.log(
+      'Validando pago. Método seleccionado:',
+      this.paymentInfo.method
+    );
+    console.log('Información de pago completa:', this.paymentInfo);
+
+    if (this.paymentInfo.method === 'cash-pickup') {
+      console.log('Método cash-pickup válido');
+      return true;
+    }
+
+    if (this.paymentInfo.method === 'mercado-pago') {
+      console.log('Método mercado-pago válido');
+      return true;
+    }
+
+    if (this.paymentInfo.method === 'credit-card') {
+      const isValid = !!(
+        this.paymentInfo.cardName?.trim() &&
+        this.paymentInfo.cardNumber?.trim() &&
+        this.paymentInfo.cardExpiry?.trim() &&
+        this.paymentInfo.cardCvv?.trim()
+      );
+      console.log('Método credit-card. Validación:', isValid);
+      return isValid;
+    }
+
+    console.log('Método de pago no reconocido o no válido');
+    return false;
+  }
+
+  canProceed(): boolean {
+    switch (this.currentStep) {
+      case 1: // Selección de cine
+        return !!this.sucursalSeleccionada;
+      case 2: // Selección de horario y asientos
+        return !!(
+          this.sucursalSeleccionada &&
+          this.horarioSeleccionado &&
+          this.asientosSeleccionados.length > 0
+        );
+      case 3: // Información del cliente y pago
+        return this.isCustomerInfoValid() && this.isPaymentInfoValid();
+      default:
+        return false;
+    }
+  }
+
+  canConfirm(): boolean {
+    return this.isPaymentInfoValid() && this.termsAccepted;
+  }
+
+  // Gestión de métodos de pago
+  onPaymentMethodChange(): void {
+    console.log(
+      'onPaymentMethodChange() llamado. paymentMethod:',
+      this.paymentMethod
+    );
+    this.paymentInfo.method = this.paymentMethod;
+    console.log('paymentInfo.method actualizado a:', this.paymentInfo.method);
+  }
+
+  onCardNameChange(): void {
+    this.paymentInfo.cardName = this.cardName;
+  }
+
+  onCardNumberChange(): void {
+    this.paymentInfo.cardNumber = this.cardNumber;
+  }
+
+  onCardExpiryChange(): void {
+    this.paymentInfo.cardExpiry = this.cardExpiry;
+  }
+
+  onCardCvvChange(): void {
+    this.paymentInfo.cardCvv = this.cardCvv;
+  }
+
+  getPaymentMethodDisplayName(method: string): string {
+    switch (method) {
+      case 'credit-card':
+        return 'Tarjeta de Crédito/Débito';
+      case 'mercado-pago':
+        return 'Mercado Pago';
+      case 'cash-pickup':
+        return 'Pago en el Local';
+      default:
+        return 'Método desconocido';
+    }
+  }
+
+  // Proceso de compra final
+  async processOrder(): Promise<void> {
+    if (!this.canConfirm()) {
+      console.log('No se puede procesar la orden - validaciones fallidas');
+      return;
+    }
+
+    this.isProcessing = true;
+
+    try {
+      // Crear el item del carrito basado en la selección de asientos
+      const asientos = this.asientosSeleccionados
+        .map((a: any) => a.ASIENTO)
+        .join(', ');
+
+      const ticketItem = {
+        id: `ticket-${this.movieId}-${Date.now()}`,
+        product: {
+          id: this.movieId || '',
+          name: `${this.movieDetails?.title} - ${asientos}`,
+          description: `Sucursal: ${this.sucursalSeleccionada} | Horario: ${this.horarioSeleccionado}`,
+          price: this.precioTotal,
+          image: this.movieDetails?.poster_path
+            ? `https://image.tmdb.org/t/p/w300/${this.movieDetails.poster_path}`
+            : '',
+          category: 'movie-ticket' as const,
+          type: 'cinema-ticket',
+          metadata: {
+            movieId: this.movieId,
+            cinema: this.sucursalSeleccionada,
+            schedule: this.horarioSeleccionado,
+            seats: asientos,
+            discounts: {
+              social: this.tieneDescuentoSocial,
+              peliRandom: this.tieneDescuentoPeliRandom,
+              totalDiscount: this.montoDescuentoTotal,
+            },
+          },
+        },
+        quantity: this.asientosSeleccionados.length,
+        addedAt: new Date(),
+        specificData: {
+          cinema: this.sucursalSeleccionada,
+          schedule: this.horarioSeleccionado,
+          seats: this.asientosSeleccionados,
+          discounts: this.montoDescuentoTotal,
+        },
+      };
+
+      // Crear la orden directamente
+      const order: Order = {
+        id: `ORD-${Date.now()}`,
+        items: [ticketItem],
+        customerInfo: this.customerInfo,
+        paymentInfo: this.paymentInfo,
+        total: this.precioTotal,
+        subtotal: this.precioSubtotal,
+        discount: this.montoDescuentoTotal,
+        status: 'confirmed',
+        createdAt: new Date(),
+        pickupLocation:
+          this.paymentInfo.method === 'cash-pickup'
+            ? this.sucursalSeleccionada || undefined
+            : undefined,
+      };
+
+      // Generar PDF con QR
+      await this.generatePurchaseReceipt(order);
+
+      // Marcar compra como confirmada
+      this.compraConfirmada = true;
+      this.isProcessing = false;
+
+      console.log('Orden procesada exitosamente:', order);
+    } catch (error) {
+      this.isProcessing = false;
+      console.error('Error procesando la orden:', error);
+    }
+  }
+
+  // Generar PDF con QR - Reemplaza el método anterior
+  async generatePurchaseReceipt(order: Order): Promise<void> {
+    try {
+      // Importar jsPDF y QRCode
+      const { jsPDF } = await import('jspdf');
+      const QRCode = await import('qrcode');
+
+      const pdf = new jsPDF();
+      const pageWidth = pdf.internal.pageSize.getWidth();
+
+      // Header del PDF
+      pdf.setFillColor(26, 26, 46);
+      pdf.rect(0, 0, pageWidth, 40, 'F');
+
+      pdf.setTextColor(255, 255, 255);
+      pdf.setFontSize(24);
+      pdf.setFont('helvetica', 'bold');
+      pdf.text('🎬 CINEMALAND', pageWidth / 2, 25, { align: 'center' });
+
+      // Información de la compra
+      pdf.setTextColor(0, 0, 0);
+      pdf.setFontSize(16);
+      pdf.setFont('helvetica', 'bold');
+      pdf.text('ENTRADA DE CINE', pageWidth / 2, 55, { align: 'center' });
+
+      // Datos del cliente
+      let yPos = 75;
+      pdf.setFontSize(12);
+      pdf.setFont('helvetica', 'bold');
+      pdf.text('DATOS DEL CLIENTE:', 20, yPos);
+
+      yPos += 10;
+      pdf.setFont('helvetica', 'normal');
+      pdf.text(`Nombre: ${this.customerInfo.name}`, 20, yPos);
+      yPos += 7;
+      pdf.text(`Email: ${this.customerInfo.email}`, 20, yPos);
+      yPos += 7;
+      pdf.text(`Teléfono: ${this.customerInfo.phone}`, 20, yPos);
+      yPos += 7;
+      pdf.text(
+        `${this.customerInfo.documentType}: ${this.customerInfo.documentNumber}`,
+        20,
+        yPos
+      );
+
+      // Información de la película
+      yPos += 20;
+      pdf.setFont('helvetica', 'bold');
+      pdf.text('DETALLES DE LA FUNCIÓN:', 20, yPos);
+
+      yPos += 10;
+      pdf.setFont('helvetica', 'normal');
+      pdf.text(`Película: ${this.movieDetails?.title}`, 20, yPos);
+      yPos += 7;
+      pdf.text(`Sucursal: ${this.sucursalSeleccionada}`, 20, yPos);
+      yPos += 7;
+      pdf.text(`Horario: ${this.horarioSeleccionado}`, 20, yPos);
+      yPos += 7;
+
+      const asientos = this.asientosSeleccionados
+        .map((a: any) => a.ASIENTO)
+        .join(', ');
+      pdf.text(`Asientos: ${asientos}`, 20, yPos);
+      yPos += 7;
+      pdf.text(
+        `Fecha de compra: ${new Date().toLocaleDateString('es-ES')}`,
+        20,
+        yPos
+      );
+
+      // Información de precios
+      yPos += 20;
+      pdf.setFont('helvetica', 'bold');
+      pdf.text('DETALLES DEL PAGO:', 20, yPos);
+
+      yPos += 10;
+      pdf.setFont('helvetica', 'normal');
+      pdf.text(`Subtotal: $${this.precioSubtotal.toFixed(2)} ARS`, 20, yPos);
+
+      if (this.montoDescuentoTotal > 0) {
+        yPos += 7;
+        let descuentoTexto = 'Descuentos aplicados: ';
+        if (this.tieneDescuentoSocial) descuentoTexto += 'Social ';
+        if (this.tieneDescuentoPeliRandom) descuentoTexto += 'PeliRandom ';
+        pdf.text(descuentoTexto, 20, yPos);
+        yPos += 7;
+        pdf.text(
+          `Descuento: -$${this.montoDescuentoTotal.toFixed(2)} ARS`,
+          20,
+          yPos
+        );
+      }
+
+      yPos += 10;
+      pdf.setFont('helvetica', 'bold');
+      pdf.setFontSize(14);
+      pdf.text(`TOTAL: $${this.precioTotal.toFixed(2)} ARS`, 20, yPos);
+
+      // Generar QR con información de la orden
+      const qrData = `Orden: ${order.id}\nPelícula: ${
+        this.movieDetails?.title
+      }\nCine: ${this.sucursalSeleccionada}\nHorario: ${
+        this.horarioSeleccionado
+      }\nAsientos: ${asientos}\nTotal: $${this.precioTotal.toFixed(2)} ARS`;
+
+      const qrCodeDataUrl = await QRCode.toDataURL(qrData, {
+        width: 150,
+        margin: 2,
+      });
+
+      // Agregar QR al PDF
+      const qrSize = 50;
+      const qrX = pageWidth - qrSize - 20;
+      const qrY = 75;
+
+      pdf.addImage(qrCodeDataUrl, 'PNG', qrX, qrY, qrSize, qrSize);
+
+      // Texto del QR
+      pdf.setFontSize(10);
+      pdf.setFont('helvetica', 'normal');
+      pdf.text('Código QR', qrX + qrSize / 2, qrY + qrSize + 10, {
+        align: 'center',
+      });
+      pdf.text('de verificación', qrX + qrSize / 2, qrY + qrSize + 15, {
+        align: 'center',
+      });
+
+      // Guardar el PDF
+      pdf.save(`Entrada-Cinemaland-${order.id}.pdf`);
+
+      console.log('PDF de entrada generado con éxito para la orden:', order.id);
+    } catch (error) {
+      console.error('Error generando el PDF de la entrada:', error);
+    }
   }
 }
