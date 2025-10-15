@@ -104,22 +104,41 @@ export class UnifiedCheckoutComponent implements OnInit, OnDestroy {
       this.cardExpiry = this.paymentInfo.cardExpiry || '';
       this.cardCvv = this.paymentInfo.cardCvv || '';
     }
+
+    // Asegurar sincronización inicial
+    this.onPaymentMethodChange();
   }
 
   // Gestión de pasos
   goToStep(step: number): void {
+    console.log(
+      'goToStep() llamado con step:',
+      step,
+      'desde currentStep:',
+      this.currentStep
+    );
+    console.log('isCustomerInfoValid():', this.isCustomerInfoValid());
+    console.log('isPaymentInfoValid():', this.isPaymentInfoValid());
+
     if (step === 2 && !this.isCustomerInfoValid()) {
+      console.log(
+        'Bloqueado: no se puede ir al paso 2 sin datos válidos del cliente'
+      );
       return;
     }
     if (step === 3 && !this.isPaymentInfoValid()) {
+      console.log(
+        'Bloqueado: no se puede ir al paso 3 sin información de pago válida'
+      );
       return;
     }
+    console.log('Avanzando al paso:', step);
     this.currentStep = step;
   }
 
   nextStep(): void {
     console.log(
-      'nextStep called, currentStep:',
+      'nextStep() llamado. currentStep:',
       this.currentStep,
       'canProceed:',
       this.canProceed()
@@ -137,32 +156,61 @@ export class UnifiedCheckoutComponent implements OnInit, OnDestroy {
 
   // Validaciones
   isCustomerInfoValid(): boolean {
-    return !!(
+    const isValid = !!(
       this.customerInfo.name.trim() &&
       this.customerInfo.email.trim() &&
       this.customerInfo.phone.trim() &&
       this.customerInfo.documentNumber?.trim()
     );
+
+    // Debug temporal
+    if (!isValid) {
+      console.log('Customer info validation failed:', {
+        name: this.customerInfo.name,
+        email: this.customerInfo.email,
+        phone: this.customerInfo.phone,
+        documentNumber: this.customerInfo.documentNumber,
+      });
+    }
+
+    return isValid;
   }
 
   isPaymentInfoValid(): boolean {
+    console.log(
+      'Validando pago. Método seleccionado:',
+      this.paymentInfo.method
+    );
+    console.log('Información de pago completa:', this.paymentInfo);
+
     if (this.paymentInfo.method === 'cash-pickup') {
+      console.log('Método cash-pickup válido');
       return true;
     }
 
     if (this.paymentInfo.method === 'mercado-pago') {
+      console.log('Método mercado-pago válido');
       return true;
     }
 
     if (this.paymentInfo.method === 'credit-card') {
-      return !!(
+      const isValid = !!(
         this.paymentInfo.cardName?.trim() &&
         this.paymentInfo.cardNumber?.trim() &&
         this.paymentInfo.cardExpiry?.trim() &&
         this.paymentInfo.cardCvv?.trim()
       );
+      console.log('Método credit-card. Validación:', isValid);
+      console.log('Datos tarjeta:', {
+        cardName: this.paymentInfo.cardName,
+        cardNumber: this.paymentInfo.cardNumber,
+        cardExpiry: this.paymentInfo.cardExpiry,
+        cardCvv: this.paymentInfo.cardCvv,
+      });
+      return isValid;
     }
 
+    console.log('Método de pago no reconocido o no válido');
     return false;
   }
 
@@ -176,7 +224,12 @@ export class UnifiedCheckoutComponent implements OnInit, OnDestroy {
 
   // Gestión de pago
   onPaymentMethodChange(): void {
+    console.log(
+      'onPaymentMethodChange() llamado. paymentMethod:',
+      this.paymentMethod
+    );
     this.paymentInfo.method = this.paymentMethod;
+    console.log('paymentInfo.method actualizado a:', this.paymentInfo.method);
     this.cartService.updatePaymentInfo(this.paymentInfo);
   }
 
@@ -274,6 +327,8 @@ export class UnifiedCheckoutComponent implements OnInit, OnDestroy {
           next: (result) => {
             this.isProcessing = false;
             if (result.success) {
+              // Generar PDF con QR antes de emitir la orden completada
+              this.generatePurchaseReceipt(order);
               this.orderCompleted.emit(order);
               this.closeCheckout();
             } else {
@@ -304,7 +359,15 @@ export class UnifiedCheckoutComponent implements OnInit, OnDestroy {
 
   // Métodos para validar avance de pasos
   canProceed(): boolean {
-    return this.isCustomerInfoValid();
+    // Validación basada en el paso actual
+    switch (this.currentStep) {
+      case 1: // Paso 1: Datos del cliente
+        return this.isCustomerInfoValid();
+      case 2: // Paso 2: Información de pago
+        return this.isPaymentInfoValid();
+      default:
+        return false;
+    }
   }
 
   canConfirm(): boolean {
@@ -353,5 +416,138 @@ export class UnifiedCheckoutComponent implements OnInit, OnDestroy {
 
   removeItem(itemId: string): void {
     this.cartService.removeFromCart(itemId);
+  }
+
+  // Generar PDF con QR
+  async generatePurchaseReceipt(order: Order): Promise<void> {
+    try {
+      // Importar jsPDF y QRCode
+      const { jsPDF } = await import('jspdf');
+      const QRCode = await import('qrcode');
+
+      const pdf = new jsPDF();
+      const pageWidth = pdf.internal.pageSize.getWidth();
+
+      // Header del PDF
+      pdf.setFillColor(26, 26, 46);
+      pdf.rect(0, 0, pageWidth, 40, 'F');
+
+      pdf.setTextColor(255, 255, 255);
+      pdf.setFontSize(24);
+      pdf.setFont('helvetica', 'bold');
+      pdf.text('🎬 CINEMALAND', pageWidth / 2, 25, { align: 'center' });
+
+      // Información de la compra
+      pdf.setTextColor(0, 0, 0);
+      pdf.setFontSize(16);
+      pdf.setFont('helvetica', 'bold');
+      pdf.text('COMPROBANTE DE COMPRA', pageWidth / 2, 55, { align: 'center' });
+
+      // Datos del cliente
+      let yPos = 75;
+      pdf.setFontSize(12);
+      pdf.setFont('helvetica', 'bold');
+      pdf.text('DATOS DEL CLIENTE:', 20, yPos);
+
+      yPos += 10;
+      pdf.setFont('helvetica', 'normal');
+      pdf.text(`Nombre: ${this.customerInfo.name}`, 20, yPos);
+      yPos += 7;
+      pdf.text(`Email: ${this.customerInfo.email}`, 20, yPos);
+      yPos += 7;
+      pdf.text(`Teléfono: ${this.customerInfo.phone}`, 20, yPos);
+      yPos += 7;
+      pdf.text(
+        `${this.customerInfo.documentType}: ${this.customerInfo.documentNumber}`,
+        20,
+        yPos
+      );
+
+      // Información de la orden
+      yPos += 20;
+      pdf.setFont('helvetica', 'bold');
+      pdf.text('DETALLES DE LA ORDEN:', 20, yPos);
+
+      yPos += 10;
+      pdf.setFont('helvetica', 'normal');
+      pdf.text(`Número de Orden: ${order.id}`, 20, yPos);
+      yPos += 7;
+      pdf.text(
+        `Fecha: ${new Date(order.createdAt).toLocaleDateString('es-ES')}`,
+        20,
+        yPos
+      );
+      yPos += 7;
+      pdf.text(
+        `Método de Pago: ${this.getPaymentMethodDisplayName(
+          this.paymentInfo.method
+        )}`,
+        20,
+        yPos
+      );
+
+      // Items de la compra
+      yPos += 20;
+      pdf.setFont('helvetica', 'bold');
+      pdf.text('ITEMS COMPRADOS:', 20, yPos);
+
+      yPos += 10;
+      pdf.setFont('helvetica', 'normal');
+      order.items.forEach((item) => {
+        pdf.text(
+          `• ${item.product.name} x${item.quantity} - $${(
+            item.product.price * item.quantity
+          ).toFixed(2)}`,
+          25,
+          yPos
+        );
+        yPos += 7;
+      });
+
+      // Total
+      yPos += 10;
+      pdf.setFont('helvetica', 'bold');
+      pdf.setFontSize(14);
+      pdf.text(`TOTAL: $${order.total.toFixed(2)} ARS`, 20, yPos);
+
+      // Generar QR con información de la orden
+      const qrData = `Orden: ${order.id}\nCliente: ${
+        this.customerInfo.name
+      }\nTotal: $${order.total.toFixed(2)} ARS\nFecha: ${new Date(
+        order.createdAt
+      ).toLocaleDateString('es-ES')}`;
+
+      const qrCodeDataUrl = await QRCode.toDataURL(qrData, {
+        width: 150,
+        margin: 2,
+      });
+
+      // Agregar QR al PDF
+      const qrSize = 50;
+      const qrX = pageWidth - qrSize - 20;
+      const qrY = 75;
+
+      pdf.addImage(qrCodeDataUrl, 'PNG', qrX, qrY, qrSize, qrSize);
+
+      // Texto del QR
+      pdf.setFontSize(10);
+      pdf.setFont('helvetica', 'normal');
+      pdf.text('Código QR', qrX + qrSize / 2, qrY + qrSize + 10, {
+        align: 'center',
+      });
+      pdf.text('de verificación', qrX + qrSize / 2, qrY + qrSize + 15, {
+        align: 'center',
+      });
+
+      // Guardar el PDF
+      pdf.save(`Comprobante-Cinemaland-${order.id}.pdf`);
+
+      console.log(
+        'PDF de comprobante generado con éxito para la orden:',
+        order.id
+      );
+    } catch (error) {
+      console.error('Error generando el PDF del comprobante:', error);
+    }
   }
 }

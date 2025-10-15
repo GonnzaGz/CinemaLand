@@ -235,6 +235,33 @@
                 />
               </div>
             </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="documentType">Tipo de Documento *</label>
+                <select
+                  id="documentType"
+                  [(ngModel)]="customerInfo.documentType"
+                  class="form-input"
+                  required
+                >
+                  <option value="DNI">DNI</option>
+                  <option value="PASAPORTE">Pasaporte</option>
+                  <option value="CEDULA">Cédula</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="documentNumber">Número de Documento *</label>
+                <input
+                  type="text"
+                  id="documentNumber"
+                  [(ngModel)]="customerInfo.documentNumber"
+                  placeholder="12345678"
+                  class="form-input"
+                  required
+                />
+              </div>
+            </div>
           </div>
         </div>
 
@@ -253,6 +280,7 @@
                   name="paymentMethod"
                   value="credit-card"
                   [(ngModel)]="paymentMethod"
+                  (ngModelChange)="onPaymentMethodChange()"
                 />
                 <div class="option-content">
                   <i class="fas fa-credit-card"></i>
@@ -266,6 +294,7 @@
                   name="paymentMethod"
                   value="mercado-pago"
                   [(ngModel)]="paymentMethod"
+                  (ngModelChange)="onPaymentMethodChange()"
                 />
                 <div class="option-content">
                   <i class="fab fa-paypal"></i>
@@ -277,8 +306,9 @@
                 <input
                   type="radio"
                   name="paymentMethod"
-                  value="pickup"
+                  value="cash-pickup"
                   [(ngModel)]="paymentMethod"
+                  (ngModelChange)="onPaymentMethodChange()"
                 />
                 <div class="option-content">
                   <i class="fas fa-hand-holding-usd"></i>
