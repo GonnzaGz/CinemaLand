@@ -512,3 +512,13 @@
     </div>
   </section>
 </div>
+
+<!-- Checkout Unificado -->
+<app-unified-checkout
+  [showModal]="showUnifiedCheckout"
+  [allowPickupPayment]="true"
+  (closeModal)="onCheckoutClosed()"
+  (orderCompleted)="onOrderCompleted($event)"
+  (orderFailed)="onOrderFailed($event)"
+>
+</app-unified-checkout>

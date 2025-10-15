@@ -2,136 +2,190 @@
   <!-- Banner principal -->
   <div class="candy-banner">
     <div class="banner-content">
-      <h1 class="banner-title">FIESTA DEL CINE</h1>
-      <p class="banner-subtitle">DEL 2 AL 8 DE OCTUBRE</p>
+      <h1 class="banner-title">🍿 CANDY STORE 🍭</h1>
+      <p class="banner-subtitle">Complementa tu experiencia cinematográfica</p>
       <div class="promo-badge">
-        <p>¡COLECCIONABLES A UN</p>
-        <p class="price-highlight">SÚPER PRECIO HASTA EL 08/10!</p>
+        <p>¡DESCUENTOS ESPECIALES</p>
+        <p class="price-highlight">HASTA 20% OFF CON CÓDIGOS PROMO!</p>
       </div>
-    </div>
-    <div class="banner-products">
-      <img
-        src="assets/images/popcorn-combo.png"
-        alt="Combo Popcorn"
-        class="combo-image"
-      />
     </div>
   </div>
 
   <!-- Código promocional -->
   <div class="promo-section">
-    <h3>CÓDIGO PROMOCIONAL</h3>
+    <h3>🎟️ CÓDIGO PROMOCIONAL</h3>
     <p>
-      Si tenés un código promocional ingresalo acá y accedé a tus beneficios.
+      ¿Tenés un código promocional? ¡Ingresalo acá y accedé a tus beneficios!
     </p>
     <div class="promo-input-group">
       <input
         type="text"
-        placeholder="Ingresa acá tu código"
+        [(ngModel)]="promoCode"
+        placeholder="Ejemplo: CINE20, DULCE15"
         class="promo-input"
       />
-      <button class="promo-btn">AGREGAR</button>
+      <button (click)="applyPromoCode()" class="promo-btn">APLICAR</button>
+    </div>
+    <div class="promo-hints">
+      <small
+        >💡 Códigos válidos: CINE20 (20% off), DULCE15 (15% off), PROMO10 (10%
+        off)</small
+      >
     </div>
   </div>
 
   <!-- Categorías de productos -->
   <div class="categories-section">
     <div class="category-tabs">
-      <button class="tab-btn active">RECOMENDADOS FIESTA DEL CINE</button>
-      <button class="tab-btn">COLECCIONABLES</button>
-      <button class="tab-btn">COMBOS</button>
-      <button class="tab-btn">COMBOS XS | BBVA | PERSONAL PAY</button>
-      <button class="tab-btn">POCHOCLOS</button>
+      <button
+        class="tab-btn"
+        [class.active]="selectedCategory === 'todos'"
+        (click)="selectCategory('todos')"
+      >
+        TODOS
+      </button>
+      <button
+        class="tab-btn"
+        [class.active]="selectedCategory === 'combos'"
+        (click)="selectCategory('combos')"
+      >
+        COMBOS
+      </button>
+      <button
+        class="tab-btn"
+        [class.active]="selectedCategory === 'pochoclos'"
+        (click)="selectCategory('pochoclos')"
+      >
+        POCHOCLOS
+      </button>
+      <button
+        class="tab-btn"
+        [class.active]="selectedCategory === 'bebidas'"
+        (click)="selectCategory('bebidas')"
+      >
+        BEBIDAS
+      </button>
+      <button
+        class="tab-btn"
+        [class.active]="selectedCategory === 'dulces'"
+        (click)="selectCategory('dulces')"
+      >
+        DULCES
+      </button>
     </div>
   </div>
 
   <!-- Grid de productos -->
-  <div class="products-grid">
-    <h2 class="section-title">RECOMENDADOS FIESTA DEL CINE</h2>
-    <div class="products-container">
-      <!-- Producto 1 -->
-      <div class="product-card">
-        <div class="product-badge">PROMO FIESTA DEL CINE</div>
-        <img
-          src="assets/images/popcorn-product.png"
-          alt="Popcorn Grande"
-          class="product-image"
-        />
-        <div class="product-info">
-          <h3 class="product-name">Pochoclos Grande + Gaseosa Grande</h3>
-          <p class="product-description">
-            El combo perfecto para disfrutar tu película
-          </p>
-          <div class="product-price">
-            <span class="current-price">$2.890</span>
-            <span class="original-price">$3.500</span>
-          </div>
-          <button class="add-to-cart-btn">AGREGAR AL CARRITO</button>
-        </div>
-      </div>
+  <div class="products-section">
+    <h2 class="section-title">
+      {{
+        selectedCategory === "todos"
+          ? "TODOS LOS PRODUCTOS"
+          : selectedCategory.toUpperCase()
+      }}
+    </h2>
 
-      <!-- Producto 2 -->
-      <div class="product-card">
-        <div class="product-badge">PROMO FIESTA DEL CINE</div>
-        <img
-          src="assets/images/nachos-combo.png"
-          alt="Nachos Combo"
-          class="product-image"
-        />
-        <div class="product-info">
-          <h3 class="product-name">Nachos con Queso + Gaseosa</h3>
-          <p class="product-description">
-            Nachos crujientes con queso derretido
-          </p>
-          <div class="product-price">
-            <span class="current-price">$2.450</span>
-            <span class="original-price">$2.890</span>
+    <div class="products-grid">
+      <div *ngFor="let product of filteredProducts" class="product-card">
+        <div class="product-image">
+          <img [src]="product.image" [alt]="product.name" />
+          <div class="product-overlay">
+            <button (click)="addToCart(product)" class="quick-add-btn">
+              <i class="fas fa-cart-plus"></i>
+              Agregar
+            </button>
           </div>
-          <button class="add-to-cart-btn">AGREGAR AL CARRITO</button>
         </div>
-      </div>
 
-      <!-- Producto 3 -->
-      <div class="product-card">
-        <div class="product-badge">PROMO FIESTA DEL CINE</div>
-        <img
-          src="assets/images/candy-mix.png"
-          alt="Mix de Dulces"
-          class="product-image"
-        />
         <div class="product-info">
-          <h3 class="product-name">Mix de Dulces Premium</h3>
-          <p class="product-description">
-            Selección especial de dulces y chocolates
-          </p>
+          <h3 class="product-name">{{ product.name }}</h3>
+          <p class="product-description">{{ product.description }}</p>
           <div class="product-price">
-            <span class="current-price">$1.890</span>
-            <span class="original-price">$2.200</span>
+            ${{ product.price.toLocaleString("es-AR") }}
           </div>
-          <button class="add-to-cart-btn">AGREGAR AL CARRITO</button>
-        </div>
-      </div>
 
-      <!-- Producto 4 -->
-      <div class="product-card">
-        <div class="product-badge">PROMO FIESTA DEL CINE</div>
-        <img
-          src="assets/images/hot-dog-combo.png"
-          alt="Hot Dog Combo"
-          class="product-image"
-        />
-        <div class="product-info">
-          <h3 class="product-name">Hot Dog + Papas + Gaseosa</h3>
-          <p class="product-description">
-            Combo completo para una experiencia única
-          </p>
-          <div class="product-price">
-            <span class="current-price">$3.200</span>
-            <span class="original-price">$3.800</span>
+          <div class="product-actions">
+            <div class="quantity-controls">
+              <button
+                class="qty-btn"
+                (click)="
+                  updateQuantity(product.id, getProductQuantity(product.id) - 1)
+                "
+                [disabled]="getProductQuantity(product.id) <= 1"
+              >
+                -
+              </button>
+              <span class="quantity">{{
+                getProductQuantity(product.id) || 1
+              }}</span>
+              <button
+                class="qty-btn"
+                (click)="
+                  updateQuantity(product.id, getProductQuantity(product.id) + 1)
+                "
+              >
+                +
+              </button>
+            </div>
+            <button
+              (click)="addToCart(product, getProductQuantity(product.id) || 1)"
+              class="add-to-cart-btn"
+            >
+              <i class="fas fa-shopping-cart"></i>
+              Agregar al Carrito
+            </button>
           </div>
-          <button class="add-to-cart-btn">AGREGAR AL CARRITO</button>
         </div>
       </div>
     </div>
   </div>
+
+  <!-- Carrito flotante -->
+  <div class="floating-cart" *ngIf="cart.length > 0">
+    <div class="cart-summary">
+      <div class="cart-icon">
+        <i class="fas fa-shopping-cart"></i>
+        <span class="cart-count">{{ cartItemCount }}</span>
+      </div>
+      <div class="cart-total">
+        <div class="total-amount">${{ total.toLocaleString("es-AR") }}</div>
+        <div class="discount-info" *ngIf="appliedDiscount > 0">
+          Descuento aplicado: {{ appliedDiscount * 100 }}%
+        </div>
+      </div>
+      <button (click)="proceedToCheckout()" class="checkout-btn">
+        <i class="fas fa-credit-card"></i>
+        Finalizar Compra
+      </button>
+    </div>
+
+    <!-- Detalles del carrito -->
+    <div class="cart-details">
+      <h4>Tu Carrito:</h4>
+      <div class="cart-items">
+        <div *ngFor="let item of cart" class="cart-item">
+          <span class="item-name"
+            >{{ item.quantity }}x {{ item.product.name }}</span
+          >
+          <span class="item-price"
+            >${{
+              (item.product.price * item.quantity).toLocaleString("es-AR")
+            }}</span
+          >
+          <button (click)="removeFromCart(item.product.id)" class="remove-btn">
+            <i class="fas fa-trash"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Componente Unified Checkout -->
+  <app-unified-checkout
+    [showModal]="showCheckoutModal"
+    [allowPickupPayment]="true"
+    (closeModal)="closeCheckoutModal()"
+    (orderCompleted)="onOrderCompleted($event)"
+    (orderFailed)="onOrderFailed($event)"
+  ></app-unified-checkout>
 </div>

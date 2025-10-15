@@ -1,8 +1,68 @@
-<div>
-  <img src="assets/images/error404.png" alt="Imagén Error 404" />
-  <h1>Ops! Página no encontrada</h1>
-  <p>Lo sentimos, pero la página que buscas no existe.</p>
-  <button class="btn btn-primary btn-danger" routerLink="">
-    Volver al Inicio
-  </button>
+<div class="error-container">
+  <div class="error-content">
+    <!-- Icono 404 moderno -->
+    <div class="error-icon">
+      <i class="fas fa-film"></i>
+      <span class="error-number">404</span>
+    </div>
+
+    <!-- Contenido principal -->
+    <div class="error-text">
+      <h1 class="error-title">¡Ops! Página no encontrada</h1>
+      <p class="error-description">
+        Lo sentimos, parece que esta página se perdió en el intermedio.
+        <br />¿Qué tal si volvemos a la función principal?
+      </p>
+    </div>
+
+    <!-- Botones de acción -->
+    <div class="error-actions">
+      <button class="btn-primary" routerLink="">
+        <i class="fas fa-home"></i>
+        Volver al Inicio
+      </button>
+      <button class="btn-secondary" routerLink="/compra-entradas">
+        <i class="fas fa-ticket-alt"></i>
+        Ver Cartelera
+      </button>
+    </div>
+
+    <!-- Footer links -->
+    <div class="footer-links">
+      <div class="links-section">
+        <h3>Enlaces Útiles</h3>
+        <div class="links-grid">
+          <a href="#" class="footer-link">
+            <i class="fas fa-envelope"></i>
+            Contacto
+          </a>
+          <a href="#" class="footer-link">
+            <i class="fas fa-question-circle"></i>
+            Ayuda
+          </a>
+          <a href="#" class="footer-link">
+            <i class="fas fa-shield-alt"></i>
+            Política de Privacidad
+          </a>
+          <a href="#" class="footer-link">
+            <i class="fas fa-file-contract"></i>
+            Términos de Servicio
+          </a>
+        </div>
+      </div>
+
+      <!-- Sostenibilidad AWS -->
+      <div class="sustainability-section">
+        <div class="aws-badge">
+          <i class="fab fa-aws"></i>
+          <span>Powered by AWS</span>
+        </div>
+        <p class="sustainability-text">
+          🌱 Comprometidos con el medio ambiente. Nuestra plataforma utiliza AWS
+          con energía renovable y tecnologías sostenibles para reducir nuestra
+          huella de carbono.
+        </p>
+      </div>
+    </div>
+  </div>
 </div>

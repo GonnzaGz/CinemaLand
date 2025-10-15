@@ -1,0 +1,541 @@
+<!-- Modal de Checkout Unificado -->
+<div
+  class="checkout-modal"
+  [ngClass]="{ show: showModal }"
+  [style.display]="showModal ? 'flex' : 'none'"
+>
+  <div class="modal-overlay" (click)="onOverlayClick($event)"></div>
+
+  <div class="modal-container">
+    <!-- Header -->
+    <div class="modal-header">
+      <h2 class="modal-title">
+        <i class="fas fa-shopping-cart"></i>
+        Finalizar Compra
+      </h2>
+      <button class="close-btn" (click)="closeCheckout()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <!-- Progress Steps -->
+    <div class="progress-steps">
+      <div
+        class="step"
+        [class.active]="currentStep >= 1"
+        [class.completed]="currentStep > 1"
+      >
+        <div class="step-number">1</div>
+        <span class="step-label">Datos</span>
+      </div>
+      <div class="step-divider" [class.completed]="currentStep > 1"></div>
+      <div
+        class="step"
+        [class.active]="currentStep >= 2"
+        [class.completed]="currentStep > 2"
+      >
+        <div class="step-number">2</div>
+        <span class="step-label">Pago</span>
+      </div>
+      <div class="step-divider" [class.completed]="currentStep > 2"></div>
+      <div class="step" [class.active]="currentStep >= 3">
+        <div class="step-number">3</div>
+        <span class="step-label">Confirmar</span>
+      </div>
+    </div>
+
+    <div class="modal-content">
+      <!-- Resumen del Carrito (Sidebar) -->
+      <div class="cart-summary">
+        <h3 class="summary-title">
+          <i class="fas fa-list"></i>
+          Resumen del Pedido
+        </h3>
+
+        <div class="summary-items">
+          <div class="summary-item" *ngFor="let item of cartItems">
+            <img
+              [src]="item.product.image"
+              [alt]="item.product.name"
+              class="item-image"
+            />
+            <div class="item-details">
+              <h4 class="item-name">{{ item.product.name }}</h4>
+              <p class="item-category">
+                {{ getCategoryDisplayName(item.product.category) }}
+              </p>
+              <div class="item-meta" *ngIf="item.specificData">
+                <small *ngIf="item.specificData.date"
+                  >Fecha:
+                  {{ item.specificData.date | date : "dd/MM/yyyy" }}</small
+                >
+                <small *ngIf="item.specificData.time"
+                  >Hora: {{ item.specificData.time }}</small
+                >
+                <small *ngIf="item.specificData.seats"
+                  >Asientos: {{ item.specificData.seats?.join(", ") }}</small
+                >
+              </div>
+            </div>
+            <div class="item-price-section">
+              <div class="quantity-controls" *ngIf="currentStep === 1">
+                <button
+                  class="qty-btn"
+                  (click)="updateItemQuantity(item.id, item.quantity - 1)"
+                  [disabled]="item.quantity <= 1"
+                >
+                  -
+                </button>
+                <span class="quantity">{{ item.quantity }}</span>
+                <button
+                  class="qty-btn"
+                  (click)="updateItemQuantity(item.id, item.quantity + 1)"
+                >
+                  +
+                </button>
+                <button
+                  class="remove-btn"
+                  (click)="removeItem(item.id)"
+                  title="Eliminar"
+                >
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+              <div class="item-price">
+                <span class="unit-price"
+                  >${{ item.product.price.toLocaleString("es-AR") }} c/u</span
+                >
+                <span class="total-price"
+                  >${{
+                    (item.product.price * item.quantity).toLocaleString("es-AR")
+                  }}</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Código promocional -->
+        <div class="promo-section" *ngIf="currentStep <= 2">
+          <div class="promo-input-group" *ngIf="!appliedPromo?.success">
+            <input
+              type="text"
+              [(ngModel)]="promoCode"
+              placeholder="Código promocional"
+              class="promo-input"
+            />
+            <button
+              (click)="applyPromoCode()"
+              class="promo-btn"
+              [disabled]="!promoCode.trim()"
+            >
+              Aplicar
+            </button>
+          </div>
+
+          <div class="promo-applied" *ngIf="appliedPromo?.success">
+            <i class="fas fa-check-circle"></i>
+            <span>{{ appliedPromo?.message }}</span>
+            <button (click)="removePromoCode()" class="remove-promo">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+
+          <div
+            class="promo-error"
+            *ngIf="appliedPromo && !appliedPromo.success"
+          >
+            <i class="fas fa-exclamation-circle"></i>
+            <span>{{ appliedPromo.message }}</span>
+          </div>
+        </div>
+
+        <!-- Totales -->
+        <div class="order-totals">
+          <div class="total-line">
+            <span
+              >Subtotal ({{ getTotalItems() }}
+              {{ getTotalItems() === 1 ? "item" : "items" }}):</span
+            >
+            <span>${{ getSubtotal().toLocaleString("es-AR") }}</span>
+          </div>
+          <div class="total-line" *ngIf="getDiscount() > 0">
+            <span>Descuento:</span>
+            <span class="discount"
+              >-${{ getDiscount().toLocaleString("es-AR") }}</span
+            >
+          </div>
+          <div class="total-line final-total">
+            <span>TOTAL:</span>
+            <span>${{ getTotal().toLocaleString("es-AR") }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Formularios por Step -->
+      <div class="form-section">
+        <!-- Step 1: Datos del Cliente -->
+        <div class="step-content" *ngIf="currentStep === 1">
+          <h3 class="step-title">
+            <i class="fas fa-user"></i>
+            Información Personal
+          </h3>
+
+          <div class="form-grid">
+            <div class="form-group full-width">
+              <label for="customerName">Nombre Completo *</label>
+              <input
+                type="text"
+                id="customerName"
+                [(ngModel)]="customerInfo.name"
+                placeholder="Tu nombre completo"
+                class="form-input"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="customerEmail">Email *</label>
+              <input
+                type="email"
+                id="customerEmail"
+                [(ngModel)]="customerInfo.email"
+                placeholder="tu@email.com"
+                class="form-input"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="customerPhone">Teléfono *</label>
+              <input
+                type="tel"
+                id="customerPhone"
+                [(ngModel)]="customerInfo.phone"
+                placeholder="+54 9 11 1234-5678"
+                class="form-input"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="documentType">Tipo de Documento *</label>
+              <select
+                id="documentType"
+                [(ngModel)]="customerInfo.documentType"
+                class="form-select"
+              >
+                <option value="DNI">DNI</option>
+                <option value="CUIL">CUIL</option>
+                <option value="CUIT">CUIT</option>
+                <option value="Pasaporte">Pasaporte</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="documentNumber">Número de Documento *</label>
+              <input
+                type="text"
+                id="documentNumber"
+                [(ngModel)]="customerInfo.documentNumber"
+                placeholder="12345678"
+                class="form-input"
+                required
+              />
+            </div>
+
+            <div class="form-group full-width">
+              <label for="customerAddress">Dirección</label>
+              <input
+                type="text"
+                id="customerAddress"
+                [(ngModel)]="customerInfo.address"
+                placeholder="Calle y número (opcional para pago en mostrador)"
+                class="form-input"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="customerCity">Ciudad</label>
+              <input
+                type="text"
+                id="customerCity"
+                [(ngModel)]="customerInfo.city"
+                placeholder="Ciudad"
+                class="form-input"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="postalCode">Código Postal</label>
+              <input
+                type="text"
+                id="postalCode"
+                [(ngModel)]="customerInfo.postalCode"
+                placeholder="1234"
+                class="form-input"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 2: Método de Pago -->
+        <div class="step-content" *ngIf="currentStep === 2">
+          <h3 class="step-title">
+            <i class="fas fa-credit-card"></i>
+            Método de Pago
+          </h3>
+
+          <div class="payment-methods">
+            <label class="payment-option">
+              <input
+                type="radio"
+                name="paymentMethod"
+                value="credit-card"
+                [(ngModel)]="paymentInfo.method"
+                (change)="onPaymentMethodChange()"
+              />
+              <span class="option-content">
+                <i class="fas fa-credit-card"></i>
+                <span>Tarjeta de Crédito/Débito</span>
+              </span>
+            </label>
+
+            <label class="payment-option">
+              <input
+                type="radio"
+                name="paymentMethod"
+                value="mercado-pago"
+                [(ngModel)]="paymentInfo.method"
+                (change)="onPaymentMethodChange()"
+              />
+              <span class="option-content">
+                <i class="fab fa-paypal"></i>
+                <span>Mercado Pago</span>
+              </span>
+            </label>
+
+            <label class="payment-option" *ngIf="allowPickupPayment">
+              <input
+                type="radio"
+                name="paymentMethod"
+                value="cash-pickup"
+                [(ngModel)]="paymentInfo.method"
+                (change)="onPaymentMethodChange()"
+              />
+              <span class="option-content">
+                <i class="fas fa-store"></i>
+                <span>Pago en Mostrador</span>
+              </span>
+            </label>
+          </div>
+
+          <!-- Formulario de Tarjeta -->
+          <div class="card-form" *ngIf="paymentInfo.method === 'credit-card'">
+            <div class="form-grid">
+              <div class="form-group full-width">
+                <label for="cardName">Nombre en la Tarjeta *</label>
+                <input
+                  type="text"
+                  id="cardName"
+                  [(ngModel)]="paymentInfo.cardName"
+                  placeholder="Nombre como aparece en la tarjeta"
+                  class="form-input"
+                  required
+                />
+              </div>
+
+              <div class="form-group full-width">
+                <label for="cardNumber">Número de Tarjeta *</label>
+                <input
+                  type="text"
+                  id="cardNumber"
+                  [value]="paymentInfo.cardNumber"
+                  (input)="formatCardNumber($event)"
+                  placeholder="1234 5678 9012 3456"
+                  class="form-input"
+                  maxlength="19"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="cardExpiry">Vencimiento *</label>
+                <input
+                  type="text"
+                  id="cardExpiry"
+                  [value]="paymentInfo.cardExpiry"
+                  (input)="formatCardExpiry($event)"
+                  placeholder="MM/AA"
+                  class="form-input"
+                  maxlength="5"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="cardCvv">CVV *</label>
+                <input
+                  type="text"
+                  id="cardCvv"
+                  [(ngModel)]="paymentInfo.cardCvv"
+                  placeholder="123"
+                  class="form-input"
+                  maxlength="4"
+                  required
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- Información de Mercado Pago -->
+          <div
+            class="payment-info"
+            *ngIf="paymentInfo.method === 'mercado-pago'"
+          >
+            <div class="info-card">
+              <i class="fas fa-info-circle"></i>
+              <p>
+                Serás redirigido a Mercado Pago para completar el pago de forma
+                segura.
+              </p>
+            </div>
+          </div>
+
+          <!-- Información de Pago en Mostrador -->
+          <div
+            class="payment-info"
+            *ngIf="paymentInfo.method === 'cash-pickup'"
+          >
+            <div class="info-card pickup-info">
+              <i class="fas fa-store"></i>
+              <h4>Pago y Retiro en Mostrador</h4>
+              <p>
+                • Podrás pagar en efectivo o tarjeta en cualquiera de nuestras
+                sucursales
+              </p>
+              <p>• Retira tu pedido en el momento del pago</p>
+              <p>• Horarios: Lunes a Domingo de 10:00 a 22:00</p>
+              <p><strong>Sucursal Centro:</strong> Av. Corrientes 1234, CABA</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 3: Confirmación -->
+        <div class="step-content" *ngIf="currentStep === 3">
+          <h3 class="step-title">
+            <i class="fas fa-check-circle"></i>
+            Confirmar Pedido
+          </h3>
+
+          <div class="confirmation-details">
+            <div class="detail-section">
+              <h4>Datos del Cliente</h4>
+              <p><strong>Nombre:</strong> {{ customerInfo.name }}</p>
+              <p><strong>Email:</strong> {{ customerInfo.email }}</p>
+              <p><strong>Teléfono:</strong> {{ customerInfo.phone }}</p>
+              <p>
+                <strong>{{ customerInfo.documentType }}:</strong>
+                {{ customerInfo.documentNumber }}
+              </p>
+            </div>
+
+            <div class="detail-section">
+              <h4>Método de Pago</h4>
+              <p>{{ getPaymentMethodDisplayName(paymentInfo.method) }}</p>
+              <div
+                *ngIf="
+                  paymentInfo.method === 'credit-card' && paymentInfo.cardNumber
+                "
+              >
+                <p>
+                  <strong>Tarjeta:</strong> **** **** ****
+                  {{ paymentInfo.cardNumber.slice(-4) }}
+                </p>
+              </div>
+            </div>
+
+            <div class="detail-section" *ngIf="appliedPromo?.success">
+              <h4>Código Promocional</h4>
+              <p>
+                <strong>{{ promoCode }}:</strong> {{ appliedPromo?.message }}
+              </p>
+            </div>
+          </div>
+
+          <div class="terms-section">
+            <label class="checkbox-container">
+              <input type="checkbox" [(ngModel)]="termsAccepted" required />
+              <span class="checkmark"></span>
+              Acepto los
+              <a href="#" target="_blank">términos y condiciones</a> y la
+              <a href="#" target="_blank">política de privacidad</a>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer con acciones -->
+    <div class="modal-footer">
+      <div class="action-buttons">
+        <button
+          class="btn-back"
+          (click)="previousStep()"
+          *ngIf="currentStep > 1"
+          [disabled]="isProcessing"
+        >
+          <i class="fas fa-arrow-left"></i>
+          Anterior
+        </button>
+
+        <button
+          class="btn-cancel"
+          (click)="closeCheckout()"
+          [disabled]="isProcessing"
+        >
+          <i class="fas fa-times"></i>
+          Cancelar
+        </button>
+
+        <button
+          class="btn-next"
+          (click)="saveCustomerInfo()"
+          *ngIf="currentStep === 1"
+          [disabled]="!isCustomerInfoValid() || isProcessing"
+        >
+          <i class="fas fa-arrow-right"></i>
+          Continuar
+        </button>
+
+        <button
+          class="btn-next"
+          (click)="nextStep()"
+          *ngIf="currentStep === 2"
+          [disabled]="!isPaymentInfoValid() || isProcessing"
+        >
+          <i class="fas fa-arrow-right"></i>
+          Continuar
+        </button>
+
+        <button
+          class="btn-confirm"
+          (click)="processOrder()"
+          *ngIf="currentStep === 3"
+          [disabled]="!termsAccepted || isProcessing"
+        >
+          <i class="fas fa-spinner fa-spin" *ngIf="isProcessing"></i>
+          <i class="fas fa-check" *ngIf="!isProcessing"></i>
+          {{ isProcessing ? "Procesando..." : "Confirmar Compra" }}
+        </button>
+      </div>
+
+      <div class="footer-total">
+        <span class="total-label">Total a pagar:</span>
+        <span class="total-amount"
+          >${{ getTotal().toLocaleString("es-AR") }}</span
+        >
+      </div>
+    </div>
+  </div>
+</div>

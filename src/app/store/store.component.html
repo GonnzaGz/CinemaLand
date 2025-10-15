@@ -1,56 +1,505 @@
 <div class="store-container">
-  <!-- Banner Store -->
-  <div class="store-banner">
-    <h1>CINEMALAND STORE</h1>
-    <p>Productos exclusivos de tus películas favoritas</p>
+  <!-- Header del Store -->
+  <div class="store-header" *ngIf="!showCheckout">
+    <div class="header-content">
+      <h1 class="store-title">🛍️ CINEMALAND STORE</h1>
+      <p class="store-subtitle">
+        Productos exclusivos para verdaderos fanáticos del cine
+      </p>
+    </div>
   </div>
 
-  <!-- Categorías -->
-  <div class="categories">
-    <button class="cat-btn active">DISNEY</button>
-    <button class="cat-btn">FÚTBOL</button>
-    <button class="cat-btn">POCHOCLERAS</button>
+  <!-- Filtros y Búsqueda -->
+  <div class="filters-section" *ngIf="!showCheckout">
+    <div class="search-bar">
+      <i class="fas fa-search"></i>
+      <input
+        type="text"
+        [(ngModel)]="searchTerm"
+        (input)="filterProducts()"
+        placeholder="Buscar productos..."
+        class="search-input"
+      />
+    </div>
+
+    <div class="category-filters">
+      <button
+        *ngFor="let category of categories"
+        class="category-btn"
+        [class.active]="selectedCategory === category"
+        (click)="selectedCategory = category; filterProducts()"
+      >
+        {{ getCategoryDisplayName(category) }}
+      </button>
+    </div>
   </div>
 
-  <!-- Productos Disney -->
-  <div class="products-section">
-    <h2>DISNEY</h2>
-    <div class="products-grid">
-      <div class="product-item">
-        <div class="discount-badge">DESCUENTO</div>
-        <img
-          src="assets/images/disney-moana.png"
-          alt="Moana"
-          class="product-img"
-        />
-        <h3>Figura Moana</h3>
-        <p class="price">$3.500</p>
-        <button class="buy-btn">COMPRAR</button>
+  <!-- Grid de Productos -->
+  <div class="products-grid" *ngIf="!showCheckout && !showCart">
+    <div
+      *ngFor="let product of filteredProducts"
+      class="product-card"
+      [class.featured]="product.featured"
+    >
+      <div class="product-image">
+        <img [src]="product.image" [alt]="product.name" />
+        <div class="featured-badge" *ngIf="product.featured">⭐ DESTACADO</div>
+        <div class="stock-info" [class.low-stock]="product.stock <= 5">
+          Stock: {{ product.stock }}
+        </div>
       </div>
 
-      <div class="product-item">
-        <div class="discount-badge">DESCUENTO</div>
-        <img
-          src="assets/images/disney-snow.png"
-          alt="Blancanieves"
-          class="product-img"
-        />
-        <h3>Figura Blancanieves</h3>
-        <p class="price">$3.200</p>
-        <button class="buy-btn">COMPRAR</button>
-      </div>
+      <div class="product-info">
+        <h3 class="product-name">{{ product.name }}</h3>
+        <p class="product-description">{{ product.description }}</p>
+        <div class="product-category">
+          {{ getCategoryDisplayName(product.category) }}
+        </div>
 
-      <div class="product-item">
-        <div class="discount-badge">DESCUENTO</div>
-        <img
-          src="assets/images/disney-villains.png"
-          alt="Villanos"
-          class="product-img"
-        />
-        <h3>Set Villanos Disney</h3>
-        <p class="price">$5.800</p>
-        <button class="buy-btn">COMPRAR</button>
+        <div class="product-footer">
+          <div class="price-section">
+            <span class="price"
+              >${{ product.price.toLocaleString("es-AR") }}</span
+            >
+          </div>
+
+          <button
+            class="add-to-cart-btn"
+            (click)="addToCart(product)"
+            [disabled]="product.stock === 0"
+          >
+            <i class="fas fa-cart-plus"></i>
+            {{ product.stock === 0 ? "Sin Stock" : "Agregar" }}
+          </button>
+        </div>
       </div>
     </div>
   </div>
+
+  <!-- No hay productos -->
+  <div
+    class="no-products"
+    *ngIf="!showCheckout && !showCart && filteredProducts.length === 0"
+  >
+    <i class="fas fa-search"></i>
+    <h3>No se encontraron productos</h3>
+    <p>Intenta cambiar los filtros o el término de búsqueda</p>
+  </div>
+
+  <!-- Cart Sidebar -->
+  <div class="cart-sidebar" *ngIf="showCart" [class.show]="showCart">
+    <div class="cart-header">
+      <h2>🛒 Tu Carrito</h2>
+      <button class="close-cart" (click)="toggleCart()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <div class="cart-content">
+      <!-- Empty Cart -->
+      <div class="empty-cart" *ngIf="cart.length === 0">
+        <i class="fas fa-shopping-cart"></i>
+        <h3>Tu carrito está vacío</h3>
+        <p>¡Agrega algunos productos geniales!</p>
+      </div>
+
+      <!-- Cart Items -->
+      <div class="cart-items" *ngIf="cart.length > 0">
+        <div class="cart-item" *ngFor="let item of cart">
+          <img
+            [src]="item.product.image"
+            [alt]="item.product.name"
+            class="item-image"
+          />
+
+          <div class="item-details">
+            <h4>{{ item.product.name }}</h4>
+            <p class="item-price">
+              ${{ item.product.price.toLocaleString("es-AR") }}
+            </p>
+
+            <div class="quantity-controls">
+              <button
+                (click)="updateQuantity(item.product.id, item.quantity - 1)"
+              >
+                -
+              </button>
+              <span class="quantity">{{ item.quantity }}</span>
+              <button
+                (click)="updateQuantity(item.product.id, item.quantity + 1)"
+              >
+                +
+              </button>
+            </div>
+          </div>
+
+          <div class="item-actions">
+            <div class="item-total">
+              ${{
+                (item.product.price * item.quantity).toLocaleString("es-AR")
+              }}
+            </div>
+            <button
+              class="remove-item"
+              (click)="removeFromCart(item.product.id)"
+            >
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cart Footer -->
+    <div class="cart-footer" *ngIf="cart.length > 0">
+      <div class="cart-total">
+        <div class="total-line">
+          <span>Total de productos:</span>
+          <span>{{ getCartItemCount() }}</span>
+        </div>
+        <div class="total-line final">
+          <span>TOTAL A PAGAR:</span>
+          <span>${{ getCartTotal().toLocaleString("es-AR") }}</span>
+        </div>
+      </div>
+
+      <div class="cart-actions">
+        <button class="continue-shopping" (click)="toggleCart()">
+          <i class="fas fa-arrow-left"></i>
+          Seguir Comprando
+        </button>
+        <button class="checkout-btn" (click)="startCheckout()">
+          <i class="fas fa-credit-card"></i>
+          Finalizar Compra
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Checkout Modal -->
+  <div class="checkout-modal" *ngIf="showCheckout">
+    <div class="checkout-container">
+      <!-- Checkout Header -->
+      <div class="checkout-header">
+        <button class="back-btn" (click)="cancelCheckout()">
+          <i class="fas fa-arrow-left"></i>
+          Volver
+        </button>
+        <h2>💳 Finalizar Compra</h2>
+        <div class="checkout-total">
+          <span>Total: ${{ getCartTotal().toLocaleString("es-AR") }}</span>
+        </div>
+      </div>
+
+      <div class="checkout-content">
+        <!-- Resumen de Productos -->
+        <div class="order-summary">
+          <h3>📦 Resumen del Pedido</h3>
+          <div class="summary-items">
+            <div class="summary-item" *ngFor="let item of cart">
+              <img [src]="item.product.image" [alt]="item.product.name" />
+              <div class="item-info">
+                <h4>{{ item.product.name }}</h4>
+                <p>
+                  Cantidad: {{ item.quantity }} × ${{
+                    item.product.price.toLocaleString("es-AR")
+                  }}
+                </p>
+              </div>
+              <div class="item-total">
+                ${{
+                  (item.product.price * item.quantity).toLocaleString("es-AR")
+                }}
+              </div>
+            </div>
+          </div>
+
+          <div class="summary-total">
+            <div class="total-line">
+              <span>Subtotal:</span>
+              <span>${{ getCartTotal().toLocaleString("es-AR") }}</span>
+            </div>
+            <div class="total-line">
+              <span>Envío:</span>
+              <span>GRATIS</span>
+            </div>
+            <div class="total-line final">
+              <span>TOTAL:</span>
+              <span>${{ getCartTotal().toLocaleString("es-AR") }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Información del Cliente -->
+        <div class="form-section">
+          <h3>👤 Información de Envío</h3>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="customerName">Nombre Completo *</label>
+              <input
+                type="text"
+                id="customerName"
+                [(ngModel)]="customerInfo.name"
+                placeholder="Tu nombre completo"
+                class="form-input"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="customerEmail">Email *</label>
+              <input
+                type="email"
+                id="customerEmail"
+                [(ngModel)]="customerInfo.email"
+                placeholder="tu@email.com"
+                class="form-input"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="customerPhone">Teléfono *</label>
+              <input
+                type="tel"
+                id="customerPhone"
+                [(ngModel)]="customerInfo.phone"
+                placeholder="+54 9 11 1234-5678"
+                class="form-input"
+                required
+              />
+            </div>
+
+            <div class="form-group full-width">
+              <label for="customerAddress">Dirección *</label>
+              <input
+                type="text"
+                id="customerAddress"
+                [(ngModel)]="customerInfo.address"
+                placeholder="Calle y número"
+                class="form-input"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="customerCity">Ciudad *</label>
+              <input
+                type="text"
+                id="customerCity"
+                [(ngModel)]="customerInfo.city"
+                placeholder="Ciudad"
+                class="form-input"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="postalCode">Código Postal</label>
+              <input
+                type="text"
+                id="postalCode"
+                [(ngModel)]="customerInfo.postalCode"
+                placeholder="1234"
+                class="form-input"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Método de Pago -->
+        <div class="form-section">
+          <h3>💳 Método de Pago</h3>
+
+          <div class="payment-methods">
+            <label class="payment-option">
+              <input
+                type="radio"
+                name="paymentMethod"
+                value="credit-card"
+                [(ngModel)]="paymentMethod"
+              />
+              <span class="option-content">
+                <i class="fas fa-credit-card"></i>
+                Tarjeta de Crédito/Débito
+              </span>
+            </label>
+
+            <label class="payment-option">
+              <input
+                type="radio"
+                name="paymentMethod"
+                value="mercado-pago"
+                [(ngModel)]="paymentMethod"
+              />
+              <span class="option-content">
+                <i class="fab fa-paypal"></i>
+                Mercado Pago
+              </span>
+            </label>
+          </div>
+
+          <!-- Formulario de Tarjeta -->
+          <div class="card-form" *ngIf="paymentMethod === 'credit-card'">
+            <div class="form-grid">
+              <div class="form-group full-width">
+                <label for="cardName">Nombre en la Tarjeta *</label>
+                <input
+                  type="text"
+                  id="cardName"
+                  [(ngModel)]="cardName"
+                  placeholder="Nombre como aparece en la tarjeta"
+                  class="form-input"
+                  required
+                />
+              </div>
+
+              <div class="form-group full-width">
+                <label for="cardNumber">Número de Tarjeta *</label>
+                <input
+                  type="text"
+                  id="cardNumber"
+                  [value]="cardNumber"
+                  (input)="formatCardNumber($event)"
+                  placeholder="1234 5678 9012 3456"
+                  class="form-input"
+                  maxlength="19"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="cardExpiry">Vencimiento *</label>
+                <input
+                  type="text"
+                  id="cardExpiry"
+                  [value]="cardExpiry"
+                  (input)="formatCardExpiry($event)"
+                  placeholder="MM/AA"
+                  class="form-input"
+                  maxlength="5"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="cardCvv">CVV *</label>
+                <input
+                  type="text"
+                  id="cardCvv"
+                  [(ngModel)]="cardCvv"
+                  placeholder="123"
+                  class="form-input"
+                  maxlength="4"
+                  required
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- Información de Mercado Pago -->
+          <div
+            class="mercado-pago-info"
+            *ngIf="paymentMethod === 'mercado-pago'"
+          >
+            <div class="info-card">
+              <i class="fas fa-info-circle"></i>
+              <p>
+                Serás redirigido a Mercado Pago para completar el pago de forma
+                segura.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Términos y condiciones -->
+        <div class="terms-section">
+          <label class="checkbox-container">
+            <input type="checkbox" required />
+            <span class="checkmark"></span>
+            Acepto los <a href="#" target="_blank">términos y condiciones</a> y
+            la <a href="#" target="_blank">política de privacidad</a>
+          </label>
+        </div>
+      </div>
+
+      <!-- Checkout Footer -->
+      <div class="checkout-footer">
+        <div class="action-buttons">
+          <button class="btn-cancel" (click)="cancelCheckout()">
+            <i class="fas fa-times"></i>
+            Cancelar
+          </button>
+          <button
+            class="btn-confirm"
+            (click)="processOrder()"
+            [disabled]="!isFormValid() || isProcessing"
+          >
+            <i class="fas fa-spinner fa-spin" *ngIf="isProcessing"></i>
+            <i class="fas fa-file-pdf" *ngIf="!isProcessing"></i>
+            {{ isProcessing ? "Procesando..." : "Confirmar Compra" }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Carrito flotante -->
+  <div class="floating-cart" *ngIf="cart.length > 0 && !showCheckoutModal">
+    <div class="cart-summary">
+      <div class="cart-icon">
+        <i class="fas fa-shopping-cart"></i>
+        <span class="cart-count">{{ getLocalCartItemCount() }}</span>
+      </div>
+      <div class="cart-total">
+        <div class="total-amount">
+          ${{ getLocalCartTotal().toLocaleString("es-AR") }}
+        </div>
+        <div class="items-count">
+          {{ getLocalCartItemCount() }}
+          {{ getLocalCartItemCount() === 1 ? "producto" : "productos" }}
+        </div>
+      </div>
+      <button (click)="openUnifiedCheckout()" class="checkout-btn">
+        <i class="fas fa-credit-card"></i>
+        Finalizar Compra
+      </button>
+    </div>
+
+    <!-- Detalles del carrito -->
+    <div class="cart-details">
+      <h4>Tu Carrito:</h4>
+      <div class="cart-items">
+        <div *ngFor="let item of cart" class="cart-item">
+          <span class="item-name"
+            >{{ item.quantity }}x {{ item.product.name }}</span
+          >
+          <span class="item-price"
+            >${{
+              (item.product.price * item.quantity).toLocaleString("es-AR")
+            }}</span
+          >
+          <button (click)="removeFromCart(item.product.id)" class="remove-btn">
+            <i class="fas fa-trash"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Componente Unified Checkout -->
+  <app-unified-checkout
+    [showModal]="showCheckoutModal"
+    [allowPickupPayment]="true"
+    (closeModal)="closeCheckoutModal()"
+    (orderCompleted)="onOrderCompleted($event)"
+    (orderFailed)="onOrderFailed($event)"
+  ></app-unified-checkout>
+
+  <!-- Overlay -->
+  <div
+    class="overlay"
+    *ngIf="showCart || showCheckout"
+    (click)="showCart ? toggleCart() : cancelCheckout()"
+  ></div>
 </div>

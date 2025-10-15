@@ -1,19 +1,236 @@
-div {
-  text-align: center;
-  margin-top: 3rem;
+/* Error 404 - Diseño Moderno */
+.error-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
   color: white;
-  background-color: rgba(0, 0, 0, 0.153);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
-img {
-  width: 350px;
-  height: 250px;
-  margin-top: 4rem;
+.error-content {
+  max-width: 800px;
+  text-align: center;
+  animation: fadeInUp 0.8s ease-out;
 }
 
-button {
-  padding: 10px 20px;
-  font-size: 16px;
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Icono 404 */
+.error-icon {
+  position: relative;
+  margin-bottom: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+.error-icon .fas {
+  font-size: 6rem;
+  color: #d4af37;
+  animation: rotate 3s linear infinite;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.error-number {
+  font-size: 8rem;
+  font-weight: bold;
+  background: linear-gradient(135deg, #d4af37, #b8860b);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 0 30px rgba(212, 175, 55, 0.5);
+}
+
+/* Texto del error */
+.error-title {
+  font-size: 3rem;
+  margin-bottom: 20px;
+  font-weight: bold;
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.error-description {
+  font-size: 1.2rem;
+  color: #cccccc;
+  margin-bottom: 40px;
+  line-height: 1.6;
+}
+
+/* Botones de acción */
+.error-actions {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin-bottom: 60px;
+  flex-wrap: wrap;
+}
+
+.btn-primary,
+.btn-secondary {
+  padding: 15px 30px;
+  border: none;
+  border-radius: 25px;
+  font-size: 1.1rem;
+  font-weight: bold;
   cursor: pointer;
-  margin-bottom: 3rem;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: white;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #d4af37, #b8860b);
+  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+}
+
+.btn-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(212, 175, 55, 0.5);
+}
+
+.btn-secondary {
+  background: linear-gradient(135deg, #4a90e2, #357abd);
+  box-shadow: 0 4px 15px rgba(74, 144, 226, 0.3);
+}
+
+.btn-secondary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(74, 144, 226, 0.5);
+}
+
+/* Footer Links */
+.footer-links {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  padding: 40px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.links-section h3 {
+  color: #d4af37;
+  margin-bottom: 25px;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.links-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  margin-bottom: 40px;
+}
+
+.footer-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  color: white;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  border: 1px solid transparent;
+}
+
+.footer-link:hover {
+  background: rgba(212, 175, 55, 0.2);
+  border-color: #d4af37;
+  transform: translateY(-2px);
+  color: #d4af37;
+}
+
+.footer-link i {
+  font-size: 1.2rem;
+}
+
+/* Sección de Sostenibilidad AWS */
+.sustainability-section {
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  padding-top: 30px;
+  text-align: center;
+}
+
+.aws-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: linear-gradient(135deg, #ff9900, #ff6600);
+  padding: 10px 20px;
+  border-radius: 25px;
+  margin-bottom: 20px;
+  font-weight: bold;
+  color: white;
+  box-shadow: 0 4px 15px rgba(255, 153, 0, 0.3);
+}
+
+.aws-badge i {
+  font-size: 1.5rem;
+}
+
+.sustainability-text {
+  color: #cccccc;
+  font-size: 1rem;
+  line-height: 1.6;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .error-number {
+    font-size: 6rem;
+  }
+
+  .error-title {
+    font-size: 2rem;
+  }
+
+  .error-actions {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .links-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .footer-links {
+    padding: 30px 20px;
+  }
+
+  .error-icon {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .error-icon .fas {
+    font-size: 4rem;
+  }
 }

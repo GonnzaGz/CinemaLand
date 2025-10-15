@@ -89,10 +89,70 @@
     <!-- Sección inferior -->
     <div class="footer-bottom">
       <div class="footer-bottom-content">
-        <p class="copyright">
-          © 2025 CinemaLand. Todos los derechos reservados.
-        </p>
-        <p class="credits">Hecho con ❤️ para los amantes del cine</p>
+        <div class="footer-left">
+          <p class="copyright">
+            © 2025 CinemaLand. Todos los derechos reservados.
+          </p>
+          <p class="credits">Hecho con ❤️ para los amantes del cine</p>
+        </div>
+
+        <!-- Botón de accesibilidad -->
+        <div class="accessibility-section">
+          <div class="daltonism-controls">
+            <button
+              class="daltonism-toggle"
+              [class.active]="isDaltonismActive"
+              (click)="toggleDaltonismMode()"
+              title="Activar/Desactivar modo para daltonismo"
+            >
+              <i [class]="currentMode.icon"></i>
+              <span class="toggle-text">{{ currentMode.name }}</span>
+            </button>
+
+            <div class="daltonism-menu" [class.open]="showDaltonismMenu">
+              <button
+                class="menu-trigger"
+                (click)="toggleDaltonismMenu()"
+                title="Opciones de accesibilidad"
+              >
+                <i class="fas fa-cog"></i>
+              </button>
+
+              <div class="menu-dropdown" *ngIf="showDaltonismMenu">
+                <div class="menu-header">
+                  <h4>🎨 Opciones de Accesibilidad</h4>
+                  <button (click)="closeDaltonismMenu()" class="close-menu">
+                    <i class="fas fa-times"></i>
+                  </button>
+                </div>
+
+                <div class="mode-options">
+                  <button
+                    *ngFor="let mode of colorblindModes"
+                    class="mode-option"
+                    [class.selected]="currentMode.id === mode.id"
+                    (click)="selectColorblindMode(mode)"
+                  >
+                    <i [class]="mode.icon"></i>
+                    <div class="mode-info">
+                      <span class="mode-name">{{ mode.name }}</span>
+                      <small class="mode-description">{{
+                        mode.description
+                      }}</small>
+                    </div>
+                  </button>
+                </div>
+
+                <div class="menu-footer">
+                  <small>
+                    💡 Estos filtros ayudan a simular diferentes tipos de
+                    daltonismo para mejorar la accesibilidad de la aplicación.
+                  </small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>

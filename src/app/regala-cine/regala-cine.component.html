@@ -1,175 +1,327 @@
 <div class="regala-cine-container">
-  <!-- Banner principal -->
-  <div class="hero-banner">
-    <div class="banner-overlay"></div>
+  <!-- Banner principal rediseñado -->
+  <div class="gift-banner">
     <div class="banner-content">
-      <div class="gift-icon">
-        <i class="fas fa-gift"></i>
-      </div>
-      <h1 class="main-title">REGALÁ ALGO QUE NUNCA SE OLVIDA</h1>
-      <p class="subtitle">Regalar Cine es regalar momentos inolvidables.</p>
-
-      <div class="experience-icons">
-        <div class="icon-item">
-          <i class="fas fa-camera"></i>
-        </div>
-        <div class="icon-item">
-          <i class="fas fa-video"></i>
-        </div>
-        <div class="icon-item">
-          <i class="fas fa-ticket-alt"></i>
-        </div>
-        <div class="icon-item">
-          <i class="fas fa-cloud"></i>
-        </div>
-        <div class="icon-item">
-          <i class="fas fa-volume-up"></i>
-        </div>
-        <div class="icon-item">
-          <i class="fas fa-gem"></i>
-        </div>
-      </div>
-    </div>
-    <div class="banner-image">
-      <img
-        src="assets/images/cinema-couple.jpg"
-        alt="Pareja en el cine"
-        class="couple-image"
-      />
-    </div>
-  </div>
-
-  <!-- ¿Qué son las experiencias? -->
-  <div class="experiences-section">
-    <h2 class="section-title">
-      ¿QUÉ SON Y COMO FUNCIONAN LAS <span class="highlight">EXPERIENCIAS</span>?
-    </h2>
-    <p class="section-description">
-      Las experiencias de cine no son formas únicas de disfrutar tus películas
-      favoritas. Es vivir el cine de una manera diferente y memorable.
-    </p>
-
-    <div class="steps-container">
-      <div class="step-item">
-        <div class="step-number">01</div>
-        <h3>Explorá todas las opciones</h3>
-        <p>disponibles y elegí la experiencia que querés regalar(te).</p>
-      </div>
-
-      <div class="step-item">
-        <div class="step-number">02</div>
-        <h3>Personalizá la experiencia:</h3>
-        <p>hacela única para vos o para alguien más.</p>
-      </div>
-
-      <div class="step-item">
-        <div class="step-number">03</div>
-        <h3>Pagá de la forma que más te convenga:</h3>
-        <p>tarjetas, puntos o cualquiera de las opciones disponibles.</p>
+      <h1 class="banner-title">🎁 REGALÁ MOMENTOS INOLVIDABLES</h1>
+      <p class="banner-subtitle">
+        Regalar Cine es regalar emociones, risas y recuerdos únicos
+      </p>
+      <div class="promo-badge">
+        <p><strong>🎪 Experiencias únicas para regalar</strong></p>
+        <p class="price-highlight">Desde $3.500</p>
+        <p>¡El regalo perfecto para cualquier ocasión!</p>
       </div>
     </div>
   </div>
 
-  <!-- Experiencias para regalar -->
-  <div class="gifts-section">
-    <h2 class="section-title">
-      EXPERIENCIAS<br /><span class="highlight">PARA REGALAR O PARA VOS</span>
-    </h2>
+  <!-- Sección principal de códigos promocionales -->
+  <div class="promo-section">
+    <h3>🎫 CÓDIGOS PROMOCIONALES DISPONIBLES</h3>
+    <div class="promo-info">
+      <div class="promo-item">
+        <div class="promo-code">REGALO10</div>
+        <div class="promo-desc">10% de descuento en experiencias</div>
+      </div>
+      <div class="promo-item">
+        <div class="promo-code">FAMILIA15</div>
+        <div class="promo-desc">15% OFF en paquetes familiares</div>
+      </div>
+    </div>
+  </div>
 
-    <div class="gift-cards-container">
-      <!-- Experiencia Clásica -->
-      <div class="gift-card classic">
-        <div class="card-header">
-          <h3>EXPERIENCIA CLÁSICA</h3>
-          <div class="price">Desde $4.500</div>
+  <!-- Cuadrícula de experiencias regalo -->
+  <div class="experiences-grid">
+    <!-- Experiencia Básica -->
+    <div class="experience-card" (click)="addToCart('basica')">
+      <div class="card-image">
+        <img
+          src="https://images.unsplash.com/photo-1489599133944-f04122bbaa55?w=400&h=250&fit=crop"
+          alt="Experiencia Básica"
+        />
+        <div class="card-overlay">
+          <i class="fas fa-gift"></i>
         </div>
-        <div class="card-content">
-          <ul class="benefits-list">
-            <li>
-              <i class="fas fa-check"></i> 2 Entradas para cualquier función 2D
-            </li>
-            <li>
-              <i class="fas fa-check"></i> Combo Mediano (Pochoclos + Gaseosa)
-            </li>
-            <li><i class="fas fa-check"></i> Válido por 6 meses</li>
-          </ul>
+      </div>
+      <div class="card-content">
+        <div class="card-category">BÁSICA</div>
+        <h3 class="card-title">Experiencia Básica</h3>
+        <p class="card-description">2 entradas + combo básico</p>
+        <div class="card-price">$3.500</div>
+        <button class="add-to-cart-btn">
+          <i class="fas fa-shopping-cart"></i>
+          Regalar
+        </button>
+      </div>
+    </div>
+
+    <!-- Experiencia Premium -->
+    <div class="experience-card popular" (click)="addToCart('premium')">
+      <div class="popular-badge">⭐ Popular</div>
+      <div class="card-image">
+        <img
+          src="https://images.unsplash.com/photo-1489599133944-f04122bbaa55?w=400&h=250&fit=crop"
+          alt="Experiencia Premium"
+        />
+        <div class="card-overlay">
+          <i class="fas fa-crown"></i>
         </div>
-        <button class="gift-btn">REGALAR EXPERIENCIA</button>
+      </div>
+      <div class="card-content">
+        <div class="card-category">PREMIUM</div>
+        <h3 class="card-title">Experiencia Premium</h3>
+        <p class="card-description">4 entradas premium + combo deluxe</p>
+        <div class="card-price">$6.500</div>
+        <button class="add-to-cart-btn">
+          <i class="fas fa-shopping-cart"></i>
+          Regalar
+        </button>
+      </div>
+    </div>
+
+    <!-- Experiencia Familiar -->
+    <div class="experience-card" (click)="addToCart('familiar')">
+      <div class="card-image">
+        <img
+          src="https://images.unsplash.com/photo-1489599133944-f04122bbaa55?w=400&h=250&fit=crop"
+          alt="Experiencia Familiar"
+        />
+        <div class="card-overlay">
+          <i class="fas fa-users"></i>
+        </div>
+      </div>
+      <div class="card-content">
+        <div class="card-category">FAMILIAR</div>
+        <h3 class="card-title">Experiencia Familiar</h3>
+        <p class="card-description">6 entradas + combo familiar XXL</p>
+        <div class="card-price">$9.500</div>
+        <button class="add-to-cart-btn">
+          <i class="fas fa-shopping-cart"></i>
+          Regalar
+        </button>
+      </div>
+    </div>
+
+    <!-- Membresía Anual -->
+    <div class="experience-card vip" (click)="addToCart('anual')">
+      <div class="vip-badge">💎 VIP</div>
+      <div class="card-image">
+        <img
+          src="https://images.unsplash.com/photo-1489599133944-f04122bbaa55?w=400&h=250&fit=crop"
+          alt="Membresía Anual"
+        />
+        <div class="card-overlay">
+          <i class="fas fa-infinity"></i>
+        </div>
+      </div>
+      <div class="card-content">
+        <div class="card-category">MEMBRESÍA</div>
+        <h3 class="card-title">Membresía Anual</h3>
+        <p class="card-description">Acceso ilimitado por 1 año</p>
+        <div class="card-price">$15.000</div>
+        <button class="add-to-cart-btn">
+          <i class="fas fa-shopping-cart"></i>
+          Regalar
+        </button>
+      </div>
+    </div>
+
+    <!-- Paquete Romántico -->
+    <div class="experience-card" (click)="addToCart('romantico')">
+      <div class="card-image">
+        <img
+          src="https://images.unsplash.com/photo-1489599133944-f04122bbaa55?w=400&h=250&fit=crop"
+          alt="Paquete Romántico"
+        />
+        <div class="card-overlay">
+          <i class="fas fa-heart"></i>
+        </div>
+      </div>
+      <div class="card-content">
+        <div class="card-category">ROMÁNTICO</div>
+        <h3 class="card-title">Paquete Romántico</h3>
+        <p class="card-description">2 entradas VIP + cena romántica</p>
+        <div class="card-price">$8.500</div>
+        <button class="add-to-cart-btn">
+          <i class="fas fa-shopping-cart"></i>
+          Regalar
+        </button>
+      </div>
+    </div>
+
+    <!-- Experiencia Cumpleaños -->
+    <div class="experience-card" (click)="addToCart('cumpleanos')">
+      <div class="card-image">
+        <img
+          src="https://images.unsplash.com/photo-1489599133944-f04122bbaa55?w=400&h=250&fit=crop"
+          alt="Experiencia Cumpleaños"
+        />
+        <div class="card-overlay">
+          <i class="fas fa-birthday-cake"></i>
+        </div>
+      </div>
+      <div class="card-content">
+        <div class="card-category">CUMPLEAÑOS</div>
+        <h3 class="card-title">Fiesta de Cumpleaños</h3>
+        <p class="card-description">Sala privada + decoración + torta</p>
+        <div class="card-price">$12.000</div>
+        <button class="add-to-cart-btn">
+          <i class="fas fa-shopping-cart"></i>
+          Regalar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sección de beneficios modernizada -->
+  <div class="benefits-section">
+    <div class="benefits-container">
+      <div class="benefits-card">
+        <h2 class="benefits-main-title">
+          🌟 ¿Por qué regalar experiencias de cine?
+        </h2>
+        <p class="benefits-subtitle">
+          Descubre todas las razones por las que regalar cine es la mejor opción
+        </p>
+
+        <div class="benefits-grid">
+          <div class="benefit-item">
+            <div class="benefit-icon">
+              <i class="fas fa-heart"></i>
+            </div>
+            <h3 class="benefit-title">Experiencias Únicas</h3>
+            <p class="benefit-description">
+              Cada película es una nueva aventura que quedará grabada en la
+              memoria para siempre.
+            </p>
+          </div>
+
+          <div class="benefit-item">
+            <div class="benefit-icon">
+              <i class="fas fa-users"></i>
+            </div>
+            <h3 class="benefit-title">Momentos Compartidos</h3>
+            <p class="benefit-description">
+              Ideal para disfrutar en pareja, con amigos o en familia. El mejor
+              regalo es el tiempo juntos.
+            </p>
+          </div>
+
+          <div class="benefit-item">
+            <div class="benefit-icon">
+              <i class="fas fa-star"></i>
+            </div>
+            <h3 class="benefit-title">Calidad Premium</h3>
+            <p class="benefit-description">
+              Tecnología de última generación, sonido envolvente y la mejor
+              experiencia cinematográfica.
+            </p>
+          </div>
+
+          <div class="benefit-item">
+            <div class="benefit-icon">
+              <i class="fas fa-gift"></i>
+            </div>
+            <h3 class="benefit-title">Fácil de Regalar</h3>
+            <p class="benefit-description">
+              Voucher digital personalizable que se puede enviar al instante o
+              programar para una fecha especial.
+            </p>
+          </div>
+
+          <div class="benefit-item">
+            <div class="benefit-icon">
+              <i class="fas fa-clock"></i>
+            </div>
+            <h3 class="benefit-title">Sin Caducidad</h3>
+            <p class="benefit-description">
+              Los recuerdos creados en el cine duran para toda la vida, mucho
+              más que cualquier objeto material.
+            </p>
+          </div>
+
+          <div class="benefit-item">
+            <div class="benefit-icon">
+              <i class="fas fa-mobile-alt"></i>
+            </div>
+            <h3 class="benefit-title">100% Digital</h3>
+            <p class="benefit-description">
+              Sin preocupaciones por envíos. Se entrega instantáneamente por
+              email con un diseño hermoso.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FAQ Section -->
+  <div class="faq-section">
+    <h2 class="faq-title">🤔 Preguntas Frecuentes</h2>
+
+    <div class="faq-grid">
+      <div class="faq-item">
+        <h3 class="faq-question">¿Cómo funciona el proceso de regalo?</h3>
+        <p class="faq-answer">
+          Comprás el voucher, lo personalizás con un mensaje y se envía
+          automáticamente al email del destinatario. Ellos pueden usar el código
+          cuando quieran para reservar sus entradas.
+        </p>
       </div>
 
-      <!-- Experiencia Premium -->
-      <div class="gift-card premium">
-        <div class="popular-badge">MÁS POPULAR</div>
-        <div class="card-header">
-          <h3>EXPERIENCIA PREMIUM</h3>
-          <div class="price">Desde $7.200</div>
-        </div>
-        <div class="card-content">
-          <ul class="benefits-list">
-            <li>
-              <i class="fas fa-check"></i> 2 Entradas para cualquier función
-              (2D, 3D, XD)
-            </li>
-            <li><i class="fas fa-check"></i> Combo Grande Premium</li>
-            <li><i class="fas fa-check"></i> Asientos preferenciales</li>
-            <li><i class="fas fa-check"></i> Válido por 12 meses</li>
-          </ul>
-        </div>
-        <button class="gift-btn premium-btn">REGALAR EXPERIENCIA</button>
+      <div class="faq-item">
+        <h3 class="faq-question">¿Tienen fecha de vencimiento?</h3>
+        <p class="faq-answer">
+          Los vouchers tienen validez según el paquete: Básico (6 meses),
+          Premium y Familiar (1 año). Tiempo suficiente para disfrutar la
+          experiencia.
+        </p>
       </div>
 
-      <!-- Experiencia VIP -->
-      <div class="gift-card vip">
-        <div class="card-header">
-          <h3>EXPERIENCIA VIP</h3>
-          <div class="price">Desde $12.000</div>
-        </div>
-        <div class="card-content">
-          <ul class="benefits-list">
-            <li><i class="fas fa-check"></i> 2 Entradas IMAX o 4D</li>
-            <li>
-              <i class="fas fa-check"></i> Combo VIP (Pochoclos, Gaseosa,
-              Nachos)
-            </li>
-            <li><i class="fas fa-check"></i> Asientos premium</li>
-            <li><i class="fas fa-check"></i> Acceso a sala VIP</li>
-            <li><i class="fas fa-check"></i> Válido por 12 meses</li>
-          </ul>
-        </div>
-        <button class="gift-btn vip-btn">REGALAR EXPERIENCIA</button>
+      <div class="faq-item">
+        <h3 class="faq-question">¿Se puede usar en cualquier sucursal?</h3>
+        <p class="faq-answer">
+          Sí, los vouchers son válidos en todas nuestras sucursales a nivel
+          nacional. Solo necesitan presentar el código en la boletería o usarlo
+          online.
+        </p>
       </div>
 
-      <!-- Gift Card Personalizada -->
-      <div class="gift-card custom">
-        <div class="card-header">
-          <h3>GIFT CARD PERSONALIZADA</h3>
-          <div class="price">Monto a elección</div>
-        </div>
-        <div class="card-content">
-          <ul class="benefits-list">
-            <li>
-              <i class="fas fa-check"></i> El regalo perfecto para cinefílos
-            </li>
-            <li>
-              <i class="fas fa-check"></i> Monto desde $2.000 hasta $50.000
-            </li>
-            <li><i class="fas fa-check"></i> Válido para entradas y candy</li>
-            <li><i class="fas fa-check"></i> Diseño personalizable</li>
-            <li><i class="fas fa-check"></i> Válido por 24 meses</li>
-          </ul>
-        </div>
-        <button class="gift-btn custom-btn">CREAR GIFT CARD</button>
+      <div class="faq-item">
+        <h3 class="faq-question">¿Puedo personalizar el mensaje?</h3>
+        <p class="faq-answer">
+          ¡Por supuesto! Podés agregar un mensaje personal que aparecerá en el
+          voucher. Hacé que tu regalo sea aún más especial.
+        </p>
       </div>
     </div>
   </div>
 
   <!-- CTA Final -->
-  <div class="cta-section">
-    <h2>REGALÁ MOMENTOS QUE DURAN PARA SIEMPRE</h2>
-    <p>
-      Cada experiencia CinemaLand es una oportunidad de crear recuerdos
-      inolvidables
-    </p>
-    <button class="main-cta-btn">EXPLORAR TODAS LAS EXPERIENCIAS</button>
+  <div class="final-cta">
+    <div class="cta-content">
+      <h2 class="cta-title">🎬 ¿Listo para regalar momentos únicos?</h2>
+      <p class="cta-description">
+        Elegí tu experiencia regalo y hacé feliz a alguien especial hoy mismo
+      </p>
+      <div class="cta-buttons">
+        <button class="cta-btn primary" (click)="addToCart('premium')">
+          <i class="fas fa-gift"></i>
+          REGALAR EXPERIENCIA PREMIUM
+        </button>
+        <button class="cta-btn secondary" (click)="addToCart('basica')">
+          <i class="fas fa-ticket-alt"></i>
+          REGALAR EXPERIENCIA BÁSICA
+        </button>
+      </div>
+    </div>
   </div>
+
+  <!-- Componente Unified Checkout -->
+  <app-unified-checkout
+    [showModal]="showCheckoutModal"
+    [allowPickupPayment]="true"
+    (closeModal)="closeCheckoutModal()"
+    (orderCompleted)="onOrderCompleted($event)"
+    (orderFailed)="onOrderFailed($event)"
+  ></app-unified-checkout>
 </div>

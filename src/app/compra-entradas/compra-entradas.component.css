@@ -562,11 +562,11 @@
     rgba(20, 20, 20, 0.98)
   );
   backdrop-filter: blur(10px);
-  z-index: 1000;
+  z-index: 5; /* Reducido para mejor manejo de layers */
   transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: -5px 0 20px rgba(0, 0, 0, 0.5);
   border-left: 3px solid #d4af37;
-  overflow-y: auto;
+  overflow-y: visible; /* Cambiar para mostrar scrollbar */
   overflow-x: hidden; /* Evitar scroll horizontal */
 }
 
@@ -597,17 +597,32 @@
 .favoritos-content {
   padding: 20px;
   height: calc(100vh - 140px); /* Ajustado para navbar sticky */
-  overflow-y: auto;
-  /* Ocultar scrollbar pero mantener funcionalidad */
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  overflow-y: auto; /* Mantener scroll visible */
+  /* Mostrar scrollbar con estilo personalizado */
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: #d4af37 rgba(255, 255, 255, 0.1); /* Firefox */
   display: flex;
   flex-direction: column;
 }
 
-/* Ocultar scrollbar en WebKit */
+/* Estilo de scrollbar personalizado para WebKit */
 .favoritos-content::-webkit-scrollbar {
-  display: none;
+  width: 8px; /* Mostrar scrollbar más delgada */
+}
+
+.favoritos-content::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+.favoritos-content::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #d4af37, #b8860b);
+  border-radius: 4px;
+  transition: background 0.3s ease;
+}
+
+.favoritos-content::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #f4d03f, #d4af37);
 }
 
 .favoritos-lista {
@@ -703,23 +718,30 @@
 }
 
 .boton-limpiar {
-  width: 80%; /* Reducir ancho para centrarlo mejor */
+  width: 90%; /* Mejorar ancho para mejor centrado */
   background: linear-gradient(135deg, #ff6b6b, #ee5a52);
   color: white;
   border: none;
-  padding: 12px 20px;
+  padding: 15px 25px; /* Incrementar padding para mejor apariencia */
   border-radius: 25px;
   font-weight: bold;
   cursor: pointer;
   transition: all 0.3s ease;
-  margin: 20px auto 0 auto; /* Centrar el botón horizontalmente */
+  margin: 20px auto 10px auto; /* Centrar perfectamente */
   font-size: 1rem;
   display: block; /* Necesario para que margin auto funcione */
+  text-align: center; /* Asegurar texto centrado */
+  box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3); /* Sombra inicial */
 }
 
 .boton-limpiar:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+  box-shadow: 0 8px 25px rgba(255, 107, 107, 0.5); /* Sombra mejorada en hover */
+  background: linear-gradient(
+    135deg,
+    #ff5252,
+    #e53935
+  ); /* Color más vibrante en hover */
 }
 
 /* Ajustes del contenedor principal */

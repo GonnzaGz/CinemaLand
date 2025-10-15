@@ -4,11 +4,13 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { AuthService } from '../service/auth.service';
 import { FavoritosService } from '../service/favoritos.service';
+import { CartService, CartProduct } from '../service/cart.service';
+import { UnifiedCheckoutComponent } from '../unified-checkout/unified-checkout.component';
 
 @Component({
   selector: 'app-compra-entradas',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, UnifiedCheckoutComponent],
   templateUrl: './compra-entradas.component.html',
   styleUrls: ['./compra-entradas.component.css'],
 })
@@ -50,6 +52,10 @@ export class CompraEntradasComponent implements OnInit, OnDestroy {
   carouselInterval: any;
   isCarouselTransitioning: boolean = false;
 
+  // Propiedades para el nuevo sistema de checkout unificado
+  showUnifiedCheckout: boolean = false;
+  selectedTickets: any = null; // Para almacenar la información de las entradas seleccionadas
+
   // Getter para la película actual
   get currentMovie() {
     return this.featuredMovies[this.currentSlide] || null;
@@ -58,6 +64,7 @@ export class CompraEntradasComponent implements OnInit, OnDestroy {
   private apiMovieService = inject(ApipeliculasService);
   private router = inject(Router);
   private favoritosService = inject(FavoritosService);
+  private cartService = inject(CartService);
 
   constructor(private authService: AuthService) {
     this.obtenerPeliculasPopulares();
@@ -306,29 +313,90 @@ export class CompraEntradasComponent implements OnInit, OnDestroy {
     this.router.navigate(['/movie-details', id]);
   }
 
-  comprarEntradas() {
+  comprarEntradas(movie?: any, ticketInfo?: any) {
     console.log(this.isAuthenticated);
-    if (this.isAuthenticated) {
+    if (!this.isAuthenticated) {
+      this.mensaje = 'Debes iniciar sesión para comprar entradas.';
+      setTimeout(() => {
+        this.mensaje = '';
+      }, 5000);
+      return;
+    }
+
+    if (movie && ticketInfo) {
+      // Nueva lógica con carrito unificado
+      const ticketProduct: CartProduct = {
+        id: `movie_${movie.id}_${Date.now()}`,
+        name: `${movie.title}`,
+        description: `Entrada para ${movie.title}`,
+        price: ticketInfo.price || 2500,
+        image: movie.poster_path
+          ? `https://image.tmdb.org/t/p/w500/${movie.poster_path}`
+          : 'assets/images/default-movie-poster.png',
+        category: 'movie-ticket',
+        type: ticketInfo.type || 'standard',
+        metadata: {
+          movieId: movie.id,
+          title: movie.title,
+          rating: movie.vote_average,
+          duration: ticketInfo.duration || '120 min',
+          genre: this.getMovieGenres(movie.genre_ids),
+        },
+      };
+
+      const specificData = {
+        date: ticketInfo.date,
+        time: ticketInfo.time,
+        cinema: ticketInfo.cinema || 'CinemaLand Centro',
+        room: ticketInfo.room || 'Sala 1',
+        seats: ticketInfo.seats || [],
+        format: ticketInfo.format || '2D',
+        language: ticketInfo.language || 'Español',
+      };
+
+      this.cartService.addToCart(
+        ticketProduct,
+        ticketInfo.quantity || 1,
+        specificData
+      );
+      this.selectedTickets = {
+        movie,
+        ticketInfo,
+        product: ticketProduct,
+        specificData,
+      };
+      this.showUnifiedCheckout = true;
+    } else {
+      // Lógica anterior para compatibilidad
       if (this.selectedMovieId) {
         this.router.navigate(['/seleccion-asientos', this.selectedMovieId]);
       } else {
         console.error('No se ha seleccionado ninguna película');
       }
-    } else {
-      this.mensaje = 'Debes iniciar sesión para comprar entradas.';
     }
   }
 
   // Método específico para comprar entradas desde las tarjetas
   comprarEntradasPelicula(movieId: number) {
     console.log(this.isAuthenticated);
-    if (this.isAuthenticated) {
-      this.router.navigate(['/seleccion-asientos', movieId]);
-    } else {
+    if (!this.isAuthenticated) {
       this.mensaje = 'Debes iniciar sesión para comprar entradas.';
       setTimeout(() => {
         this.mensaje = '';
       }, 5000);
+      return;
+    }
+
+    // Buscar la película por ID
+    const movie =
+      this.estrenos.find((p) => p.id === movieId) ||
+      this.peliculasViejas.find((p) => p.id === movieId);
+
+    if (movie) {
+      this.compraRapida(movie);
+    } else {
+      // Fallback al sistema anterior
+      this.router.navigate(['/seleccion-asientos', movieId]);
     }
   }
 
@@ -688,6 +756,72 @@ export class CompraEntradasComponent implements OnInit, OnDestroy {
       .filter((genre) => genre !== 'Desconocido');
 
     return genres.length > 0 ? genres.join(', ') : 'Sin clasificar';
+  }
+
+  // Método simplificado para compra rápida desde el botón "Comprar Entradas"
+  compraRapida(movie: any): void {
+    const ticketInfo = {
+      price: 2500,
+      quantity: 1,
+      type: 'standard',
+      date: this.getNextShowDate(),
+      time: '20:00',
+      cinema: 'CinemaLand Centro',
+      room: 'Sala 1',
+      format: '2D',
+      language: 'Español',
+      seats: ['F8'], // Asiento por defecto
+    };
+
+    this.comprarEntradas(movie, ticketInfo);
+  }
+
+  // Método para obtener la próxima fecha de función (hoy o mañana)
+  private getNextShowDate(): string {
+    const today = new Date();
+    const hour = today.getHours();
+
+    // Si es después de las 22:00, mostrar funciones del día siguiente
+    if (hour >= 22) {
+      today.setDate(today.getDate() + 1);
+    }
+
+    return today.toISOString().split('T')[0];
+  }
+
+  // Métodos para manejar el checkout unificado
+  onCheckoutClosed(): void {
+    this.showUnifiedCheckout = false;
+    this.selectedTickets = null;
+  }
+
+  onOrderCompleted(order: any): void {
+    console.log('Orden completada:', order);
+
+    // Mostrar mensaje de éxito
+    alert(`¡Compra exitosa! Tu número de orden es: ${order.id}`);
+
+    // Limpiar datos temporales
+    this.selectedTickets = null;
+    this.showUnifiedCheckout = false;
+
+    // Opcional: redirigir a una página de confirmación
+    // this.router.navigate(['/order-confirmation', order.id]);
+  }
+
+  onOrderFailed(errorMessage: string): void {
+    console.error('Error en la orden:', errorMessage);
+    alert(`Error al procesar la compra: ${errorMessage}`);
+  }
+
+  // Método para obtener el número total de items en el carrito
+  getCartItemCount(): number {
+    return this.cartService.getCartItemCount();
+  }
+
+  // Método para obtener el total del carrito
+  getCartTotal(): number {
+    return this.cartService.getCartTotal();
   }
 
   ngOnDestroy() {
