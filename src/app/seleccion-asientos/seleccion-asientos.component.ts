@@ -209,13 +209,8 @@ export class SeleccionAsientosComponent implements OnInit {
     }
     this.actualizarPrecios();
 
-    // Si hay asientos seleccionados y estamos en el paso 2, abrir checkout
-    if (this.asientosSeleccionados.length > 0 && this.currentStep === 2) {
-      // Pequeño delay para que el usuario vea la selección
-      setTimeout(() => {
-        this.goToCheckout();
-      }, 500);
-    }
+    // El usuario debe hacer clic en "Ir a pago" manualmente para continuar
+    // No abrimos el checkout automáticamente
   }
 
   actualizarPrecios(): void {

@@ -305,11 +305,17 @@ export class UnifiedCheckoutComponent implements OnInit, OnDestroy {
 
   // Procesar orden
   processOrder(): void {
+    console.log('🚀 processOrder() iniciado');
+    console.log('Customer info valid:', this.isCustomerInfoValid());
+    console.log('Payment info valid:', this.isPaymentInfoValid());
+
     if (!this.isCustomerInfoValid() || !this.isPaymentInfoValid()) {
+      console.log('❌ Validación falló, abortando processOrder');
       return;
     }
 
     this.isProcessing = true;
+    console.log('⏳ isProcessing = true');
 
     try {
       // Guardar información final
@@ -317,25 +323,34 @@ export class UnifiedCheckoutComponent implements OnInit, OnDestroy {
       this.cartService.updatePaymentInfo(this.paymentInfo);
 
       // Crear orden
+      console.log('📋 Creando orden...');
       const order = this.cartService.createOrder(
         this.appliedPromo?.success ? this.promoCode : undefined
       );
+      console.log('✅ Orden creada:', order);
 
       // Procesar orden
+      console.log('🔄 Procesando orden...');
       this.subscriptions.push(
         this.cartService.processOrder(order).subscribe({
           next: (result) => {
+            console.log('📨 Respuesta del procesamiento:', result);
             this.isProcessing = false;
             if (result.success) {
+              console.log('✅ Orden procesada exitosamente, generando PDF...');
               // Generar PDF con QR antes de emitir la orden completada
               this.generatePurchaseReceipt(order);
+              console.log('📧 Emitiendo orderCompleted...');
               this.orderCompleted.emit(order);
+              console.log('🔒 Cerrando checkout...');
               this.closeCheckout();
             } else {
+              console.log('❌ Orden falló:', result.message);
               this.orderFailed.emit(result.message);
             }
           },
           error: (error) => {
+            console.log('💥 Error en el procesamiento:', error);
             this.isProcessing = false;
             this.orderFailed.emit('Error inesperado. Intente nuevamente.');
             console.error('Order processing error:', error);
@@ -343,6 +358,7 @@ export class UnifiedCheckoutComponent implements OnInit, OnDestroy {
         })
       );
     } catch (error) {
+      console.log('💥 Error en la creación de orden:', error);
       this.isProcessing = false;
       this.orderFailed.emit('Error al crear la orden. Verifique sus datos.');
       console.error('Order creation error:', error);
@@ -420,13 +436,17 @@ export class UnifiedCheckoutComponent implements OnInit, OnDestroy {
 
   // Generar PDF con QR
   async generatePurchaseReceipt(order: Order): Promise<void> {
+    console.log('🎯 generatePurchaseReceipt() iniciado con orden:', order);
     try {
       // Importar jsPDF y QRCode
+      console.log('📦 Importando jsPDF y QRCode...');
       const { jsPDF } = await import('jspdf');
       const QRCode = await import('qrcode');
+      console.log('✅ Librerías importadas exitosamente');
 
       const pdf = new jsPDF();
       const pageWidth = pdf.internal.pageSize.getWidth();
+      console.log('📄 PDF creado, ancho de página:', pageWidth);
 
       // Header del PDF
       pdf.setFillColor(26, 26, 46);
@@ -540,14 +560,18 @@ export class UnifiedCheckoutComponent implements OnInit, OnDestroy {
       });
 
       // Guardar el PDF
+      console.log(
+        '💾 Guardando PDF con nombre:',
+        `Comprobante-Cinemaland-${order.id}.pdf`
+      );
       pdf.save(`Comprobante-Cinemaland-${order.id}.pdf`);
 
       console.log(
-        'PDF de comprobante generado con éxito para la orden:',
+        '✅ PDF de comprobante generado con éxito para la orden:',
         order.id
       );
     } catch (error) {
-      console.error('Error generando el PDF del comprobante:', error);
+      console.error('❌ Error generando el PDF del comprobante:', error);
     }
   }
 }
