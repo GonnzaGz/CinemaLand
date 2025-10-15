@@ -75,8 +75,16 @@ export class SeleccionAsientosComponent implements OnInit {
     // Verificar si viene de PeliRandom mediante queryParams
     this.route.queryParams.subscribe((params) => {
       const fromPeliRandom = params['fromPeliRandom'];
+      console.log('QueryParams recibidos:', params);
+      console.log('fromPeliRandom:', fromPeliRandom);
+
       if (fromPeliRandom === 'true') {
+        console.log(
+          '✅ Detectado que viene de PeliRandom - Aplicando descuento'
+        );
         this.cargarDescuentoPeliRandom();
+      } else {
+        console.log('❌ No viene de PeliRandom - Sin descuento');
       }
     });
 
@@ -179,19 +187,37 @@ export class SeleccionAsientosComponent implements OnInit {
   }
 
   cargarDescuentoPeliRandom(): void {
+    console.log('🔍 Intentando cargar descuento PeliRandom...');
     const descuentoData = localStorage.getItem('descuentoPeliRandom');
+    console.log('Datos en localStorage:', descuentoData);
+
     if (descuentoData) {
       try {
         const descuento = JSON.parse(descuentoData);
+        console.log('Descuento parseado:', descuento);
+
         if (descuento.activo) {
           this.tieneDescuentoPeliRandom = true;
           this.descuentoPorcentajePeliRandom = descuento.porcentaje;
 
-          console.log('Descuento PeliRandom cargado:', descuento);
+          console.log('✅ Descuento PeliRandom cargado exitosamente:', {
+            porcentaje: descuento.porcentaje,
+            activo: descuento.activo,
+          });
+
+          // Recalcular precios si ya hay asientos seleccionados
+          if (this.asientosSeleccionados.length > 0) {
+            console.log('🔄 Recalculando precios con descuento PeliRandom...');
+            this.actualizarPrecios();
+          }
+        } else {
+          console.log('❌ Descuento PeliRandom no está activo');
         }
       } catch (error) {
-        console.error('Error al cargar descuento PeliRandom:', error);
+        console.error('❌ Error al cargar descuento PeliRandom:', error);
       }
+    } else {
+      console.log('❌ No se encontró descuento PeliRandom en localStorage');
     }
   }
 
@@ -217,6 +243,16 @@ export class SeleccionAsientosComponent implements OnInit {
       this.montoDescuentoPeliRandom =
         (this.precioSubtotal * this.descuentoPorcentajePeliRandom) / 100;
       this.descuentoPorcentajeTotal += this.descuentoPorcentajePeliRandom;
+      console.log('💰 Aplicando descuento PeliRandom:', {
+        porcentaje: this.descuentoPorcentajePeliRandom,
+        monto: this.montoDescuentoPeliRandom,
+        subtotal: this.precioSubtotal,
+      });
+    } else {
+      console.log('❌ No se aplica descuento PeliRandom:', {
+        tieneDescuento: this.tieneDescuentoPeliRandom,
+        porcentaje: this.descuentoPorcentajePeliRandom,
+      });
     }
 
     // Sumar todos los descuentos
@@ -257,14 +293,16 @@ export class SeleccionAsientosComponent implements OnInit {
 
     if (!this.asientosFiltrados || this.asientosFiltrados.length === 0) {
       console.warn('No hay asientos filtrados para generar filas');
+      // Generar estructura estándar de cine: 10 filas de 15 asientos
+      this.generarEstructuraCine();
       return;
     }
 
-    // Agrupar asientos por la primera letra de ASIENTO (A, B, C, etc.)
+    // Si hay datos del backend, agrupar por letra
     const filasPorLetra: { [key: string]: any[] } = {};
 
     this.asientosFiltrados.forEach((asiento: any) => {
-      const letra = asiento.ASIENTO?.[0] || 'A'; // Primera letra del asiento
+      const letra = asiento.ASIENTO?.[0] || 'A';
       if (!filasPorLetra[letra]) {
         filasPorLetra[letra] = [];
       }
@@ -285,6 +323,27 @@ export class SeleccionAsientosComponent implements OnInit {
 
     console.log('Filas de asientos generadas:', this.filasAsientos.length);
     console.log('Filas por letra:', filasPorLetra);
+  }
+
+  // Generar estructura estándar de cine: 10 filas (A-J) x 15 asientos (1-15)
+  generarEstructuraCine() {
+    const letras = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
+    const asientosPorFila = 15;
+
+    letras.forEach((letra) => {
+      const fila: any[] = [];
+      for (let i = 1; i <= asientosPorFila; i++) {
+        fila.push({
+          ASIENTO: `${letra}${i}`,
+          nombre: `${letra}${i}`,
+          ocupado: false,
+          precio: 10000,
+        });
+      }
+      this.filasAsientos.push(fila);
+    });
+
+    console.log('Estructura estándar de cine generada: 10 filas x 15 asientos');
   }
   onHorarioChange(e: any) {
     console.log('Horario seleccionado:', e);

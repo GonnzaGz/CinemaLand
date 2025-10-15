@@ -120,8 +120,12 @@ export class PelirandomComponent implements OnInit {
   }
 
   irAComprarEntradas(id: number): void {
-    this.router.navigate(['/seleccion-asientos', id]).then(() => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
+    this.router
+      .navigate(['/seleccion-asientos', id], {
+        queryParams: { fromPeliRandom: 'true' },
+      })
+      .then(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
   }
 }
