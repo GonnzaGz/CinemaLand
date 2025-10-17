@@ -1,7 +1,7 @@
 /* Regala Cine - Modern Design */
 .regala-cine-container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #667eea 100%);
+  background: linear-gradient(135deg, #2f3031 0%, #222222 50%, #2f3031 100%);
   color: #ffffff;
   padding: 0;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
@@ -11,7 +11,7 @@
 
 /* Banner principal rediseñado - Violeta */
 .gift-banner {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #667eea 100%);
+  background: linear-gradient(135deg, #2f3031 0%, #222222 50%, #2f3031 100%);
   padding: 6rem 2rem 4rem;
   margin: 0;
   text-align: center;
@@ -221,13 +221,13 @@
   bottom: 0;
   background: linear-gradient(
     135deg,
-    rgba(102, 126, 234, 0.8),
-    rgba(118, 75, 162, 0.8)
+    rgba(0, 156, 47, 0.8),
+    rgba(16, 181, 187, 0.8)
   );
   display: flex;
   align-items: center;
   justify-content: center;
-  opacity: 0;
+  opacity: 1;
   transition: opacity 0.3s ease;
 }
 

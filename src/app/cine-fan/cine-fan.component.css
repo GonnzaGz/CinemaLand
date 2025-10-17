@@ -1,7 +1,7 @@
 /* CineFan Component - Diseño Moderno y Profesional */
 .cine-fan-container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #667eea 100%);
+  background: linear-gradient(135deg, #2f3031 0%, #222222 50%, #2f3031 100%);
   color: #ffffff;
   padding: 0;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
@@ -11,10 +11,13 @@
 
 /* Hero Section Mejorado */
 .hero-section {
-  text-align: center;
+  background: linear-gradient(135deg, #2e2e2e 0%, #141414 50%, #2e2e2e 100%);
   padding: 6rem 2rem 4rem;
-  background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.1));
+  margin: 0;
+  text-align: center;
   position: relative;
+  overflow: hidden;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
 }
 
 .hero-section::before {

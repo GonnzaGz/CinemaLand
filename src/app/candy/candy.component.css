@@ -1,7 +1,7 @@
 /* Candy Store - Modern Design */
 .candy-container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #667eea 100%);
+  background: linear-gradient(135deg, #2f3031 0%, #222222 50%, #2f3031 100%);
   color: #ffffff;
   padding: 0;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
@@ -11,7 +11,7 @@
 
 /* Banner principal rediseñado */
 .candy-banner {
-  background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 50%, #ff4757 100%);
+  background: linear-gradient(135deg, #ff6b6b 0%, #d1427d 50%, #ff4757 100%);
   padding: 6rem 2rem 4rem;
   margin: 0;
   text-align: center;
@@ -268,7 +268,7 @@
   transition: transform 0.4s ease;
 }
 
-.product-card:hover .product-image img {
+.product-card:hover {
   transform: scale(1.1);
 }
 
