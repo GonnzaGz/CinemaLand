@@ -7,6 +7,11 @@
   overflow: hidden;
   margin-top: 0 !important;
   padding-top: 0 !important;
+  font-weight: 800;
+  text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+  color: white;
+  margin-bottom: 3rem;
+  font-weight: 800;
 }
 
 /* Hero Loading State */
@@ -20,6 +25,10 @@
 .loading-content {
   text-align: center;
   color: white;
+}
+
+.hero-details {
+  padding-bottom: 1rem;
 }
 
 .loading-spinner {
@@ -183,7 +192,8 @@
   border: 1px solid rgba(255, 255, 255, 0.3);
   backdrop-filter: blur(15px);
   margin-left: 5px;
-  border-radius: 10px;
+  border-radius: 15px;
+  padding: 6px 12px;
 }
 
 .hero-title {
@@ -194,6 +204,8 @@
   color: #ffffff;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
   text-transform: uppercase;
+  padding-top: 5rem;
+  padding-bottom: 5rem;
 }
 
 .hero-description {
@@ -236,7 +248,7 @@
   color: #000;
   border: none;
   padding: 15px 30px;
-  border-radius: 30px;
+  border-radius: 10px;
   font-size: 1.1rem;
   font-weight: bold;
   cursor: pointer;
@@ -492,8 +504,8 @@
 
 /* Estilos para cada tarjeta de película */
 .pelicula-card-fav {
-  background-color: rgba(218, 165, 32, 0.783); /* Fondo oscuro */
-  color: goldenrod; /* Texto blanco */
+  background: rgb(46, 46, 46) !important; /* Fondo oscuro */
+  color: white !important; /* Texto blanco */
   border-radius: 15px;
   padding: 15px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
@@ -521,7 +533,7 @@
 .pelicula-card-fav h4 {
   font-size: 1.3rem;
   margin-top: 10px;
-  color: black; /* Rojo Hoyts */
+  color: white; /* Rojo Hoyts */
 }
 
 .pelicula-card-fav button {
@@ -686,7 +698,7 @@
 
 .btn-ver-detalles {
   background: linear-gradient(135deg, #4caf50, #45a049);
-  color: white;
+  color: black;
   border: none;
   padding: 8px 15px;
   border-radius: 20px;
@@ -697,8 +709,7 @@
 }
 
 .btn-ver-detalles:hover {
-  transform: scale(1.05);
-  box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
+  color: black !important;
 }
 
 .btn-eliminar {
@@ -707,20 +718,20 @@
   border: none;
   padding: 8px 12px;
   border-radius: 20px;
-  font-size: 0.8rem;
+  font-size: 1rem;
+  font-weight: bolder;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .btn-eliminar:hover {
   transform: scale(1.05);
-  box-shadow: 0 4px 15px rgba(244, 67, 54, 0.4);
 }
 
 .boton-limpiar {
   width: 90%; /* Mejorar ancho para mejor centrado */
   background: linear-gradient(135deg, #ff6b6b, #ee5a52);
-  color: white;
+  color: black;
   border: none;
   padding: 15px 25px; /* Incrementar padding para mejor apariencia */
   border-radius: 25px;
@@ -1174,7 +1185,7 @@
   color: black;
   border: none;
   padding: 6px 8px;
-  border-radius: 18px;
+  border-radius: 10px;
   font-size: 0.75rem;
   font-weight: 600;
   cursor: pointer;

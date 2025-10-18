@@ -828,4 +828,8 @@ export class CompraEntradasComponent implements OnInit, OnDestroy {
     this.stopSlideshow();
     this.stopCarousel();
   }
+
+  comprarEntradasRapida(peliculaId: number) {
+    this.router.navigate(['/seleccion-asientos', peliculaId]);
+  }
 }

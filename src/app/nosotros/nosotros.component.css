@@ -89,6 +89,7 @@
   backdrop-filter: blur(10px);
   position: relative;
   overflow: hidden;
+  width: 23rem;
 }
 
 .team-member:hover {

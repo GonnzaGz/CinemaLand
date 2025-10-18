@@ -121,9 +121,6 @@
 
               <div class="movie-info">
                 <h3 class="movie-title">{{ movie.title }}</h3>
-                <p class="movie-year">
-                  {{ movie.release_date | date : "yyyy" }}
-                </p>
 
                 <div class="movie-actions">
                   <button
@@ -131,7 +128,7 @@
                     [routerLink]="['/movie-details', movie.id]"
                   >
                     <i class="fas"></i>
-                    Detalles
+                    + Info
                   </button>
                   <button
                     class="btn-small btn-tickets"

@@ -132,9 +132,9 @@ export class StoreComponent implements OnInit {
       {
         id: 5,
         name: 'Hoodie Cinemaland Premium',
-        description: 'Sudadera con capucha premium, calidad superior',
+        description: 'Buzo con capucha premium, calidad superior',
         price: 6500,
-        image: 'assets/images/sudadera.png',
+        image: 'assets/images/buzo.png',
         category: 'ropa',
         stock: 18,
         featured: true,
@@ -150,7 +150,7 @@ export class StoreComponent implements OnInit {
       },
       {
         id: 7,
-        name: 'Libro: Historia del Cine',
+        name: 'Libro CinemaLand: Historia del Cine',
         description: 'Edición especial con fotos exclusivas y entrevistas',
         price: 5200,
         image: 'assets/images/libro.png',

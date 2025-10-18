@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../service/auth.service';
 import { FavoritosService } from '../service/favoritos.service';
+import { MovieDetailsComponent } from '../movie-details/movie-details.component';
 
 @Component({
   selector: 'app-elegi-pelicula',
@@ -19,8 +20,6 @@ export class ElegiPeliculaComponent implements OnInit, OnDestroy {
   mostrarTodasLasPeliculas: boolean = false;
   isAuthenticated: boolean = true;
   peliculasfavoritas: any[] = [];
-  movie: any = null;
-  mensaje: string = '';
 
   // Propiedades para filtros
   filtroFormato: string = 'todos';
@@ -200,9 +199,7 @@ export class ElegiPeliculaComponent implements OnInit, OnDestroy {
   }
 
   comprarEntradas(peliculaId: number) {
-    this.router.navigate(['/seleccion-asientos'], {
-      queryParams: { peliculaId: peliculaId },
-    });
+    this.router.navigate(['/seleccion-asientos', peliculaId]);
   }
 
   // Métodos para filtros
@@ -304,18 +301,5 @@ export class ElegiPeliculaComponent implements OnInit, OnDestroy {
 
   verMasPeliculas() {
     this.mostrarTodasLasPeliculas = !this.mostrarTodasLasPeliculas;
-  }
-
-  compraEntradas() {
-    if (this.isAuthenticated) {
-      if (this.movie?.id) {
-        this.router.navigate(['/seleccion-asientos', this.movie.id]);
-      }
-    } else {
-      this.mensaje = 'Debes iniciar sesión para comprar entradas.';
-      setTimeout(() => {
-        this.mensaje = '';
-      }, 5000);
-    }
   }
 }

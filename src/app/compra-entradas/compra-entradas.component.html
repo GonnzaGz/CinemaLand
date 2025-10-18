@@ -29,7 +29,6 @@
             </div>
 
             <h1 class="hero-title">{{ currentMovie.title }}</h1>
-            <p class="hero-description">{{ currentMovie.overview }}</p>
 
             <div class="hero-details">
               <span class="detail-item">
@@ -39,10 +38,6 @@
               <span class="detail-item">
                 <i class="fas fa-film"></i>
                 {{ getMovieGenres(currentMovie.genre_ids) }}
-              </span>
-              <span class="detail-item">
-                <i class="fas fa-star"></i>
-                {{ currentMovie.vote_average | number : "1.1" }}
               </span>
             </div>
 
@@ -121,7 +116,7 @@
         <div class="loading-content">
           <h1 class="hero-title">¡Bienvenido a CinemaLand!</h1>
           <p class="hero-description">
-            Cargando las mejores películas para ti...
+            Cargando las mejores películas para vos...
           </p>
           <div class="loading-spinner">
             <i class="fas fa-film fa-spin"></i>
@@ -135,7 +130,7 @@
 <!-- Panel lateral de favoritos -->
 <div class="panel-favoritos" [class.abierto]="favoritosAbierto">
   <div class="favoritos-header">
-    <h2 class="titulofav">Tus Favoritas</h2>
+    <h2 class="titulofav">TUS FAVORITAS</h2>
   </div>
   <div class="favoritos-content">
     <ul class="favoritos-lista">
@@ -151,7 +146,7 @@
         </div>
         <div class="favorito-actions">
           <button (click)="verDetalles(pelicula.id)" class="btn-ver-detalles">
-            Ver
+            + INFO
           </button>
           <button
             (click)="eliminarDeFavoritos(pelicula.id)"
@@ -163,7 +158,7 @@
       </li>
     </ul>
     <button (click)="Borrarlistacompleta()" class="boton-limpiar">
-      Borrar Favoritos
+      BORRAR
     </button>
   </div>
 </div>
@@ -361,7 +356,9 @@
             </button>
             <button
               class="btn-primary-card"
-              (click)="comprarEntradasPelicula(pelicula.id)"
+              (click)="
+                comprarEntradasRapida(pelicula.id); $event.stopPropagation()
+              "
               title="Comprar entradas"
             >
               <i class="fas fa-ticket-alt"></i>

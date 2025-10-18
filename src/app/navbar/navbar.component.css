@@ -34,9 +34,9 @@
 }
 
 .brand-logo {
-  width: 130px;
-  height: 120px;
-  margin-right: 20px;
+  width: 300px; /* antes 130px */
+  height: 135px; /* antes 120px */
+  padding-right: 100px; /* antes 20px */
   object-fit: contain; /* Mantiene las proporciones de la imagen */
   object-position: center; /* Centra la imagen */
   display: block;
