@@ -94,8 +94,7 @@ export class StoreComponent implements OnInit {
         name: 'Remera Cinema Classic',
         description: 'Remera 100% algodón con logo vintage de Cinemaland',
         price: 3500,
-        image:
-          'https://via.placeholder.com/300x300/1a1a1a/ffffff?text=REMERA+CINEMA',
+        image: 'assets/images/remera.png',
         category: 'ropa',
         stock: 25,
         featured: true,
@@ -105,18 +104,17 @@ export class StoreComponent implements OnInit {
         name: 'Gorra Snapback Director',
         description: 'Gorra ajustable con bordado premium del logo Cinemaland',
         price: 2800,
-        image:
-          'https://via.placeholder.com/300x300/000000/ffffff?text=GORRA+DIRECTOR',
+        image: 'assets/images/gorra.png',
         category: 'accesorios',
         stock: 15,
       },
       {
         id: 3,
         name: 'Funko Pop Cinema Character',
-        description: 'Figura coleccionable exclusiva de personaje de película',
+        description:
+          'Figura coleccionable exclusiva de Oscar, nuestra mascota de CinemaLand',
         price: 4200,
-        image:
-          'https://via.placeholder.com/300x300/ff6b6b/ffffff?text=FUNKO+POP',
+        image: 'assets/images/funko-oscar.png',
         category: 'coleccionables',
         stock: 12,
         featured: true,
@@ -127,8 +125,7 @@ export class StoreComponent implements OnInit {
         description:
           'Poster de edición limitada de película clásica - Tamaño A2',
         price: 1800,
-        image:
-          'https://via.placeholder.com/300x300/4ecdc4/ffffff?text=POSTER+CLASSIC',
+        image: 'assets/images/poster.png',
         category: 'posters',
         stock: 30,
       },
@@ -137,8 +134,7 @@ export class StoreComponent implements OnInit {
         name: 'Hoodie Cinemaland Premium',
         description: 'Sudadera con capucha premium, calidad superior',
         price: 6500,
-        image:
-          'https://via.placeholder.com/300x300/45b7d1/ffffff?text=HOODIE+PREMIUM',
+        image: 'assets/images/sudadera.png',
         category: 'ropa',
         stock: 18,
         featured: true,
@@ -148,8 +144,7 @@ export class StoreComponent implements OnInit {
         name: 'Taza Térmica Director',
         description: 'Taza térmica de acero inoxidable con diseño exclusivo',
         price: 2200,
-        image:
-          'https://via.placeholder.com/300x300/f39c12/ffffff?text=TAZA+DIRECTOR',
+        image: 'assets/images/taza.png',
         category: 'accesorios',
         stock: 40,
       },
@@ -158,8 +153,7 @@ export class StoreComponent implements OnInit {
         name: 'Libro: Historia del Cine',
         description: 'Edición especial con fotos exclusivas y entrevistas',
         price: 5200,
-        image:
-          'https://via.placeholder.com/300x300/8e44ad/ffffff?text=LIBRO+HISTORIA',
+        image: 'assets/images/libro.png',
         category: 'libros',
         stock: 20,
       },
@@ -168,8 +162,7 @@ export class StoreComponent implements OnInit {
         name: 'Collar Carrete de Película',
         description: 'Collar con dije en forma de carrete de película vintage',
         price: 1900,
-        image:
-          'https://via.placeholder.com/300x300/e74c3c/ffffff?text=COLLAR+FILM',
+        image: 'assets/images/collar.png',
         category: 'accesorios',
         stock: 35,
       },
@@ -178,8 +171,7 @@ export class StoreComponent implements OnInit {
         name: 'Cuadro Arte Cinematográfico',
         description: 'Cuadro enmarcado con arte original inspirado en el cine',
         price: 8900,
-        image:
-          'https://via.placeholder.com/300x300/2c3e50/ffffff?text=CUADRO+ARTE',
+        image: 'assets/images/cuadro.png',
         category: 'coleccionables',
         stock: 8,
       },
@@ -188,8 +180,7 @@ export class StoreComponent implements OnInit {
         name: 'Set de Pins Coleccionables',
         description: 'Set de 6 pins metálicos de géneros cinematográficos',
         price: 1500,
-        image:
-          'https://via.placeholder.com/300x300/27ae60/ffffff?text=PINS+SET',
+        image: 'assets/images/pins.png',
         category: 'coleccionables',
         stock: 50,
       },

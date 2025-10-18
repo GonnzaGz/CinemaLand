@@ -89,12 +89,6 @@
       <div *ngFor="let product of filteredProducts" class="product-card">
         <div class="product-image">
           <img [src]="product.image" [alt]="product.name" />
-          <div class="product-overlay">
-            <button (click)="addToCart(product)" class="quick-add-btn">
-              <i class="fas fa-cart-plus"></i>
-              Agregar
-            </button>
-          </div>
         </div>
 
         <div class="product-info">
@@ -115,7 +109,7 @@
               >
                 -
               </button>
-              <span class="quantity">{{
+              <span class="quantitys">{{
                 getProductQuantity(product.id) || 1
               }}</span>
               <button
@@ -132,7 +126,7 @@
               class="add-to-cart-btn"
             >
               <i class="fas fa-shopping-cart"></i>
-              Agregar al Carrito
+              Agregar
             </button>
           </div>
         </div>

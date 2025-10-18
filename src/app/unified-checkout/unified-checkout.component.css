@@ -515,6 +515,7 @@
   cursor: pointer;
   transition: all 0.3s ease;
   background: white;
+  color: #7a7a7a;
 }
 
 .payment-option:hover {
@@ -528,7 +529,7 @@
 }
 
 .payment-option input[type="radio"]:checked + .option-content {
-  color: #667eea;
+  color: #1a1a1a;
 }
 
 .option-content {
@@ -619,6 +620,7 @@
   background: rgba(102, 126, 234, 0.05);
   border: 1px solid rgba(102, 126, 234, 0.1);
   border-radius: 12px;
+  color: #495057;
 }
 
 .checkbox-container {

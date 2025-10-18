@@ -239,6 +239,12 @@
   gap: 2rem;
 }
 
+.quantitys {
+  font-size: 0.8rem;
+  color: #1a1a1a;
+  font-weight: 500;
+}
+
 .product-card {
   background: rgba(255, 255, 255, 0.98);
   border-radius: 25px;

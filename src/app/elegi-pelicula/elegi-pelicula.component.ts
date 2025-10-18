@@ -19,6 +19,8 @@ export class ElegiPeliculaComponent implements OnInit, OnDestroy {
   mostrarTodasLasPeliculas: boolean = false;
   isAuthenticated: boolean = true;
   peliculasfavoritas: any[] = [];
+  movie: any = null;
+  mensaje: string = '';
 
   // Propiedades para filtros
   filtroFormato: string = 'todos';
@@ -302,5 +304,18 @@ export class ElegiPeliculaComponent implements OnInit, OnDestroy {
 
   verMasPeliculas() {
     this.mostrarTodasLasPeliculas = !this.mostrarTodasLasPeliculas;
+  }
+
+  compraEntradas() {
+    if (this.isAuthenticated) {
+      if (this.movie?.id) {
+        this.router.navigate(['/seleccion-asientos', this.movie.id]);
+      }
+    } else {
+      this.mensaje = 'Debes iniciar sesión para comprar entradas.';
+      setTimeout(() => {
+        this.mensaje = '';
+      }, 5000);
+    }
   }
 }

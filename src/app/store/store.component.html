@@ -52,13 +52,10 @@
       <div class="product-info">
         <h3 class="product-name">{{ product.name }}</h3>
         <p class="product-description">{{ product.description }}</p>
-        <div class="product-category">
-          {{ getCategoryDisplayName(product.category) }}
-        </div>
 
         <div class="product-footer">
           <div class="price-section">
-            <span class="price"
+            <span class="product-price"
               >${{ product.price.toLocaleString("es-AR") }}</span
             >
           </div>
