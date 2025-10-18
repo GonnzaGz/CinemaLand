@@ -91,8 +91,8 @@ export class StoreComponent implements OnInit {
     this.products = [
       {
         id: 1,
-        name: 'Remera Cinema Classic',
-        description: 'Remera 100% algodón con logo vintage de Cinemaland',
+        name: 'Remera CinemaLand American Style',
+        description: 'Remera estilo americano CinemaLand',
         price: 3500,
         image: 'assets/images/remera.png',
         category: 'ropa',
@@ -101,8 +101,8 @@ export class StoreComponent implements OnInit {
       },
       {
         id: 2,
-        name: 'Gorra Snapback Director',
-        description: 'Gorra ajustable con bordado premium del logo Cinemaland',
+        name: 'Gorra Snapback CinemaLand',
+        description: 'Gorra ajustable con bordado premium de CinemaLand',
         price: 2800,
         image: 'assets/images/gorra.png',
         category: 'accesorios',
@@ -112,7 +112,7 @@ export class StoreComponent implements OnInit {
         id: 3,
         name: 'Funko Pop Cinema Character',
         description:
-          'Figura coleccionable exclusiva de Oscar, nuestra mascota de CinemaLand',
+          'Figura coleccionable exclusiva de Oscar, la mascota de CinemaLand',
         price: 4200,
         image: 'assets/images/funko-oscar.png',
         category: 'coleccionables',
@@ -121,9 +121,8 @@ export class StoreComponent implements OnInit {
       },
       {
         id: 4,
-        name: 'Poster Película Clásica',
-        description:
-          'Poster de edición limitada de película clásica - Tamaño A2',
+        name: 'Poster de Oscar de CinemaLand',
+        description: 'Poster de edición limitada de Oscar - Tamaño A2',
         price: 1800,
         image: 'assets/images/poster.png',
         category: 'posters',
@@ -141,7 +140,7 @@ export class StoreComponent implements OnInit {
       },
       {
         id: 6,
-        name: 'Taza Térmica Director',
+        name: 'Taza Térmica CinemaLand',
         description: 'Taza térmica de acero inoxidable con diseño exclusivo',
         price: 2200,
         image: 'assets/images/taza.png',
@@ -159,8 +158,8 @@ export class StoreComponent implements OnInit {
       },
       {
         id: 8,
-        name: 'Collar Carrete de Película',
-        description: 'Collar con dije en forma de carrete de película vintage',
+        name: 'Collar Oscar de CinemaLand',
+        description: 'Collar con dije de la mascota oficial Oscar',
         price: 1900,
         image: 'assets/images/collar.png',
         category: 'accesorios',
