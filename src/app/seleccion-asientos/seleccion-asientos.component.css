@@ -224,7 +224,7 @@
 }
 
 .screen {
-  background: linear-gradient(135deg, #d4af37, #b8860b);
+  background: linear-gradient(135deg, white, whitesmoke);
   height: 8px;
   border-radius: 50px;
   margin: 0 auto 2rem auto;
@@ -239,7 +239,7 @@
   left: 50%;
   transform: translateX(-50%);
   font-size: 0.9rem;
-  color: #a6f9ff;
+  color: white;
   font-weight: 600;
 }
 
