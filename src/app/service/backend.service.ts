@@ -5,7 +5,7 @@ import { HttpClient } from '@angular/common/http';
   providedIn: 'root',
 })
 export class BackendService {
-  private url = 'https://api.error404dev.com/api';
+  private url = 'https://onlyback.error404dev.com/api';
 
   constructor(private http: HttpClient) {}
 
