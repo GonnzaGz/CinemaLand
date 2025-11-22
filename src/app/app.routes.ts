@@ -20,11 +20,11 @@ export const routes: Routes = [
 
   { path: 'candy', component: CandyComponent },
 
-  { path: 'cine-fan', component: CineFanComponent },
+  { path: 'fan+', component: CineFanComponent },
 
-  { path: 'regala-cine', component: RegalaCineComponent },
+  { path: 'cine+', component: RegalaCineComponent },
 
-  { path: 'store', component: StoreComponent },
+  { path: 'shop', component: StoreComponent },
 
   { path: 'elegi-pelicula', component: ElegiPeliculaComponent },
 
