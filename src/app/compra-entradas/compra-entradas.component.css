@@ -1070,25 +1070,20 @@
 }
 
 .card-content {
-  padding: 12px 20px 16px; /* Reducir padding superior e inferior */
-  flex: 0 0 165px; /* Reducir altura del contenido */
+  padding: 12px 20px 10px;
+  flex: 0 0 auto;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 165px; /* Altura reducida */
-  min-height: 165px;
-  max-height: 165px;
   overflow: hidden;
 }
 
 .card-info {
   flex: 0 0 auto;
-  height: 85px; /* Reducir altura para ajustar */
-  min-height: 85px;
-  max-height: 85px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  margin-bottom: 8px;
 }
 
 .card-title {
@@ -1112,30 +1107,53 @@
 
 .card-meta {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: 6px; /* Reducir margen para acercar elementos */
+  margin-bottom: 0;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-size: 0.75rem;
 }
 
 .card-genre {
   color: #d4af37;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+  display: flex;
+  align-items: flex-start;
+  gap: 5px;
+}
+
+.genre-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  line-height: 1.2;
+}
+
+.genre-item {
+  display: block;
+}
+
+.card-duration {
+  color: #cccccc;
+  font-size: 0.8rem;
   font-weight: 500;
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
+}
+
+.card-duration i {
+  color: #d4af37;
+  font-size: 0.7rem;
 }
 
 .card-badge {
-  background: linear-gradient(
-    135deg,
-    #16a34a,
-    #15803d
-  ); /* Verde para CARTELERA */
+  background: linear-gradient(135deg, #16a34a, #15803d);
   color: white;
   padding: 4px 10px;
   border-radius: 10px;
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   font-weight: bold;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -1182,7 +1200,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-top: 6px; /* Reducir margen superior */
+  margin-top: auto;
   height: 40px;
   min-height: 40px;
   max-height: 40px;

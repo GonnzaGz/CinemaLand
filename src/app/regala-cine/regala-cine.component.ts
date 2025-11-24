@@ -29,7 +29,7 @@ export class RegalaCineComponent implements OnInit {
     basica: {
       id: 'gift-basica',
       name: 'Experiencia Básica',
-      price: 3500,
+      price: 35000,
       description: '2 entradas + combo básico',
       features: [
         '2 entradas para cualquier función',
@@ -41,7 +41,7 @@ export class RegalaCineComponent implements OnInit {
     premium: {
       id: 'gift-premium',
       name: 'Experiencia Premium',
-      price: 6500,
+      price: 65000,
       description: '4 entradas premium + combo deluxe',
       features: [
         '4 entradas premium (incluye IMAX/XD)',
@@ -54,7 +54,7 @@ export class RegalaCineComponent implements OnInit {
     familiar: {
       id: 'gift-familiar',
       name: 'Experiencia Familiar',
-      price: 9500,
+      price: 95000,
       description: '6 entradas + combo familiar XXL',
       features: [
         '6 entradas para toda la familia',
@@ -68,7 +68,7 @@ export class RegalaCineComponent implements OnInit {
     anual: {
       id: 'gift-anual',
       name: 'Membresía Anual',
-      price: 15000,
+      price: 150000,
       description: 'Acceso ilimitado por 1 año',
       features: [
         'Entradas ilimitadas durante 1 año',
@@ -82,7 +82,7 @@ export class RegalaCineComponent implements OnInit {
     romantico: {
       id: 'gift-romantico',
       name: 'Paquete Romántico',
-      price: 8500,
+      price: 85000,
       description: '2 entradas VIP + cena romántica',
       features: [
         '2 entradas VIP',
@@ -95,7 +95,7 @@ export class RegalaCineComponent implements OnInit {
     cumpleanos: {
       id: 'gift-cumpleanos',
       name: 'Fiesta de Cumpleaños',
-      price: 12000,
+      price: 120000,
       description: 'Sala privada + decoración + torta',
       features: [
         'Sala privada para hasta 15 personas',

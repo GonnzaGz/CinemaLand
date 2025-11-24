@@ -170,7 +170,16 @@ export class MovieDetailsComponent implements OnInit {
     return this.peliculasfavoritas.some((p) => p.id === peliculaId);
   }
 
-  getMovieGenres(genreIds: number[]): string {
+  getMovieGenres(genreIds?: number[]): string {
+    // Si la película tiene el campo genres (de la API de detalles), usar ese
+    if (this.movie?.genres && Array.isArray(this.movie.genres)) {
+      const genreNames = this.movie.genres
+        .slice(0, 3)
+        .map((genre: any) => genre.name);
+      return genreNames.length > 0 ? genreNames.join(', ') : 'Sin clasificar';
+    }
+
+    // Si no, usar genre_ids (de la API de listados)
     if (!genreIds || genreIds.length === 0) {
       return 'Sin clasificar';
     }

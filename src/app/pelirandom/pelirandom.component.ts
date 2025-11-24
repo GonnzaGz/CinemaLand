@@ -31,8 +31,11 @@ export class PelirandomComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.authService.isAuthenticated$.subscribe((isAuth) => {
-      this.isAuthenticated = isAuth;
+    this.authService.isAuthenticated$.subscribe((data) => {
+      console.log('=== SUSCRIPCIÓN isAuthenticated$ (PeliRandom) ===');
+      console.log('Data recibida:', data);
+      this.isAuthenticated = data.isAuthenticated || false;
+      console.log('isAuthenticated asignado:', this.isAuthenticated);
     });
 
     this.apiMovieService.getcategorias().subscribe((data) => {
@@ -128,14 +131,23 @@ export class PelirandomComponent implements OnInit {
   }
 
   irAComprarEntradas(id: number): void {
+    console.log('=== COMPRAR ENTRADAS (PeliRandom) ===');
+    console.log('Película ID:', id);
+    console.log('isAuthenticated:', this.isAuthenticated);
+    console.log('Mensaje actual:', this.mensaje);
+
     if (!this.isAuthenticated) {
-      this.mensaje = 'Debes iniciar sesión para comprar entradas';
+      console.log('❌ Usuario NO autenticado - Mostrando mensaje');
+      this.mensaje = 'Debes iniciar sesión para comprar entradas.';
+      console.log('Mensaje asignado:', this.mensaje);
       setTimeout(() => {
+        console.log('⏰ Timeout - Limpiando mensaje');
         this.mensaje = '';
       }, 5000);
       return;
     }
 
+    console.log('✅ Usuario autenticado - Navegando a selección de asientos');
     this.router
       .navigate(['/seleccion-asientos', id], {
         queryParams: { fromPeliRandom: 'true' },

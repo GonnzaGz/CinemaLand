@@ -34,7 +34,7 @@ export class CandyComponent implements OnInit {
     {
       id: 1,
       name: 'Combo Dulce Grande',
-      price: 2800,
+      price: 28000,
       image: 'assets/images/combo-dulce.png',
       category: 'combos',
       description: 'Pochoclos grandes + 2 gaseosas + golosinas',
@@ -42,7 +42,7 @@ export class CandyComponent implements OnInit {
     {
       id: 2,
       name: 'Pochoclos Caramelo',
-      price: 1500,
+      price: 15000,
       image: 'assets/images/pochoclos.png',
       category: 'pochoclos',
       description: 'Pochoclos con caramelo',
@@ -50,7 +50,7 @@ export class CandyComponent implements OnInit {
     {
       id: 3,
       name: 'Nachos Supremos',
-      price: 2200,
+      price: 22000,
       image: 'assets/images/nachos.png',
       category: 'combos',
       description: 'Nachos con queso cheddar',
@@ -58,7 +58,7 @@ export class CandyComponent implements OnInit {
     {
       id: 4,
       name: 'Gaseosa 500ml',
-      price: 800,
+      price: 8000,
       image: 'assets/images/soda.png',
       category: 'bebidas',
       description: 'Gaseosa fría de 500ml',
@@ -66,7 +66,7 @@ export class CandyComponent implements OnInit {
     {
       id: 5,
       name: 'Combo Pareja',
-      price: 3500,
+      price: 35000,
       image: 'assets/images/combo-pareja.png',
       category: 'combos',
       description: 'Para compartir: pochoclos XL + 2 gaseosas + golosinas',
@@ -74,7 +74,7 @@ export class CandyComponent implements OnInit {
     {
       id: 6,
       name: 'Box Golosinas',
-      price: 1200,
+      price: 12000,
       image: 'assets/images/combo-candy.png',
       category: 'dulces',
       description: 'Variedad de golosinas premium',

@@ -68,19 +68,16 @@ export class CompraEntradasComponent implements OnInit, OnDestroy {
 
   constructor(private authService: AuthService) {
     this.obtenerPeliculasPopulares();
-
     this.isAuthenticated$ = this.authService.isAuthenticated$;
-
-    this.authService.isAuthenticated$.subscribe((data) => {
-      this.isAuthenticated = data.isAuthenticated;
-    });
   }
 
   ngOnInit(): void {
     // Suscribirse al estado de autenticación
-    this.authService.isAuthenticated$.subscribe((isAuth) => {
-      this.isAuthenticated = isAuth;
-      console.log('Compra-Entradas - Usuario autenticado:', isAuth);
+    this.authService.isAuthenticated$.subscribe((data) => {
+      console.log('=== SUSCRIPCIÓN isAuthenticated$ ===');
+      console.log('Data recibida:', data);
+      this.isAuthenticated = data.isAuthenticated || false;
+      console.log('isAuthenticated asignado:', this.isAuthenticated);
     });
 
     const idsession = localStorage.getItem('idsession');
@@ -337,7 +334,7 @@ export class CompraEntradasComponent implements OnInit, OnDestroy {
         id: `movie_${movie.id}_${Date.now()}`,
         name: `${movie.title}`,
         description: `Entrada para ${movie.title}`,
-        price: ticketInfo.price || 2500,
+        price: ticketInfo.price || 25000,
         image: movie.poster_path
           ? `https://image.tmdb.org/t/p/w500/${movie.poster_path}`
           : 'assets/images/default-movie-poster.png',
@@ -771,10 +768,23 @@ export class CompraEntradasComponent implements OnInit, OnDestroy {
     return genres.length > 0 ? genres.join(', ') : 'Sin clasificar';
   }
 
+  getMovieGenresArray(genreIds: number[]): string[] {
+    if (!genreIds || genreIds.length === 0) {
+      return ['Sin clasificar'];
+    }
+
+    const genres = genreIds
+      .slice(0, 1) // Solo 1 género
+      .map((id) => this.genreMap[id] || 'Desconocido')
+      .filter((genre) => genre !== 'Desconocido');
+
+    return genres.length > 0 ? genres : ['Sin clasificar'];
+  }
+
   // Método simplificado para compra rápida desde el botón "Comprar Entradas"
   compraRapida(movie: any): void {
     const ticketInfo = {
-      price: 2500,
+      price: 25000,
       quantity: 1,
       type: 'standard',
       date: this.getNextShowDate(),
@@ -843,18 +853,23 @@ export class CompraEntradasComponent implements OnInit, OnDestroy {
   }
 
   comprarEntradasRapida(peliculaId: number) {
-    console.log('Comprar entradas rápida - Autenticado:', this.isAuthenticated);
+    console.log('=== COMPRAR ENTRADAS RÁPIDA ===');
+    console.log('Película ID:', peliculaId);
+    console.log('isAuthenticated:', this.isAuthenticated);
+    console.log('Mensaje actual:', this.mensaje);
 
     if (!this.isAuthenticated) {
-      console.log('Usuario no autenticado, mostrando mensaje');
+      console.log('❌ Usuario NO autenticado - Mostrando mensaje');
       this.mensaje = 'Debes iniciar sesión para comprar entradas.';
+      console.log('Mensaje asignado:', this.mensaje);
       setTimeout(() => {
+        console.log('⏰ Timeout - Limpiando mensaje');
         this.mensaje = '';
       }, 5000);
       return;
     }
 
-    console.log('Usuario autenticado, navegando a selección de asientos');
+    console.log('✅ Usuario autenticado - Navegando a selección de asientos');
     this.router.navigate(['/seleccion-asientos', peliculaId]);
   }
 }

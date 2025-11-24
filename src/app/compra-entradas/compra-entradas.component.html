@@ -298,6 +298,8 @@
         [style.display]="
           mostrarTodasLasPeliculas || i < peliculasMostradas ? 'block' : 'none'
         "
+        (click)="verDetalles(pelicula.id)"
+        style="cursor: pointer"
       >
         <div class="card-image-container">
           <img
@@ -315,7 +317,7 @@
             </div>
             <button
               class="btn-favorite-card"
-              (click)="toggleFavorito(pelicula)"
+              (click)="toggleFavorito(pelicula); $event.stopPropagation()"
               [class.active]="esFavorito(pelicula.id)"
             >
               <i class="fas fa-heart"></i>
@@ -327,10 +329,19 @@
           <div class="card-info">
             <h4 class="card-title">{{ pelicula.title }}</h4>
             <div class="card-meta">
-              <span class="card-genre">
+              <div class="card-genre">
                 <i class="fas fa-film"></i>
-                {{ getMovieGenres(pelicula.genre_ids) }}
-              </span>
+                <div class="genre-list">
+                  <span
+                    *ngFor="
+                      let genre of getMovieGenresArray(pelicula.genre_ids)
+                    "
+                    class="genre-item"
+                  >
+                    {{ genre }}
+                  </span>
+                </div>
+              </div>
               <span
                 class="card-badge"
                 [class.estreno]="
@@ -355,7 +366,7 @@
           <div class="card-actions">
             <button
               class="btn-icon-card"
-              (click)="verDetalles(pelicula.id)"
+              (click)="verDetalles(pelicula.id); $event.stopPropagation()"
               title="Ver detalles completos"
             >
               <i class="fas fa-info-circle"></i>

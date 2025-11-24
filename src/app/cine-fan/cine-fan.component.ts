@@ -29,7 +29,7 @@ export class CineFanComponent implements OnInit {
     black: {
       id: 'cine-fan-black',
       name: 'CINE FAN BLACK',
-      price: 4999,
+      price: 49990,
       description: '4 entradas mensuales con acceso VIP y máximos beneficios',
       benefits: [
         '4 entradas mensuales (2D, 3D, XD, COMFORT, IMAX)',
@@ -43,7 +43,7 @@ export class CineFanComponent implements OnInit {
     plus: {
       id: 'cine-fan-plus',
       name: 'CINE FAN +',
-      price: 2999,
+      price: 29990,
       description: '2 entradas mensuales con excelentes beneficios',
       benefits: [
         '2 entradas mensuales (2D, 3D, XD, COMFORT)',
@@ -56,7 +56,7 @@ export class CineFanComponent implements OnInit {
     fan: {
       id: 'cine-fan',
       name: 'CINE FAN',
-      price: 1499,
+      price: 14990,
       description: '1 entrada mensual con beneficios básicos',
       benefits: [
         '1 entrada mensual (2D, 3D, XD, COMFORT)',

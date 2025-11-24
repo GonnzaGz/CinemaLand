@@ -33,9 +33,11 @@ export class ElegiPeliculaComponent implements OnInit, OnDestroy {
   private favoritosService = inject(FavoritosService);
 
   ngOnInit() {
-    this.authService.isAuthenticated$.subscribe((isAuth) => {
-      this.isAuthenticated = isAuth;
-      console.log('Elegi-Pelicula - Usuario autenticado:', isAuth);
+    this.authService.isAuthenticated$.subscribe((data) => {
+      console.log('=== SUSCRIPCIÓN isAuthenticated$ (Elegi-Pelicula) ===');
+      console.log('Data recibida:', data);
+      this.isAuthenticated = data.isAuthenticated || false;
+      console.log('isAuthenticated asignado:', this.isAuthenticated);
     });
 
     this.cargarPeliculasEnCartelera();
@@ -68,11 +70,33 @@ export class ElegiPeliculaComponent implements OnInit, OnDestroy {
             if (pelicula.media_type === 'tv') return false;
 
             // Debe tener título e imagen y rating válido
-            return (
-              pelicula.title &&
-              pelicula.poster_path &&
-              pelicula.vote_average > 0
-            );
+            if (
+              !pelicula.title ||
+              !pelicula.poster_path ||
+              pelicula.vote_average <= 0
+            ) {
+              return false;
+            }
+
+            // Filtrar por fecha de lanzamiento: máximo 60 días desde hoy
+            if (pelicula.release_date) {
+              const fechaLanzamiento = new Date(pelicula.release_date);
+              const hoy = new Date();
+              const diferenciaDias = Math.floor(
+                (hoy.getTime() - fechaLanzamiento.getTime()) /
+                  (1000 * 60 * 60 * 24)
+              );
+
+              // Solo películas con máximo 60 días desde su lanzamiento y que ya se hayan estrenado
+              if (diferenciaDias > 60 || diferenciaDias < 0) {
+                return false;
+              }
+            } else {
+              // Si no tiene fecha de lanzamiento, la excluimos
+              return false;
+            }
+
+            return true;
           })
           .map((pelicula: any) => ({
             ...pelicula,
@@ -205,21 +229,23 @@ export class ElegiPeliculaComponent implements OnInit, OnDestroy {
   }
 
   comprarEntradas(peliculaId: number) {
-    console.log(
-      'Intentando comprar entradas - Autenticado:',
-      this.isAuthenticated
-    );
+    console.log('=== COMPRAR ENTRADAS (Elegi-Pelicula) ===');
+    console.log('Película ID:', peliculaId);
+    console.log('isAuthenticated:', this.isAuthenticated);
+    console.log('Mensaje actual:', this.mensaje);
 
     if (!this.isAuthenticated) {
-      console.log('Usuario no autenticado, mostrando mensaje');
-      this.mensaje = 'Debes iniciar sesión para comprar entradas';
+      console.log('❌ Usuario NO autenticado - Mostrando mensaje');
+      this.mensaje = 'Debes iniciar sesión para comprar entradas.';
+      console.log('Mensaje asignado:', this.mensaje);
       setTimeout(() => {
+        console.log('⏰ Timeout - Limpiando mensaje');
         this.mensaje = '';
       }, 5000);
       return;
     }
 
-    console.log('Usuario autenticado, navegando a selección de asientos');
+    console.log('✅ Usuario autenticado - Navegando a selección de asientos');
     this.router.navigate(['/seleccion-asientos', peliculaId]);
   }
 

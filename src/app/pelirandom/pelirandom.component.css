@@ -176,7 +176,7 @@
 .btn-back {
   position: absolute;
   top: 2rem;
-  left: 2rem;
+  left: 0.5rem;
   background: rgba(0, 0, 0, 0.7);
   border: 2px solid rgba(255, 255, 255, 0.3);
   border-radius: 50px;
