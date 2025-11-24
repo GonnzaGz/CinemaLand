@@ -295,29 +295,27 @@
 }
 
 .remove-certificate-btn {
-  background: #ef4444;
+  background: transparent;
   border: none;
-  color: white;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
+  color: #ef4444;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+  padding: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-size: 0.9rem;
-  flex-shrink: 0;
 }
 
 .remove-certificate-btn:hover {
-  background: #dc2626;
-  transform: scale(1.1);
-  box-shadow: 0 3px 10px rgba(239, 68, 68, 0.4);
+  color: #dc2626;
+  transform: scale(1.15);
+  filter: drop-shadow(0 2px 4px rgba(239, 68, 68, 0.4));
 }
 
 .remove-certificate-btn:active {
-  transform: scale(0.95);
+  transform: scale(0.9);
 }
 
 /* === DISCOUNT STATUS === */

@@ -44,8 +44,10 @@ export class NavbarComponent {
       this.isAuthenticated = data.isAuthenticated;
     });
     this.authService.userData$.subscribe((data) => {
-      console.log('userData:', data);
-      this.userData = data;
+      console.log('userData completo:', data);
+      // Extraer los datos del objeto userData si existe
+      this.userData = data?.userData || data || {};
+      console.log('userData extraído:', this.userData);
     });
   }
   onSearch() {
