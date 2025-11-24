@@ -1,5 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApipeliculasService } from '../service/apipeliculas.service';
 import { AuthService } from '../service/auth.service';
@@ -23,6 +23,7 @@ export class MovieDetailsComponent implements OnInit {
 
   private route = inject(ActivatedRoute);
   private router = inject(Router);
+  private location = inject(Location);
   private apiMovieService = inject(ApipeliculasService);
   private authService = inject(AuthService);
   private favoritosService = inject(FavoritosService);
@@ -204,7 +205,8 @@ export class MovieDetailsComponent implements OnInit {
   }
 
   goBack() {
-    this.router.navigate(['/compra-entradas']);
+    // Usar el historial del navegador para volver a la página anterior
+    this.location.back();
   }
 
   watchTrailer() {

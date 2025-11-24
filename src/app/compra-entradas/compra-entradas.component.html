@@ -1,3 +1,9 @@
+<!-- Mensaje de error (fuera del contenedor principal) -->
+<div class="error-message" *ngIf="mensaje">
+  <i class="fas fa-exclamation-triangle"></i>
+  {{ mensaje }}
+</div>
+
 <!-- Hero Section Moderno -->
 <section class="hero-section" *ngIf="featuredMovies.length > 0 && currentMovie">
   <div class="hero-slider">

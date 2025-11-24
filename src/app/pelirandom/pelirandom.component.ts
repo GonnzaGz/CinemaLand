@@ -4,6 +4,7 @@ import { Pelicula } from '../pelisearch/pelicula.interface';
 import { ApipeliculasService } from '../service/apipeliculas.service';
 import { Categoria } from './categorias.interface';
 import { Router, RouterLink } from '@angular/router';
+import { AuthService } from '../service/auth.service';
 
 @Component({
   selector: 'app-pelirandom',
@@ -20,13 +21,20 @@ export class PelirandomComponent implements OnInit {
   activeIndex = 0;
   intervalId: any;
   loading = false;
+  isAuthenticated = false;
+  mensaje: string = '';
 
   constructor(
     private apiMovieService: ApipeliculasService,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
+    this.authService.isAuthenticated$.subscribe((isAuth) => {
+      this.isAuthenticated = isAuth;
+    });
+
     this.apiMovieService.getcategorias().subscribe((data) => {
       this.categorias = data.genres;
     });
@@ -120,6 +128,14 @@ export class PelirandomComponent implements OnInit {
   }
 
   irAComprarEntradas(id: number): void {
+    if (!this.isAuthenticated) {
+      this.mensaje = 'Debes iniciar sesión para comprar entradas';
+      setTimeout(() => {
+        this.mensaje = '';
+      }, 5000);
+      return;
+    }
+
     this.router
       .navigate(['/seleccion-asientos', id], {
         queryParams: { fromPeliRandom: 'true' },

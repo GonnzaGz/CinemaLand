@@ -1,3 +1,9 @@
+<!-- Mensaje de error (fuera del contenedor principal) -->
+<div class="error-message" *ngIf="mensaje">
+  <i class="fas fa-exclamation-triangle"></i>
+  {{ mensaje }}
+</div>
+
 <div class="regala-cine-container">
   <!-- Banner principal rediseñado -->
   <div class="gift-banner">
@@ -14,6 +20,7 @@
     </div>
   </div>
 
+  <!-- Sección de regalos -->
   <!-- Sección principal de códigos promocionales -->
   <div class="promo-section">
     <h3>🎫 CÓDIGOS PROMOCIONALES DISPONIBLES</h3>

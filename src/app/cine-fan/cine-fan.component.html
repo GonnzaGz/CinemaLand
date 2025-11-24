@@ -1,4 +1,10 @@
-﻿<div class="cine-fan-container">
+﻿<!-- Mensaje de error (fuera del contenedor principal) -->
+<div class="error-message" *ngIf="mensaje">
+  <i class="fas fa-exclamation-triangle"></i>
+  {{ mensaje }}
+</div>
+
+<div class="cine-fan-container">
   <div class="hero-section">
     <h1 class="hero-title">FAN +</h1>
     <p class="hero-subtitle">Más cine, más beneficios, más diversión</p>

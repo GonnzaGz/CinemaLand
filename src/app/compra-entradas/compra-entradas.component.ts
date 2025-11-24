@@ -24,7 +24,7 @@ export class CompraEntradasComponent implements OnInit, OnDestroy {
   estrenos: any[] = [];
   peliculasViejas: any[] = [];
   isAuthenticated$!: any;
-  isAuthenticated: boolean = true;
+  isAuthenticated: boolean = false;
   mensaje: string = '';
   favoritosAbierto: boolean = false; // Estado para controlar el panel de favoritos
 
@@ -77,6 +77,12 @@ export class CompraEntradasComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    // Suscribirse al estado de autenticación
+    this.authService.isAuthenticated$.subscribe((isAuth) => {
+      this.isAuthenticated = isAuth;
+      console.log('Compra-Entradas - Usuario autenticado:', isAuth);
+    });
+
     const idsession = localStorage.getItem('idsession');
     const idlist = localStorage.getItem('idlist');
     /*const lastSelectedMovieId = localStorage.getItem('selectedMovieId');*/
@@ -314,8 +320,10 @@ export class CompraEntradasComponent implements OnInit, OnDestroy {
   }
 
   comprarEntradas(movie?: any, ticketInfo?: any) {
-    console.log(this.isAuthenticated);
+    console.log('Comprar entradas - Autenticado:', this.isAuthenticated);
+
     if (!this.isAuthenticated) {
+      console.log('Usuario no autenticado, mostrando mensaje');
       this.mensaje = 'Debes iniciar sesión para comprar entradas.';
       setTimeout(() => {
         this.mensaje = '';
@@ -378,8 +386,13 @@ export class CompraEntradasComponent implements OnInit, OnDestroy {
 
   // Método específico para comprar entradas desde las tarjetas
   comprarEntradasPelicula(movieId: number) {
-    console.log(this.isAuthenticated);
+    console.log(
+      'Comprar entradas película - Autenticado:',
+      this.isAuthenticated
+    );
+
     if (!this.isAuthenticated) {
+      console.log('Usuario no autenticado, mostrando mensaje');
       this.mensaje = 'Debes iniciar sesión para comprar entradas.';
       setTimeout(() => {
         this.mensaje = '';
@@ -830,6 +843,18 @@ export class CompraEntradasComponent implements OnInit, OnDestroy {
   }
 
   comprarEntradasRapida(peliculaId: number) {
+    console.log('Comprar entradas rápida - Autenticado:', this.isAuthenticated);
+
+    if (!this.isAuthenticated) {
+      console.log('Usuario no autenticado, mostrando mensaje');
+      this.mensaje = 'Debes iniciar sesión para comprar entradas.';
+      setTimeout(() => {
+        this.mensaje = '';
+      }, 5000);
+      return;
+    }
+
+    console.log('Usuario autenticado, navegando a selección de asientos');
     this.router.navigate(['/seleccion-asientos', peliculaId]);
   }
 }

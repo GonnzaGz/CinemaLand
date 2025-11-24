@@ -99,7 +99,9 @@
         <div class="user-menu-container">
           <button class="user-btn" (click)="toggleUserMenu()" title="Mi Cuenta">
             <i class="fas fa-user"></i>
-            <span class="user-name" *ngIf="user?.name">{{ user.name }}</span>
+            <span class="user-name" *ngIf="userData?.username">{{
+              userData.username
+            }}</span>
           </button>
 
           <!-- Menú desplegable de usuario -->
@@ -109,9 +111,11 @@
                 <i class="fas fa-user-circle"></i>
               </div>
               <div class="user-details">
-                <h4 class="user-name-display">{{ user?.name || "Usuario" }}</h4>
+                <h4 class="user-name-display">
+                  {{ userData?.username || "Usuario" }}
+                </h4>
                 <p class="user-email">
-                  {{ user?.email || "email@ejemplo.com" }}
+                  {{ userData?.email || "email@ejemplo.com" }}
                 </p>
               </div>
             </div>
@@ -130,11 +134,6 @@
                 <span class="favorites-badge" *ngIf="favoritosCount > 0">{{
                   favoritosCount
                 }}</span>
-              </a>
-
-              <a class="user-menu-item" routerLink="/compra-entradas">
-                <i class="fas fa-ticket-alt"></i>
-                <span>Mis Entradas</span>
               </a>
 
               <div class="user-menu-divider"></div>

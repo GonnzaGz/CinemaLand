@@ -12,6 +12,8 @@
 html {
   scrollbar-color: #292929 #161616; /* thumb y track */
   scrollbar-width: thin;
+  position: relative;
+  z-index: 9999; /* Scrollbar principal por encima de todo */
 }
 
 html,
@@ -23,6 +25,13 @@ body {
   background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%);
   font-family: "Ubuntu", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     Oxygen, sans-serif;
+}
+
+/* Asegurar que el scrollbar principal esté sobre todos los elementos */
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  z-index: 9999 !important;
+  position: relative;
 }
 
 /* Compensar el navbar sticky */

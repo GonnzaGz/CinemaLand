@@ -18,8 +18,9 @@ export class ElegiPeliculaComponent implements OnInit, OnDestroy {
   peliculas: any[] = [];
   peliculasMostradas: number = 30;
   mostrarTodasLasPeliculas: boolean = false;
-  isAuthenticated: boolean = true;
+  isAuthenticated: boolean = false;
   peliculasfavoritas: any[] = [];
+  mensaje: string = '';
 
   // Propiedades para filtros
   filtroFormato: string = 'todos';
@@ -32,6 +33,11 @@ export class ElegiPeliculaComponent implements OnInit, OnDestroy {
   private favoritosService = inject(FavoritosService);
 
   ngOnInit() {
+    this.authService.isAuthenticated$.subscribe((isAuth) => {
+      this.isAuthenticated = isAuth;
+      console.log('Elegi-Pelicula - Usuario autenticado:', isAuth);
+    });
+
     this.cargarPeliculasEnCartelera();
     this.cargarFavoritos();
   }
@@ -199,6 +205,21 @@ export class ElegiPeliculaComponent implements OnInit, OnDestroy {
   }
 
   comprarEntradas(peliculaId: number) {
+    console.log(
+      'Intentando comprar entradas - Autenticado:',
+      this.isAuthenticated
+    );
+
+    if (!this.isAuthenticated) {
+      console.log('Usuario no autenticado, mostrando mensaje');
+      this.mensaje = 'Debes iniciar sesión para comprar entradas';
+      setTimeout(() => {
+        this.mensaje = '';
+      }, 5000);
+      return;
+    }
+
+    console.log('Usuario autenticado, navegando a selección de asientos');
     this.router.navigate(['/seleccion-asientos', peliculaId]);
   }
 

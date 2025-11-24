@@ -2,6 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CartService } from '../service/cart.service';
+import { AuthService } from '../service/auth.service';
 import { UnifiedCheckoutComponent } from '../unified-checkout/unified-checkout.component';
 import jsPDF from 'jspdf';
 import * as QRCode from 'qrcode';
@@ -82,6 +83,11 @@ export class CandyComponent implements OnInit {
 
   // Servicios
   private cartService = inject(CartService);
+  private authService = inject(AuthService);
+
+  // Estado de autenticación
+  isAuthenticated = false;
+  mensaje: string = '';
 
   // Propiedades para unified checkout
   showCheckoutModal = false;
@@ -94,6 +100,9 @@ export class CandyComponent implements OnInit {
   customerEmail: string = '';
   showCheckout: boolean = false;
 
+  // Cantidades temporales por producto (antes de agregar al carrito)
+  productQuantities: { [key: number]: number } = {};
+
   // Códigos promocionales
   promoCodes = {
     CINE20: 0.2,
@@ -105,8 +114,10 @@ export class CandyComponent implements OnInit {
 
   ngOnInit() {
     this.loadCartFromStorage();
-    // Limpiar carrito del CartService al inicializar para evitar conflictos
-    // this.cartService.clearCart(); // Descomenta si necesitas limpiar
+    // Verificar autenticación
+    this.authService.isAuthenticated$.subscribe((data) => {
+      this.isAuthenticated = data.isAuthenticated;
+    });
   }
 
   // Filtrar productos por categoría
@@ -121,6 +132,15 @@ export class CandyComponent implements OnInit {
 
   // Agregar producto al carrito
   addToCart(product: Product, quantity: number = 1) {
+    // Verificar autenticación
+    if (!this.isAuthenticated) {
+      this.mensaje = 'Debes iniciar sesión para agregar productos al carrito';
+      setTimeout(() => {
+        this.mensaje = '';
+      }, 5000);
+      return;
+    }
+
     // Agregar al carrito local para compatibilidad
     const existingItem = this.cart.find(
       (item) => item.product.id === product.id
@@ -146,8 +166,11 @@ export class CandyComponent implements OnInit {
       quantity
     );
 
+    // Resetear la cantidad temporal después de agregar
+    this.productQuantities[product.id] = 1;
+
     this.saveCartToStorage();
-    console.log('Producto agregado al carrito:', product.name); // Debug
+    this.showNotification(`${product.name} agregado al carrito`);
   }
 
   // Remover del carrito
@@ -169,28 +192,13 @@ export class CandyComponent implements OnInit {
     }
 
     this.saveCartToStorage();
+    this.showNotification('Producto eliminado del carrito');
   }
 
-  // Actualizar cantidad
+  // Actualizar cantidad temporal (antes de agregar al carrito)
   updateQuantity(productId: number, quantity: number) {
-    const item = this.cart.find((item) => item.product.id === productId);
-    if (item) {
-      item.quantity = Math.max(1, quantity);
-
-      // También actualizar en CartService
-      const cartItems = this.cartService.getCart();
-      const serviceItem = cartItems.find(
-        (cartItem: any) =>
-          cartItem.product.category === 'candy' &&
-          cartItem.product.id === productId.toString()
-      );
-
-      if (serviceItem) {
-        this.cartService.updateQuantity(serviceItem.id, quantity);
-      }
-
-      this.saveCartToStorage();
-    }
+    // Asegurar que la cantidad sea al menos 1
+    this.productQuantities[productId] = Math.max(1, quantity);
   }
 
   // Aplicar código promocional
@@ -461,9 +469,36 @@ export class CandyComponent implements OnInit {
     this.selectedCategory = category;
   }
 
-  // Obtener cantidad de producto en carrito
+  // Obtener cantidad temporal del producto (antes de agregarlo al carrito)
   getProductQuantity(productId: number): number {
-    const item = this.cart.find((item) => item.product.id === productId);
-    return item ? item.quantity : 0;
+    return this.productQuantities[productId] || 1;
+  }
+
+  // Mostrar notificación de éxito
+  showNotification(message: string) {
+    const notification = document.createElement('div');
+    notification.textContent = message;
+    notification.style.cssText = `
+      position: fixed;
+      top: 80px;
+      right: 20px;
+      background: #28a745;
+      color: white;
+      padding: 1rem 1.5rem;
+      border-radius: 8px;
+      z-index: 10001;
+      font-weight: 600;
+      box-shadow: 0 4px 12px rgba(40, 167, 69, 0.4);
+      animation: slideIn 0.3s ease-out;
+    `;
+
+    document.body.appendChild(notification);
+
+    setTimeout(() => {
+      notification.style.animation = 'slideOut 0.3s ease-out';
+      setTimeout(() => {
+        notification.remove();
+      }, 300);
+    }, 3000);
   }
 }

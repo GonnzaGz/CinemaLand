@@ -30,16 +30,24 @@
             <a href="#" class="social-link" aria-label="YouTube">
               <i class="fab fa-youtube"></i>
             </a>
+            <a
+              routerLink="/nosotros"
+              fragment="seccion-ecologica"
+              class="social-link eco-link"
+              aria-label="Compromiso Ecológico"
+            >
+              <i class="fas fa-leaf"></i>
+            </a>
           </div>
         </div>
 
         <!-- Navegación rápida -->
         <div class="footer-section">
-          <h4 class="footer-title">Navegación</h4>
+          <h4 class="footer-title">NAVEGACIÓN</h4>
           <ul class="footer-links">
             <li><a routerLink="" class="footer-link">Home</a></li>
             <li>
-              <a routerLink="pelirandom" class="footer-link">Tu Peli Random</a>
+              <a routerLink="pelirandom" class="footer-link">Peli Random</a>
             </li>
             <li>
               <a routerLink="pelissearch" class="footer-link">Buscador</a>
@@ -50,7 +58,7 @@
 
         <!-- Información -->
         <div class="footer-section">
-          <h4 class="footer-title">Información</h4>
+          <h4 class="footer-title">INFORMACIÓN</h4>
           <ul class="footer-links">
             <li><a href="#" class="footer-link">Política de Privacidad</a></li>
             <li><a href="#" class="footer-link">Términos de Servicio</a></li>
@@ -61,7 +69,7 @@
 
         <!-- Newsletter -->
         <div class="footer-section newsletter-section">
-          <h4 class="footer-title">Mantente al día</h4>
+          <h4 class="footer-title">NEWSLETTER</h4>
           <p class="newsletter-description">
             Suscríbete para recibir las últimas novedades sobre estrenos y
             eventos especiales.
@@ -98,6 +106,7 @@
 
         <!-- Botón de accesibilidad -->
         <div class="accessibility-section">
+          <h4 class="footer-title">Modo Daltonismo</h4>
           <div class="daltonism-controls">
             <button
               class="daltonism-toggle"
@@ -120,7 +129,7 @@
 
               <div class="menu-dropdown" *ngIf="showDaltonismMenu">
                 <div class="menu-header">
-                  <h4>🎨 Opciones de Accesibilidad</h4>
+                  <h4>🎨 Opciones de Daltonismo</h4>
                   <button (click)="closeDaltonismMenu()" class="close-menu">
                     <i class="fas fa-times"></i>
                   </button>

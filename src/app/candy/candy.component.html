@@ -1,3 +1,9 @@
+<!-- Mensaje de error (fuera del contenedor principal) -->
+<div class="error-message" *ngIf="mensaje">
+  <i class="fas fa-exclamation-triangle"></i>
+  {{ mensaje }}
+</div>
+
 <div class="candy-container">
   <!-- Banner principal -->
   <div class="candy-banner">
@@ -17,6 +23,7 @@
     <p>
       ¿Tenés un código promocional? ¡Ingresalo acá y accedé a tus beneficios!
     </p>
+
     <div class="promo-input-group">
       <input
         type="text"

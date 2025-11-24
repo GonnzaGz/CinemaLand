@@ -566,7 +566,7 @@
   top: 60px; /* Altura del navbar sticky */
   right: -400px;
   width: 380px;
-  max-width: 90vw; /* Evitar que se salga de la pantalla */
+  max-width: calc(90vw - 15px); /* Restar ancho del scrollbar */
   height: calc(100vh - 60px); /* Altura restante después del navbar sticky */
   background: linear-gradient(
     180deg,
@@ -574,16 +574,18 @@
     rgba(20, 20, 20, 0.98)
   );
   backdrop-filter: blur(10px);
-  z-index: 5; /* Reducido para mejor manejo de layers */
+  z-index: 5;
   transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: -5px 0 20px rgba(0, 0, 0, 0.5);
   border-left: 3px solid #d4af37;
-  overflow-y: visible; /* Cambiar para mostrar scrollbar */
-  overflow-x: hidden; /* Evitar scroll horizontal */
+  overflow-y: visible;
+  overflow-x: hidden; /* Sin scrollbar horizontal */
+  pointer-events: auto; /* Solo el panel captura eventos */
 }
 
+/* Cuando está abierto, dejar espacio para el scrollbar */
 .panel-favoritos.abierto {
-  right: 0;
+  right: 15px; /* Separación del borde para dejar visible el scrollbar */
 }
 
 /* Header del panel de favoritos */
@@ -610,37 +612,41 @@
   padding: 20px;
   height: calc(100vh - 140px); /* Ajustado para navbar sticky */
   overflow-y: auto; /* Mantener scroll visible */
+  overflow-x: hidden; /* Sin scrollbar horizontal */
   /* Mostrar scrollbar con estilo personalizado */
   scrollbar-width: thin; /* Firefox */
-  scrollbar-color: #d4af37 rgba(255, 255, 255, 0.1); /* Firefox */
+  scrollbar-color: #3a3a3a rgba(255, 255, 255, 0.05); /* Firefox - gris oscuro */
   display: flex;
   flex-direction: column;
+  align-items: center; /* Centrar elementos horizontalmente */
 }
 
 /* Estilo de scrollbar personalizado para WebKit */
 .favoritos-content::-webkit-scrollbar {
-  width: 8px; /* Mostrar scrollbar más delgada */
+  width: 6px; /* Scrollbar delgada */
 }
 
 .favoritos-content::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.03);
   border-radius: 4px;
 }
 
 .favoritos-content::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #d4af37, #b8860b);
+  background: #3a3a3a; /* Gris oscuro discreto */
   border-radius: 4px;
   transition: background 0.3s ease;
 }
 
 .favoritos-content::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, #f4d03f, #d4af37);
+  background: #4a4a4a; /* Ligeramente más claro al hover */
 }
 
 .favoritos-lista {
   list-style: none;
   padding: 0;
   margin: 0;
+  width: 100%; /* Ocupar todo el ancho disponible */
+  max-width: 340px; /* Ancho máximo para mantener centrado */
 }
 
 /* Tarjetas de películas favoritas rediseñadas */
@@ -657,6 +663,8 @@
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
   transition: all 0.3s ease;
   border: 1px solid rgba(212, 175, 55, 0.3);
+  width: 100%; /* Asegurar que ocupe todo el ancho disponible */
+  box-sizing: border-box; /* Incluir padding y border en el ancho */
 }
 
 .pelicula-card-fav:hover {
@@ -729,7 +737,8 @@
 }
 
 .boton-limpiar {
-  width: 90%; /* Mejorar ancho para mejor centrado */
+  width: 100%; /* Ocupar el ancho del contenedor */
+  max-width: 340px; /* Mismo ancho que las tarjetas */
   background: linear-gradient(135deg, #ff6b6b, #ee5a52);
   color: black;
   border: none;
@@ -2173,5 +2182,41 @@ html {
   .cartelera-section,
   .disfruta-section {
     margin: 50px auto;
+  }
+}
+
+/* Mensaje de error */
+.error-message {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(220, 38, 38, 0.95);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  padding: 2rem 3rem;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  z-index: 10000;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  animation: popIn 0.3s ease-out;
+  max-width: 90vw;
+  text-align: center;
+}
+
+.error-message i {
+  font-size: 2rem;
+}
+
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
   }
 }

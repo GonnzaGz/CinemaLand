@@ -69,10 +69,12 @@
 }
 
 .team-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  display: flex;
+  flex-wrap: wrap;
   gap: 40px;
-  justify-items: center;
+  justify-content: center;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .team-member {
@@ -354,12 +356,12 @@
 .sustainability-banner {
   background: linear-gradient(
     135deg,
-    rgba(255, 153, 0, 0.1),
-    rgba(212, 175, 55, 0.1)
+    rgba(76, 175, 80, 0.1),
+    rgba(34, 139, 34, 0.1)
   );
   border-radius: 20px;
   padding: 40px;
-  border: 1px solid rgba(255, 153, 0, 0.2);
+  border: 1px solid rgba(76, 175, 80, 0.2);
 }
 
 .aws-branding {
@@ -372,11 +374,11 @@
 
 .aws-branding i {
   font-size: 3rem;
-  color: #ff9900;
+  color: #4caf50;
 }
 
 .aws-text h4 {
-  color: #ff9900;
+  color: #4caf50;
   margin: 0;
   font-size: 1.5rem;
 }
@@ -458,7 +460,8 @@
   }
 
   .team-grid {
-    grid-template-columns: 1fr;
+    flex-direction: column;
+    align-items: center;
   }
 
   .action-buttons {

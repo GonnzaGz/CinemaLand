@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CartService, CartProduct, Order } from '../service/cart.service';
+import { AuthService } from '../service/auth.service';
 import { UnifiedCheckoutComponent } from '../unified-checkout/unified-checkout.component';
 
 interface GiftPackage {
@@ -20,6 +21,8 @@ interface GiftPackage {
 })
 export class RegalaCineComponent implements OnInit {
   showCheckoutModal = false;
+  isAuthenticated = false;
+  mensaje: string = '';
 
   // Paquetes de regalo disponibles
   giftPackages: { [key: string]: GiftPackage } = {
@@ -105,11 +108,27 @@ export class RegalaCineComponent implements OnInit {
     },
   };
 
-  constructor(private cartService: CartService) {}
+  constructor(
+    private cartService: CartService,
+    private authService: AuthService
+  ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.authService.isAuthenticated$.subscribe((data) => {
+      this.isAuthenticated = data.isAuthenticated;
+    });
+  }
 
   addToCart(packageType: string): void {
+    // Verificar autenticación
+    if (!this.isAuthenticated) {
+      this.mensaje = 'Debes iniciar sesión para comprar un paquete de regalo';
+      setTimeout(() => {
+        this.mensaje = '';
+      }, 5000);
+      return;
+    }
+
     const giftPackage = this.giftPackages[packageType];
     if (!giftPackage) return;
 
@@ -133,7 +152,35 @@ export class RegalaCineComponent implements OnInit {
       packageType: packageType,
       isGiftPurchase: true,
     });
+    this.showNotification(`${giftPackage.name} agregado al carrito`);
     this.showCheckoutModal = true;
+  }
+
+  showNotification(message: string): void {
+    const notification = document.createElement('div');
+    notification.textContent = message;
+    notification.style.cssText = `
+      position: fixed;
+      top: 80px;
+      right: 20px;
+      background: #28a745;
+      color: white;
+      padding: 1rem 1.5rem;
+      border-radius: 8px;
+      z-index: 10001;
+      font-weight: 600;
+      box-shadow: 0 4px 12px rgba(40, 167, 69, 0.4);
+      animation: slideIn 0.3s ease-out;
+    `;
+
+    document.body.appendChild(notification);
+
+    setTimeout(() => {
+      notification.style.animation = 'slideOut 0.3s ease-out';
+      setTimeout(() => {
+        notification.remove();
+      }, 300);
+    }, 3000);
   }
 
   closeCheckoutModal(): void {

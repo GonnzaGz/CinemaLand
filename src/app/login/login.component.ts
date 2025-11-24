@@ -92,6 +92,19 @@ export class LoginComponent implements OnInit {
     this.saveDiscountSettings();
   }
 
+  removeCertificate(type: 'discapacidad' | 'vulnerabilidad'): void {
+    if (type === 'discapacidad') {
+      this.archivoDiscapacidad = null;
+      this.tieneDiscapacidad = false;
+    } else {
+      this.archivoVulnerabilidad = null;
+      this.esSectorVulnerable = false;
+    }
+    this.updateDiscountStatus();
+    this.saveDiscountSettings();
+    console.log(`Certificado ${type} eliminado`);
+  }
+
   onFileSelected(event: Event, type: 'discapacidad' | 'vulnerabilidad'): void {
     const target = event.target as HTMLInputElement;
     const file = target.files?.[0] || null;

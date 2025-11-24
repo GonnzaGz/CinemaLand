@@ -18,7 +18,7 @@ export class NavbarComponent {
   isAuthenticated$!: any;
   userData$!: any;
   searchTerm = '';
-  user!: any;
+  userData: any = {};
   isAuthenticated!: any;
   favoritosAbierto: boolean = false;
   favoritosCount: number = 0;
@@ -44,7 +44,8 @@ export class NavbarComponent {
       this.isAuthenticated = data.isAuthenticated;
     });
     this.authService.userData$.subscribe((data) => {
-      this.user = data;
+      console.log('userData:', data);
+      this.userData = data;
     });
   }
   onSearch() {

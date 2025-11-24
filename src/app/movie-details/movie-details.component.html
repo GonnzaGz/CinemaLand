@@ -1,3 +1,9 @@
+<!-- Mensaje de error (fuera del contenedor principal) -->
+<div class="error-message" *ngIf="mensaje">
+  <i class="fas fa-exclamation-triangle"></i>
+  {{ mensaje }}
+</div>
+
 <!-- Loading state -->
 <div class="loading-container" *ngIf="loading">
   <div class="loading-content">
@@ -203,12 +209,6 @@
               <i class="fas fa-play"></i>
               Ver Trailer
             </button>
-          </div>
-
-          <!-- Error Message -->
-          <div class="error-message" *ngIf="mensaje">
-            <i class="fas fa-exclamation-triangle"></i>
-            {{ mensaje }}
           </div>
         </div>
       </div>

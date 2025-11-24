@@ -3,7 +3,7 @@
   background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%);
   color: #ffffff;
   position: relative;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .footer-modern::before {
@@ -95,6 +95,18 @@
   box-shadow: 0 8px 25px rgba(212, 175, 55, 0.3);
 }
 
+.social-link.eco-link {
+  background: linear-gradient(135deg, #4caf50, #2e7d32);
+  border: 2px solid rgba(76, 175, 80, 0.3);
+}
+
+.social-link.eco-link:hover {
+  background: linear-gradient(135deg, #66bb6a, #4caf50);
+  box-shadow: 0 8px 25px rgba(76, 175, 80, 0.4);
+  color: #fff;
+  transform: translateY(-3px) scale(1.05);
+}
+
 /* Secciones del footer */
 .footer-section {
 }
@@ -102,7 +114,7 @@
 .footer-title {
   font-size: 1.2rem;
   font-weight: bold;
-  color: #d4af37;
+  color: white;
   margin-bottom: 20px;
   position: relative;
   padding-bottom: 10px;
@@ -226,6 +238,7 @@
 /* Sección inferior */
 .footer-bottom {
   padding: 30px 0;
+  overflow: visible;
 }
 
 .footer-bottom-content {
@@ -234,6 +247,7 @@
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 20px;
+  overflow: visible;
 }
 
 .footer-left {
@@ -248,7 +262,7 @@
 }
 
 .credits {
-  color: #d4af37;
+  color: white;
   font-size: 0.8rem;
   margin: 0;
 }
@@ -258,6 +272,15 @@
   display: flex;
   align-items: center;
   gap: 15px;
+  overflow: visible;
+}
+
+.accessibility-title {
+  color: #d4af37;
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0;
+  white-space: nowrap;
 }
 
 .daltonism-controls {
@@ -265,6 +288,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
+  z-index: 9999;
 }
 
 .daltonism-toggle {
@@ -310,6 +334,14 @@
 
 .toggle-text {
   font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 150px;
+}
+
+.daltonism-toggle.active .toggle-text {
+  color: white;
 }
 
 .daltonism-menu {
@@ -350,7 +382,7 @@
   border: 2px solid #d4af37;
   border-radius: 15px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-  z-index: 1000;
+  z-index: 10000;
   min-width: 300px;
   max-width: 350px;
   animation: slideUpFadeIn 0.3s ease-out;

@@ -49,13 +49,21 @@ export class FooterComponent implements OnInit, OnDestroy {
 
   // Toggle del modo daltonismo
   toggleDaltonismMode() {
-    this.daltonismService.toggleDaltonismMode();
+    // Solo permitir toggle si no estamos en modo normal o si ya está activo
+    if (this.currentMode.id !== 'normal' || this.isDaltonismActive) {
+      this.daltonismService.toggleDaltonismMode();
+    }
   }
 
   // Cambiar tipo específico de daltonismo
   selectColorblindMode(mode: ColorblindMode) {
     this.daltonismService.setColorblindMode(mode.id);
-    this.daltonismService.setDaltonismActive(true);
+    // Si es modo normal, desactivar filtros. Si no, activarlos
+    if (mode.id === 'normal') {
+      this.daltonismService.setDaltonismActive(false);
+    } else {
+      this.daltonismService.setDaltonismActive(true);
+    }
     this.showDaltonismMenu = false;
   }
 

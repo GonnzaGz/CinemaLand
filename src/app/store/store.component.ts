@@ -2,6 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CartService } from '../service/cart.service';
+import { AuthService } from '../service/auth.service';
 import { UnifiedCheckoutComponent } from '../unified-checkout/unified-checkout.component';
 
 // Interfaces para el store
@@ -40,6 +41,11 @@ interface CustomerInfo {
 export class StoreComponent implements OnInit {
   // Servicios
   private cartService = inject(CartService);
+  private authService = inject(AuthService);
+
+  // Estado de autenticación
+  isAuthenticated = false;
+  mensaje: string = '';
 
   // Propiedades para unified checkout
   showCheckoutModal = false;
@@ -81,9 +87,16 @@ export class StoreComponent implements OnInit {
   cardCvv = '';
   cardName = '';
 
+  // Cantidades temporales por producto (antes de agregar al carrito)
+  productQuantities: { [key: number]: number } = {};
+
   ngOnInit() {
     this.loadProducts();
     this.loadCart();
+    // Verificar autenticación
+    this.authService.isAuthenticated$.subscribe((data) => {
+      this.isAuthenticated = data.isAuthenticated;
+    });
   }
 
   loadProducts() {
@@ -214,19 +227,34 @@ export class StoreComponent implements OnInit {
   }
 
   addToCart(product: StoreProduct) {
+    // Verificar autenticación
+    if (!this.isAuthenticated) {
+      this.mensaje = 'Debes iniciar sesión para agregar productos al carrito';
+      setTimeout(() => {
+        this.mensaje = '';
+      }, 5000);
+      return;
+    }
+
+    const quantity = this.productQuantities[product.id] || 1;
     const existingItem = this.cart.find(
       (item) => item.product.id === product.id
     );
 
     if (existingItem) {
-      if (existingItem.quantity < product.stock) {
-        existingItem.quantity++;
+      if (existingItem.quantity + quantity <= product.stock) {
+        existingItem.quantity += quantity;
       } else {
         alert('No hay más stock disponible de este producto');
         return;
       }
     } else {
-      this.cart.push({ product, quantity: 1 });
+      if (quantity <= product.stock) {
+        this.cart.push({ product, quantity });
+      } else {
+        alert('No hay suficiente stock disponible');
+        return;
+      }
     }
 
     // También agregar al CartService para unified-checkout
@@ -239,8 +267,11 @@ export class StoreComponent implements OnInit {
         image: product.image,
         category: 'store',
       },
-      1
+      quantity
     );
+
+    // Resetear cantidad temporal
+    this.productQuantities[product.id] = 1;
 
     this.saveCart();
     this.showNotification(`${product.name} agregado al carrito`);
@@ -607,6 +638,16 @@ export class StoreComponent implements OnInit {
     setTimeout(() => {
       notification.remove();
     }, 3000);
+  }
+
+  // Actualizar cantidad temporal (antes de agregar al carrito)
+  updateProductQuantity(productId: number, quantity: number) {
+    this.productQuantities[productId] = Math.max(1, quantity);
+  }
+
+  // Obtener cantidad temporal del producto
+  getProductQuantity(productId: number): number {
+    return this.productQuantities[productId] || 1;
   }
 
   getCategoryDisplayName(category: string): string {

@@ -1,3 +1,9 @@
+<!-- Mensaje de error (fuera del contenedor principal) -->
+<div class="error-message" *ngIf="mensaje">
+  <i class="fas fa-exclamation-triangle"></i>
+  {{ mensaje }}
+</div>
+
 <div class="elegi-pelicula-container">
   <!-- Header -->
   <div class="page-header">
@@ -127,10 +133,13 @@
       <div
         class="pelicula-card-modern"
         *ngFor="let pelicula of peliculasFiltradas"
-        (click)="verDetalles(pelicula.id)"
       >
         <!-- Imagen de la película -->
-        <div class="card-image-container">
+        <div
+          class="card-image-container"
+          (click)="verDetalles(pelicula.id)"
+          style="cursor: pointer"
+        >
           <img
             [src]="
               pelicula.poster_path

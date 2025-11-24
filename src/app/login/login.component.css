@@ -270,16 +270,54 @@
   display: none;
 }
 
+.file-status-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: rgba(74, 222, 128, 0.1);
+  padding: 10px 15px;
+  border-radius: 8px;
+  border: 1px solid rgba(74, 222, 128, 0.3);
+}
+
 .file-status {
   color: #4ade80;
   font-size: 0.9rem;
   display: flex;
   align-items: center;
   gap: 8px;
+  flex: 1;
 }
 
 .file-status i {
   color: #4ade80;
+}
+
+.remove-certificate-btn {
+  background: #ef4444;
+  border: none;
+  color: white;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+.remove-certificate-btn:hover {
+  background: #dc2626;
+  transform: scale(1.1);
+  box-shadow: 0 3px 10px rgba(239, 68, 68, 0.4);
+}
+
+.remove-certificate-btn:active {
+  transform: scale(0.95);
 }
 
 /* === DISCOUNT STATUS === */

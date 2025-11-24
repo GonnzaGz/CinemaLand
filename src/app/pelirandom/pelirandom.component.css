@@ -597,3 +597,41 @@
 .form-check-input:focus {
   box-shadow: 0 0 0 0.25rem rgba(255, 0, 0, 0.3);
 }
+
+/* Mensaje de error */
+.error-message {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(220, 38, 38, 0.95);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  padding: 2rem 3rem;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  z-index: 10000;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  animation: popIn 0.3s ease-out;
+  max-width: 90vw;
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+.error-message i {
+  font-size: 2rem;
+}
+
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}

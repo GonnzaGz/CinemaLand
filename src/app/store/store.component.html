@@ -1,3 +1,9 @@
+<!-- Mensaje de error (fuera del contenedor principal) -->
+<div class="error-message" *ngIf="mensaje && !showCheckout">
+  <i class="fas fa-exclamation-triangle"></i>
+  {{ mensaje }}
+</div>
+
 <div class="store-container">
   <!-- Header del Store -->
   <div class="store-header" *ngIf="!showCheckout">
@@ -60,14 +66,45 @@
             >
           </div>
 
-          <button
-            class="add-to-cart-btn"
-            (click)="addToCart(product)"
-            [disabled]="product.stock === 0"
-          >
-            <i class="fas fa-cart-plus"></i>
-            {{ product.stock === 0 ? "Sin Stock" : "Agregar" }}
-          </button>
+          <div class="product-actions">
+            <div class="quantity-controls">
+              <button
+                class="qty-btn"
+                (click)="
+                  updateProductQuantity(
+                    product.id,
+                    getProductQuantity(product.id) - 1
+                  )
+                "
+                [disabled]="getProductQuantity(product.id) <= 1"
+              >
+                -
+              </button>
+              <span class="quantity-display">{{
+                getProductQuantity(product.id)
+              }}</span>
+              <button
+                class="qty-btn"
+                (click)="
+                  updateProductQuantity(
+                    product.id,
+                    getProductQuantity(product.id) + 1
+                  )
+                "
+                [disabled]="getProductQuantity(product.id) >= product.stock"
+              >
+                +
+              </button>
+            </div>
+            <button
+              class="add-to-cart-btn"
+              (click)="addToCart(product)"
+              [disabled]="product.stock === 0"
+            >
+              <i class="fas fa-cart-plus"></i>
+              {{ product.stock === 0 ? "Sin Stock" : "Agregar" }}
+            </button>
+          </div>
         </div>
       </div>
     </div>

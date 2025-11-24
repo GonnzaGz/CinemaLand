@@ -6,7 +6,7 @@
         <div class="profile-avatar">
           <i class="fas fa-user-circle"></i>
         </div>
-        <h2>¡Bienvenido!</h2>
+        <h2>¡Bienvenido {{ (userData$ | async)?.userData?.username }}!</h2>
         <p class="profile-subtitle">Gestiona tu perfil y preferencias</p>
       </div>
 
@@ -62,7 +62,11 @@
               </div>
 
               <div class="file-upload-container" *ngIf="tieneDiscapacidad">
-                <label for="fileDiscapacidad" class="file-upload-btn">
+                <label
+                  for="fileDiscapacidad"
+                  class="file-upload-btn"
+                  *ngIf="!archivoDiscapacidad"
+                >
                   <i class="fas fa-cloud-upload-alt"></i>
                   <span>Subir Certificado</span>
                   <input
@@ -73,10 +77,19 @@
                     class="file-input"
                   />
                 </label>
-                <span class="file-status" *ngIf="archivoDiscapacidad">
-                  <i class="fas fa-check-circle"></i>
-                  {{ archivoDiscapacidad.name }}
-                </span>
+                <div class="file-status-container" *ngIf="archivoDiscapacidad">
+                  <span class="file-status">
+                    <i class="fas fa-check-circle"></i>
+                    {{ archivoDiscapacidad.name }}
+                  </span>
+                  <button
+                    class="remove-certificate-btn"
+                    (click)="removeCertificate('discapacidad')"
+                    title="Eliminar certificado"
+                  >
+                    <i class="fas fa-times"></i>
+                  </button>
+                </div>
               </div>
             </div>
 
@@ -101,7 +114,11 @@
               </div>
 
               <div class="file-upload-container" *ngIf="esSectorVulnerable">
-                <label for="fileVulnerabilidad" class="file-upload-btn">
+                <label
+                  for="fileVulnerabilidad"
+                  class="file-upload-btn"
+                  *ngIf="!archivoVulnerabilidad"
+                >
                   <i class="fas fa-cloud-upload-alt"></i>
                   <span>Subir Certificado</span>
                   <input
@@ -112,10 +129,22 @@
                     class="file-input"
                   />
                 </label>
-                <span class="file-status" *ngIf="archivoVulnerabilidad">
-                  <i class="fas fa-check-circle"></i>
-                  {{ archivoVulnerabilidad.name }}
-                </span>
+                <div
+                  class="file-status-container"
+                  *ngIf="archivoVulnerabilidad"
+                >
+                  <span class="file-status">
+                    <i class="fas fa-check-circle"></i>
+                    {{ archivoVulnerabilidad.name }}
+                  </span>
+                  <button
+                    class="remove-certificate-btn"
+                    (click)="removeCertificate('vulnerabilidad')"
+                    title="Eliminar certificado"
+                  >
+                    <i class="fas fa-times"></i>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
