@@ -20,6 +20,7 @@ export class MovieDetailsComponent implements OnInit {
   peliculasfavoritas: any[] = [];
   mensaje: string = '';
   loading: boolean = true;
+  fromPeliRandom: boolean = false;
 
   private route = inject(ActivatedRoute);
   private router = inject(Router);
@@ -54,6 +55,11 @@ export class MovieDetailsComponent implements OnInit {
   ngOnInit() {
     // Obtener el ID de la película desde la URL
     this.movieId = this.route.snapshot.paramMap.get('id');
+
+    // Verificar si viene de PeliRandom
+    this.route.queryParams.subscribe((params) => {
+      this.fromPeliRandom = params['fromPeliRandom'] === 'true';
+    });
 
     if (this.movieId) {
       this.loadMovieDetails();
@@ -106,7 +112,14 @@ export class MovieDetailsComponent implements OnInit {
   comprarEntradas() {
     if (this.isAuthenticated) {
       if (this.movie?.id) {
-        this.router.navigate(['/seleccion-asientos', this.movie.id]);
+        const navigationExtras: any = {};
+        if (this.fromPeliRandom) {
+          navigationExtras.queryParams = { fromPeliRandom: 'true' };
+        }
+        this.router.navigate(
+          ['/seleccion-asientos', this.movie.id],
+          navigationExtras
+        );
       }
     } else {
       this.mensaje = 'Debes iniciar sesión para comprar entradas.';

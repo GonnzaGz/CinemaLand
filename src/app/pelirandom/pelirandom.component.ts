@@ -130,6 +130,16 @@ export class PelirandomComponent implements OnInit {
     }
   }
 
+  verDetalles(id: number): void {
+    this.router
+      .navigate(['/movie-details', id], {
+        queryParams: { fromPeliRandom: 'true' },
+      })
+      .then(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+  }
+
   irAComprarEntradas(id: number): void {
     console.log('=== COMPRAR ENTRADAS (PeliRandom) ===');
     console.log('Película ID:', id);

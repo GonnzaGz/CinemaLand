@@ -136,7 +136,7 @@
                 <div class="movie-actions">
                   <button
                     class="btn-small btn-details"
-                    [routerLink]="['/movie-details', movie.id]"
+                    (click)="verDetalles(movie.id)"
                   >
                     <i class="fas"></i>
                     + Info
