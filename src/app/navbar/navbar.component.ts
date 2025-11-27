@@ -121,4 +121,35 @@ export class NavbarComponent {
     this.mobileMenuOpen = false;
     this.userMenuOpen = false;
   }
+
+  // Navegar y hacer scroll al inicio
+  navigateTo(route: string) {
+    const currentUrl = this.router.url.split('?')[0]; // Obtener URL sin query params
+    const targetRoute = route === '' ? '/' : '/' + route;
+
+    // Si estamos en la misma ruta, forzar recarga
+    if (currentUrl === targetRoute || (currentUrl === '/' && route === '')) {
+      // Navegar temporalmente a una ruta dummy y volver
+      this.router
+        .navigateByUrl('/dummy-route-' + Date.now(), {
+          skipLocationChange: true,
+        })
+        .then(() => {
+          this.router.navigate([route]).then(() => {
+            window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+            setTimeout(() => {
+              window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+              document.documentElement.scrollTop = 0;
+              document.body.scrollTop = 0;
+            }, 0);
+          });
+        });
+    } else {
+      // Navegación normal a ruta diferente
+      this.router.navigate([route]).then(() => {
+        window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+      });
+    }
+    this.closeMenus();
+  }
 }

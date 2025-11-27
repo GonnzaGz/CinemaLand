@@ -1,7 +1,7 @@
 <nav class="navbar-modern">
   <div class="navbar-container">
     <!-- Logo y marca -->
-    <a routerLink="" class="navbar-brand">
+    <a (click)="navigateTo('')" class="navbar-brand" style="cursor: pointer">
       <img
         class="brand-logo"
         src="assets/images/logonuevo.png"
@@ -24,44 +24,71 @@
     <!-- Navegación principal -->
     <div class="navbar-nav" [class.active]="mobileMenuOpen">
       <a
-        routerLink=""
+        (click)="navigateTo('')"
         class="nav-link"
         routerLinkActive="active"
         [routerLinkActiveOptions]="{ exact: true }"
+        style="cursor: pointer"
       >
         <i class="fas fa-film"></i>
         <span>PELÍCULAS</span>
       </a>
 
-      <a routerLink="candy" class="nav-link" routerLinkActive="active">
+      <a
+        (click)="navigateTo('candy')"
+        class="nav-link"
+        routerLinkActive="active"
+        style="cursor: pointer"
+      >
         <i class="fas fa-candy-cane"></i>
         <span>CANDY</span>
       </a>
 
-      <a routerLink="fan+" class="nav-link" routerLinkActive="active">
+      <a
+        (click)="navigateTo('fan+')"
+        class="nav-link"
+        routerLinkActive="active"
+        style="cursor: pointer"
+      >
         <i class="fas fa-star"></i>
         <span>FAN +</span>
       </a>
 
-      <a routerLink="cine+" class="nav-link" routerLinkActive="active">
+      <a
+        (click)="navigateTo('cine+')"
+        class="nav-link"
+        routerLinkActive="active"
+        style="cursor: pointer"
+      >
         <i class="fas fa-gift"></i>
         <span>CINE +</span>
       </a>
 
-      <a routerLink="shop" class="nav-link" routerLinkActive="active">
+      <a
+        (click)="navigateTo('shop')"
+        class="nav-link"
+        routerLinkActive="active"
+        style="cursor: pointer"
+      >
         <i class="fas fa-shopping-bag"></i>
         <span>SHOP</span>
       </a>
 
-      <a routerLink="elegi-pelicula" class="nav-link" routerLinkActive="active">
+      <a
+        (click)="navigateTo('elegi-pelicula')"
+        class="nav-link"
+        routerLinkActive="active"
+        style="cursor: pointer"
+      >
         <i class="fas fa-search"></i>
         <span>ELEGÍ PELÍCULA</span>
       </a>
 
       <a
-        routerLink="pelirandom"
+        (click)="navigateTo('pelirandom')"
         class="nav-link peli-random-btn"
         routerLinkActive="active"
+        style="cursor: pointer"
       >
         <div class="random-btn-content">
           <div class="random-icon-container">
